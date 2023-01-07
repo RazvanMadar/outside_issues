@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,16 +60,17 @@ public class IssueJdbcRepository {
         final String pagination = PaginationUtil.createPaginationQuery(pageable);
         query.append(pagination);
 
-        List<Issue> issues = jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) ->
-                new Issue(
-                        rs.getLong("id"), rs.getString("photo"),
-                        IssueType.valueOf(rs.getString("type")), rs.getDouble("latitude"),
-                        rs.getDouble("longitude"), IssueState.valueOf(rs.getString("state")),
-                        new Date(rs.getDate("reported_date").getTime()).toLocalDate(),
-                        rs.getInt("likes_number"), rs.getInt("dislikes_number"),
-                        rs.getString("description"),
-                        citizenRepository.findById(rs.getLong("citizen_id")).get())
-        );
+        List<Issue> issues = new ArrayList<>();
+//                jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) ->
+//                new Issue(
+//                        rs.getLong("id"), rs.getString("photo"),
+//                        IssueType.valueOf(rs.getString("type")), rs.getDouble("lat"),
+//                        rs.getDouble("lng"), IssueState.valueOf(rs.getString("state")),
+//                        new Date(rs.getDate("reported_date").getTime()).toLocalDate(),
+//                        rs.getInt("likes_number"), rs.getInt("dislikes_number"),
+//                        rs.getString("description"),
+//                        citizenRepository.findById(rs.getLong("citizen_id")).get())
+//        );
         List<IssueDTO> issueDTOS = convertIssuesToDTOS(issues);
 
         return new PageImpl<>(issueDTOS, pageable, issueDTOS.size());

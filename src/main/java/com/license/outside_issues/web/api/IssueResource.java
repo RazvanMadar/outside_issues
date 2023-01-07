@@ -1,6 +1,5 @@
-package com.license.outside_issues.controller;
+package com.license.outside_issues.web.api;
 
-import com.license.outside_issues.model.Issue;
 import com.license.outside_issues.service.issue.IssueService;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
 import org.springframework.data.domain.Page;
@@ -8,8 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -22,9 +19,9 @@ public class IssueResource {
         this.issueService = issueService;
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllIssues() {
-        return ResponseEntity.ok(issueService.getAllIssues());
+    @GetMapping()
+    public ResponseEntity<?> getAllIssues(@RequestParam(required = false, defaultValue = "false") Boolean hasLocation) {
+        return ResponseEntity.ok(issueService.getAllIssues(hasLocation));
     }
 
     @PostMapping
@@ -34,9 +31,9 @@ public class IssueResource {
 
     @GetMapping("/filtered")
     public ResponseEntity<Page<IssueDTO>> findIssues(@RequestParam(required = false) String type,
-                                                          @RequestParam(required = false) String state,
-                                                          @RequestParam(required = false) java.sql.Date date,
-                                                          Pageable pageable) {
+                                                     @RequestParam(required = false) String state,
+                                                     @RequestParam(required = false) java.sql.Date date,
+                                                     Pageable pageable) {
         return ResponseEntity.ok(issueService.findIssues(type, state, date, pageable));
     }
 }

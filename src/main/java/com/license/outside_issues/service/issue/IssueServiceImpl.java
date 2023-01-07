@@ -12,6 +12,7 @@ import com.license.outside_issues.service.issue.dtos.IssueDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,8 +30,9 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public List<Issue> getAllIssues() {
-        return issueRepository.findAll();
+    public List<Issue> getAllIssues(Boolean hasLocation) {
+        return hasLocation ? issueRepository.findAll().stream()
+                .filter(Issue::getHasLocation).collect(Collectors.toList()) : issueRepository.findAll();
     }
 
     @Override
@@ -46,11 +48,12 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<Issue> findIssuesByDescription(String description) {
-        if (description.isBlank() || description.isEmpty() || description.length() == 1) return getAllIssues();
-        return getAllIssues()
-                .stream()
-                .filter(issue -> issue.getDescription().toLowerCase().contains(description.toLowerCase()))
-                .collect(Collectors.toList());
+        return null;
+//        if (description.isBlank() || description.isEmpty() || description.length() == 1) return getAllIssues();
+//        return getAllIssues()
+//                .stream()
+//                .filter(issue -> issue.getDescription().toLowerCase().contains(description.toLowerCase()))
+//                .collect(Collectors.toList());
     }
 
     @Override

@@ -1,16 +1,12 @@
-package com.license.outside_issues.model;
+package com.license.outside_issues.service.issue.dtos;
 
-import javax.persistence.Embeddable;
-
-
-@Embeddable
-public class Address {
+public class AddressDTO {
     private Double lat;
     private Double lng;
 
-    public Address() {}
+    public AddressDTO() {}
 
-    public Address(Double lat, Double lng) {
+    public AddressDTO(Double lat, Double lng) {
         this.lat = lat;
         this.lng = lng;
     }

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IssueService {
-    List<Issue> getAllIssues();
+    List<Issue> getAllIssues(Boolean hasLocation);
     Long addIssue(IssueDTO issue);
     List<Issue> findIssuesByDescription(String description);
     Page<IssueDTO> findIssues(String type, String state, java.sql.Date date, Pageable pageable);

@@ -1,4 +1,4 @@
-package com.license.outside_issues.controller;
+package com.license.outside_issues.web.api;
 
 import com.license.outside_issues.service.citizen.CitizenService;
 import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;

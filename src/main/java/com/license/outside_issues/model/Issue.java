@@ -6,6 +6,7 @@ import com.license.outside_issues.enums.IssueType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 
 @Entity
@@ -14,7 +15,6 @@ public class Issue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String photo;
     @Enumerated(EnumType.STRING)
     private IssueType type;
 
@@ -29,39 +29,18 @@ public class Issue {
     //
 
     private String description;
+    private Boolean hasLocation;
+
+    @OneToMany(
+            mappedBy = "issue",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
+    private Set<IssueImage> images;
 
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "citizen_id", nullable = false)
     private Citizen citizen;
-
-    public Issue() {}
-
-    public Issue(Long id, String photo, IssueType type, Address address, IssueState state, LocalDate reportedDate, Integer likesNumber, Integer dislikesNumber, String description, Citizen citizen) {
-        this.id = id;
-        this.photo = photo;
-        this.type = type;
-        this.address = address;
-        this.state = state;
-        this.reportedDate = reportedDate;
-        this.likesNumber = likesNumber;
-        this.dislikesNumber = dislikesNumber;
-        this.description = description;
-        this.citizen = citizen;
-    }
-
-    public Issue(Long id, String photo, IssueType type, Double latitude, Double longitude, IssueState state, LocalDate reportedDate, Integer likesNumber, Integer dislikesNumber, String description, Citizen citizen) {
-        this.id = id;
-        this.photo = photo;
-        this.type = type;
-        this.address = new Address(latitude, longitude);
-        this.state = state;
-        this.reportedDate = reportedDate;
-        this.likesNumber = likesNumber;
-        this.dislikesNumber = dislikesNumber;
-        this.description = description;
-        this.citizen = citizen;
-    }
 
     public Long getId() {
         return id;
@@ -69,14 +48,6 @@ public class Issue {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     public IssueType getType() {
@@ -141,5 +112,21 @@ public class Issue {
 
     public void setCitizen(Citizen citizen) {
         this.citizen = citizen;
+    }
+
+    public Boolean getHasLocation() {
+        return hasLocation;
+    }
+
+    public void setHasLocation(Boolean hasLocation) {
+        this.hasLocation = hasLocation;
+    }
+
+    public Set<IssueImage> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<IssueImage> images) {
+        this.images = images;
     }
 }
