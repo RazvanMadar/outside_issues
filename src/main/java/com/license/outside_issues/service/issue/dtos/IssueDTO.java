@@ -16,6 +16,7 @@ public class IssueDTO {
     private String description;
     private Boolean hasLocation;
     private Long citizenId;
+    private String actualLocation;
 
     public Long getId() {
         return id;
@@ -95,5 +96,13 @@ public class IssueDTO {
 
     public void setHasLocation(Boolean hasLocation) {
         this.hasLocation = hasLocation;
+    }
+
+    public String getActualLocation() {
+        return actualLocation;
+    }
+
+    public void setActualLocation(String actualLocation) {
+        this.actualLocation = actualLocation;
     }
 }

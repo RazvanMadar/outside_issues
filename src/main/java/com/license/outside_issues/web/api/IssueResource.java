@@ -4,9 +4,12 @@ import com.license.outside_issues.service.issue.IssueService;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 
 @RestController
@@ -32,8 +35,11 @@ public class IssueResource {
     @GetMapping("/filtered")
     public ResponseEntity<Page<IssueDTO>> findIssues(@RequestParam(required = false) String type,
                                                      @RequestParam(required = false) String state,
-                                                     @RequestParam(required = false) java.sql.Date date,
+//                                                     @RequestParam(required = false) @DateTimeFormat (pattern = "yyyy.MM.dd") LocalDate fromDate,
+//                                                     @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate toDate,
+                                                     @RequestParam(required = false) String fromDate,
+                                                     @RequestParam(required = false) String toDate,
                                                      Pageable pageable) {
-        return ResponseEntity.ok(issueService.findIssues(type, state, date, pageable));
+        return ResponseEntity.ok(issueService.findIssues(type, state, fromDate, toDate, pageable));
     }
 }

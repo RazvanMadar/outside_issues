@@ -12,8 +12,8 @@ import com.license.outside_issues.service.issue.dtos.IssueDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +34,17 @@ public class IssueServiceImpl implements IssueService {
         return hasLocation ? issueRepository.findAll().stream()
                 .filter(Issue::getHasLocation).collect(Collectors.toList()) : issueRepository.findAll();
     }
+
+//    private IssueCardDTO mapIssuesCardsDTO(Issue issue) {
+//        IssueCardDTO issueCardDTO = new IssueCardDTO();
+//        issueCardDTO.setId(issue.getId());
+//        issueCardDTO.setType(issue.getType());
+//        issueCardDTO.setLat(issue.getAddress().getLat());
+//        issueCardDTO.setLng(issueCardDTO.getLng());
+//        issueCardDTO.setState(issue.getState());
+//        issueCardDTO.setReportedDate(issue.getReportedDate());
+//        issueCardDTO.set
+//    }
 
     @Override
     public Long addIssue(IssueDTO issue) {
@@ -57,7 +68,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public Page<IssueDTO> findIssues(String type, String state, java.sql.Date date, Pageable pageable) {
-        return issueJdbcRepository.findIssues(type, state, date, pageable);
+    public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, Pageable pageable) {
+        return issueJdbcRepository.findIssues(type, state, fromDate, toDate, pageable);
     }
 }

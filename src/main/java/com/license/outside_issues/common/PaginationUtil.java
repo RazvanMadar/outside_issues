@@ -22,7 +22,7 @@ public class PaginationUtil {
         StringBuilder query = new StringBuilder();
         boolean isFirstOrderColumn = true;
         if (!orders.isEmpty()) {
-            query.append(" ORDER BY ");
+            query.append("ORDER BY ");
         }
         for (Sort.Order order : orders) {
             String property = order.getProperty();

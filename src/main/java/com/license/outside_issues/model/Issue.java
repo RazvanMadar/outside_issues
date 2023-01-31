@@ -30,6 +30,7 @@ public class Issue {
 
     private String description;
     private Boolean hasLocation;
+    private String actualLocation;
 
     @OneToMany(
             mappedBy = "issue",
@@ -41,6 +42,23 @@ public class Issue {
     @JsonIgnore
     @JoinColumn(name = "citizen_id", nullable = false)
     private Citizen citizen;
+
+    public Issue() {}
+
+    public Issue(Long id, IssueType type, Address address, IssueState state, LocalDate reportedDate, Integer likesNumber, Integer dislikesNumber, String description, Boolean hasLocation, String actualLocation, Set<IssueImage> images, Citizen citizen) {
+        this.id = id;
+        this.type = type;
+        this.address = address;
+        this.state = state;
+        this.reportedDate = reportedDate;
+        this.likesNumber = likesNumber;
+        this.dislikesNumber = dislikesNumber;
+        this.description = description;
+        this.hasLocation = hasLocation;
+        this.actualLocation = actualLocation;
+        this.images = images;
+        this.citizen = citizen;
+    }
 
     public Long getId() {
         return id;
@@ -128,5 +146,13 @@ public class Issue {
 
     public void setImages(Set<IssueImage> images) {
         this.images = images;
+    }
+
+    public String getActualLocation() {
+        return actualLocation;
+    }
+
+    public void setActualLocation(String actualLocation) {
+        this.actualLocation = actualLocation;
     }
 }
