@@ -2,6 +2,7 @@ package com.license.outside_issues.service.authentication;
 
 import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.service.authentication.dtos.AuthenticationRequest;
+import com.license.outside_issues.service.authentication.dtos.AuthenticationResponse;
 import com.license.outside_issues.service.authentication.jwt.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try {
             Authentication authentication = authenticate(request);
             Citizen citizen = (Citizen) authentication.getPrincipal();
-            return ResponseEntity.ok(jwtUtil.generateAccessToken(citizen));
+            String token = jwtUtil.generateAccessToken(citizen);
+            return ResponseEntity.ok(new AuthenticationResponse(citizen.getId(), citizen.getEmail(), token));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

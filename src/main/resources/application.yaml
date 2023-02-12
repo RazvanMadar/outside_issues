@@ -28,7 +28,7 @@ spring:
     ansi:
       enabled: always
 jwt:
-  expirationTime: 3600000
+  expirationTime: 28800000
   secretKey: mySecret
 logging:
   level:

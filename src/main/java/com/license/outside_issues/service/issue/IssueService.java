@@ -7,10 +7,11 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface IssueService {
     List<Issue> getAllIssues(Boolean hasLocation);
     Long addIssue(IssueDTO issue);
-    List<Issue> findIssuesByDescription(String description);
-    Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, Pageable pageable);
+    Boolean addReactionsForIssues(Map<Long, Integer> issues);
+    Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, Pageable pageable);
 }

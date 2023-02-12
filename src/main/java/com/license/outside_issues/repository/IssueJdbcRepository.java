@@ -4,8 +4,8 @@ import com.license.outside_issues.common.PaginationUtil;
 import com.license.outside_issues.enums.IssueState;
 import com.license.outside_issues.enums.IssueType;
 import com.license.outside_issues.mapper.IssueMapper;
-import com.license.outside_issues.model.Address;
 import com.license.outside_issues.model.Issue;
+import com.license.outside_issues.service.issue.dtos.AddressDTO;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,35 +15,29 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Repository
 public class IssueJdbcRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final CitizenRepository citizenRepository;
+    private final IssueRepository issueRepository;
 
-    public IssueJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate, CitizenRepository citizenRepository) {
+    public IssueJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate, CitizenRepository citizenRepository, IssueRepository issueRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.citizenRepository = citizenRepository;
+        this.issueRepository = issueRepository;
     }
 
-
-    public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, Pageable pageable) {
+    public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, Pageable pageable) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-
-//        String actualFromDate = fromDate.toString().split("/+")[0];
-//        actualFromDate = actualFromDate.substring(0, actualFromDate.length() - 1);
-//        String actualToDate = toDate.toString().split("/+")[0];
-//        actualToDate = actualToDate.substring(0, actualToDate.length() - 1);
         StringBuilder query = new StringBuilder("SELECT * FROM issues ");
         boolean isConditionPresent = false;
         if (type != null) {
@@ -58,32 +52,24 @@ public class IssueJdbcRepository {
             parameters.addValue("state", state);
         }
 
-        if (fromDate != null && toDate != null) {
-//            BigDecimal fromDateDecimal = new BigDecimal(fromDate.format(DateTimeFormatter.ISO_DATE));
-//            BigDecimal toDateDecimal = new BigDecimal(toDate.format(DateTimeFormatter.ISO_DATE));
+        if (fromDate != null) {
             query.append(isConditionPresent ? "AND " : "WHERE ");
-            query.append("reported_date >= :from_date AND reported_date <= :to_date ");
+            query.append("reported_date >= :from_date ");
             parameters.addValue("from_date", LocalDate.parse(fromDate));
+        }
+        if (toDate != null) {
+            query.append(isConditionPresent ? "AND " : "WHERE ");
+            query.append("reported_date <= :to_date ");
             parameters.addValue("to_date", LocalDate.parse(toDate));
-
-//            parameters.addValue("from_date", fromDateDecimal);
-//            parameters.addValue("to_date", toDateDecimal);
+        }
+        if (hasLocation) {
+            query.append(isConditionPresent ? "AND " : "WHERE ");
+            query.append("has_location = true ");
         }
 
-//        else if (fromDate != null) {
-//            BigDecimal fromDateDecimal = new BigDecimal(fromDate.format(DateTimeFormatter.ISO_DATE));
-//            query.append(isConditionPresent ? "AND " : "WHERE ");
-//            query.append("reported_date >= :from_date ");
-//            parameters.addValue("from_date", fromDateDecimal);
-//        }
-//        else if (toDate != null) {
-//            BigDecimal toDateDecimal = new BigDecimal(toDate.format(DateTimeFormatter.ISO_DATE));
-//            query.append(isConditionPresent ? "AND " : "WHERE ");
-//            query.append("reported_date <= :to_date ");
-//            parameters.addValue("to_date", toDateDecimal);
-//        }
-
         System.out.println(query);
+        Integer filteredIssuesSql = jdbcTemplate.queryForObject(query.toString().replace("*", "COUNT(*)"), parameters, Integer.class);
+        int filteredIssuesSize = Objects.requireNonNullElse(filteredIssuesSql, 0);
 
         final List<Sort.Order> orders = pageable.getSort().get().toList();
         System.out.println(orders);
@@ -92,6 +78,7 @@ public class IssueJdbcRepository {
         final String pagination = PaginationUtil.createPaginationQuery(pageable);
         query.append(pagination);
 
+        System.out.println(query);
 //        List<Issue> issues = new ArrayList<>();
 //                jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) ->
 //                new Issue(
@@ -107,8 +94,9 @@ public class IssueJdbcRepository {
 //        );
 //        List<IssueDTO> issueDTOS = convertIssuesToDTOS(issues);
         List<IssueDTO> issues = jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) -> mapToIssuesDTO(rs));
+        System.out.println(issues);
 
-        return new PageImpl<>(issues, pageable, issues.size());
+        return new PageImpl<>(issues, pageable, filteredIssuesSize);
     }
 
     private IssueDTO mapToIssuesDTO(ResultSet rs) throws SQLException {
@@ -117,6 +105,11 @@ public class IssueJdbcRepository {
         issue.setType(IssueType.valueOf(rs.getString("type")));
         issue.setState(IssueState.valueOf(rs.getString("state")));
         issue.setReportedDate(new Date(rs.getDate("reported_date").getTime()).toLocalDate());
+        issue.setDescription(rs.getString("description"));
+        issue.setActualLocation(rs.getString("actual_location"));
+        issue.setAddress(new AddressDTO(rs.getDouble("lat"), rs.getDouble("lng")));
+        issue.setLikesNumber(rs.getInt("likes_number"));
+        issue.setDislikesNumber(rs.getInt("dislikes_number"));
 
 //        issue.setFromDate("start_date", LocalDate.class);
 //        issue.setToDate("to_date", LocalDate.class);

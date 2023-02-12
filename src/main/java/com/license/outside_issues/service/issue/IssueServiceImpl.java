@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,18 +58,23 @@ public class IssueServiceImpl implements IssueService {
         return savedIssue.getId();
     }
 
-    @Override
-    public List<Issue> findIssuesByDescription(String description) {
+    private Issue addReactionForIssue(Long id, Integer value) {
+        Issue issue = issueRepository.findById(id).orElseThrow(() -> {
+            throw new BusinessException(ExceptionReason.ISSUE_NOT_FOUND);
+        });
         return null;
-//        if (description.isBlank() || description.isEmpty() || description.length() == 1) return getAllIssues();
-//        return getAllIssues()
-//                .stream()
-//                .filter(issue -> issue.getDescription().toLowerCase().contains(description.toLowerCase()))
-//                .collect(Collectors.toList());
     }
 
     @Override
-    public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, Pageable pageable) {
-        return issueJdbcRepository.findIssues(type, state, fromDate, toDate, pageable);
+    public Boolean addReactionsForIssues(Map<Long, Integer> issues) {
+        List<Issue> issuesToUpdate = issueRepository.findAllById(issues.keySet().stream().toList());
+//        issueRepository.findAll().stream()
+//                .filter(issue -> issue.getId() == i)
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, Pageable pageable) {
+        return issueJdbcRepository.findIssues(type, state, fromDate, toDate, hasLocation, pageable);
     }
 }

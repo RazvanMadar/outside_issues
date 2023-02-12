@@ -12,7 +12,7 @@ public class PaginationUtil {
         if (pageable == null) {
             throw new BusinessException(ExceptionReason.INVALID_PAGE_PARAMETERS);
         }
-        return " OFFSET " + pageable.getOffset() + " ROWS FETCH NEXT " + pageable.getPageSize() + " ROWS ONLY";
+        return "OFFSET " + pageable.getOffset() + " ROWS FETCH NEXT " + pageable.getPageSize() + " ROWS ONLY";
     }
 
     public static String createOrderQuery(List<Sort.Order> orders) {

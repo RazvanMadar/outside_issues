@@ -10,6 +10,11 @@ public class Address {
 
     public Address() {}
 
+    public Address(Double lat, Double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
+
     public Double getLat() {
         return lat;
     }

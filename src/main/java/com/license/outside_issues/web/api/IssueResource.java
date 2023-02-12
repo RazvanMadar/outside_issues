@@ -35,11 +35,10 @@ public class IssueResource {
     @GetMapping("/filtered")
     public ResponseEntity<Page<IssueDTO>> findIssues(@RequestParam(required = false) String type,
                                                      @RequestParam(required = false) String state,
-//                                                     @RequestParam(required = false) @DateTimeFormat (pattern = "yyyy.MM.dd") LocalDate fromDate,
-//                                                     @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy.MM.dd") LocalDate toDate,
                                                      @RequestParam(required = false) String fromDate,
                                                      @RequestParam(required = false) String toDate,
+                                                     @RequestParam(required = false, defaultValue = "false") boolean hasLocation,
                                                      Pageable pageable) {
-        return ResponseEntity.ok(issueService.findIssues(type, state, fromDate, toDate, pageable));
+        return ResponseEntity.ok(issueService.findIssues(type, state, fromDate, toDate, hasLocation, pageable));
     }
 }
