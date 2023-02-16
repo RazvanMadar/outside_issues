@@ -27,24 +27,16 @@ public class Citizen implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(
-            mappedBy = "citizen",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
-    )
-    private Set<Issue> issues = new HashSet<>();
+    @OneToMany(mappedBy = "citizen")
+    Set<CitizenReactions> citizenReactions;
+
+//    @OneToMany(
+//            mappedBy = "citizen",
+//            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+//    )
+//    private Set<Issue> issues = new HashSet<>();
 
     public Citizen() {}
-
-    public Citizen(Long id, String email, String phoneNumber, String firstName, String lastName, String password, Set<Role> roles, Set<Issue> issues) {
-        this.id = id;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.roles = roles;
-        this.issues = issues;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -141,11 +133,25 @@ public class Citizen implements UserDetails {
         this.roles = roles;
     }
 
-    public Set<Issue> getIssues() {
-        return issues;
+    public Set<CitizenReactions> getCitizenReactions() {
+        return citizenReactions;
     }
 
-    public void setIssues(Set<Issue> issues) {
-        this.issues = issues;
+    public void setCitizenReactions(Set<CitizenReactions> citizenReactions) {
+        this.citizenReactions = citizenReactions;
+    }
+
+    @Override
+    public String toString() {
+        return "Citizen{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", citizenReactions=" + citizenReactions +
+                '}';
     }
 }

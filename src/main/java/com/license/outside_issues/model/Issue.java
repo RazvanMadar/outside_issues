@@ -31,34 +31,22 @@ public class Issue {
     private String description;
     private Boolean hasLocation;
     private String actualLocation;
+    private Long citizenId;
 
     @OneToMany(
             mappedBy = "issue",
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
     )
     private Set<IssueImage> images;
+//    @ManyToOne
+//    @JsonIgnore
+//    @JoinColumn(name = "citizen_id", nullable = false)
+//    private Citizen citizen;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "citizen_id", nullable = false)
-    private Citizen citizen;
+    @OneToMany(mappedBy = "issue")
+    Set<CitizenReactions> citizenReactions;
 
     public Issue() {}
-
-    public Issue(Long id, IssueType type, Address address, IssueState state, LocalDate reportedDate, Integer likesNumber, Integer dislikesNumber, String description, Boolean hasLocation, String actualLocation, Set<IssueImage> images, Citizen citizen) {
-        this.id = id;
-        this.type = type;
-        this.address = address;
-        this.state = state;
-        this.reportedDate = reportedDate;
-        this.likesNumber = likesNumber;
-        this.dislikesNumber = dislikesNumber;
-        this.description = description;
-        this.hasLocation = hasLocation;
-        this.actualLocation = actualLocation;
-        this.images = images;
-        this.citizen = citizen;
-    }
 
     public Long getId() {
         return id;
@@ -124,12 +112,12 @@ public class Issue {
         this.description = description;
     }
 
-    public Citizen getCitizen() {
-        return citizen;
+    public Long getCitizenId() {
+        return citizenId;
     }
 
-    public void setCitizen(Citizen citizen) {
-        this.citizen = citizen;
+    public void setCitizenId(Long citizenId) {
+        this.citizenId = citizenId;
     }
 
     public Boolean getHasLocation() {
@@ -154,5 +142,32 @@ public class Issue {
 
     public void setActualLocation(String actualLocation) {
         this.actualLocation = actualLocation;
+    }
+
+    public Set<CitizenReactions> getCitizenReactions() {
+        return citizenReactions;
+    }
+
+    public void setCitizenReactions(Set<CitizenReactions> citizenReactions) {
+        this.citizenReactions = citizenReactions;
+    }
+
+    @Override
+    public String toString() {
+        return "Issue{" +
+                "id=" + id +
+                ", type=" + type +
+                ", address=" + address +
+                ", state=" + state +
+                ", reportedDate=" + reportedDate +
+                ", likesNumber=" + likesNumber +
+                ", dislikesNumber=" + dislikesNumber +
+                ", description='" + description + '\'' +
+                ", hasLocation=" + hasLocation +
+                ", actualLocation='" + actualLocation + '\'' +
+                ", citizenId=" + citizenId +
+                ", images=" + images +
+                ", citizenReactions=" + citizenReactions +
+                '}';
     }
 }

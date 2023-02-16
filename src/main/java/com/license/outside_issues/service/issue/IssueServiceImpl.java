@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,7 +52,8 @@ public class IssueServiceImpl implements IssueService {
             throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
         });
         Issue savedIssue = IssueMapper.INSTANCE.dtoToModel(issue);
-        savedIssue.setCitizen(citizenById);
+//        savedIssue.setCitizen(citizenById);
+        savedIssue.setCitizenId(citizenById.getId());
         issueRepository.save(savedIssue);
         return savedIssue.getId();
     }
