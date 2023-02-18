@@ -1,6 +1,5 @@
 package com.license.outside_issues.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.license.outside_issues.enums.IssueState;
 import com.license.outside_issues.enums.IssueType;
 
@@ -35,7 +34,7 @@ public class Issue {
 
     @OneToMany(
             mappedBy = "issue",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
     )
     private Set<IssueImage> images;
 //    @ManyToOne
@@ -43,10 +42,14 @@ public class Issue {
 //    @JoinColumn(name = "citizen_id", nullable = false)
 //    private Citizen citizen;
 
-    @OneToMany(mappedBy = "issue")
+    @OneToMany(
+            mappedBy = "issue",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
+    )
     Set<CitizenReactions> citizenReactions;
 
-    public Issue() {}
+    public Issue() {
+    }
 
     public Long getId() {
         return id;

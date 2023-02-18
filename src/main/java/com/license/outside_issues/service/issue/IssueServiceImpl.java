@@ -1,20 +1,22 @@
 package com.license.outside_issues.service.issue;
 
+import com.license.outside_issues.enums.IssueState;
+import com.license.outside_issues.enums.IssueType;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.mapper.IssueMapper;
 import com.license.outside_issues.model.Citizen;
+import com.license.outside_issues.model.CitizenReactions;
 import com.license.outside_issues.model.Issue;
-import com.license.outside_issues.repository.CitizenRepository;
-import com.license.outside_issues.repository.IssueJdbcRepository;
-import com.license.outside_issues.repository.IssueRepository;
+import com.license.outside_issues.model.IssueImage;
+import com.license.outside_issues.repository.*;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,11 +24,15 @@ public class IssueServiceImpl implements IssueService {
     private final IssueRepository issueRepository;
     private final CitizenRepository citizenRepository;
     private final IssueJdbcRepository issueJdbcRepository;
+    private final CitizenReactionsRepository citizenReactionsRepository;
+    private final IssueImageRepository issueImageRepository;
 
-    public IssueServiceImpl(IssueRepository issueRepository, CitizenRepository citizenRepository, IssueJdbcRepository issueJdbcRepository) {
+    public IssueServiceImpl(IssueRepository issueRepository, CitizenRepository citizenRepository, IssueJdbcRepository issueJdbcRepository, CitizenReactionsRepository citizenReactionsRepository, IssueImageRepository issueImageRepository) {
         this.issueRepository = issueRepository;
         this.citizenRepository = citizenRepository;
         this.issueJdbcRepository = issueJdbcRepository;
+        this.citizenReactionsRepository = citizenReactionsRepository;
+        this.issueImageRepository = issueImageRepository;
     }
 
     @Override
@@ -58,19 +64,39 @@ public class IssueServiceImpl implements IssueService {
         return savedIssue.getId();
     }
 
-    private Issue addReactionForIssue(Long id, Integer value) {
-        Issue issue = issueRepository.findById(id).orElseThrow(() -> {
+    @Override
+    public IssueDTO findById(Long id) {
+        Issue issueById = issueRepository.findById(id).orElseThrow(() -> {
             throw new BusinessException(ExceptionReason.ISSUE_NOT_FOUND);
         });
-        return null;
+        return IssueMapper.INSTANCE.modelToDto(issueById);
     }
 
     @Override
-    public Boolean addReactionsForIssues(Map<Long, Integer> issues) {
-        List<Issue> issuesToUpdate = issueRepository.findAllById(issues.keySet().stream().toList());
-//        issueRepository.findAll().stream()
-//                .filter(issue -> issue.getId() == i)
-        return Boolean.TRUE;
+    public IssueDTO updateIssue(Long id, String type, String state) {
+        Issue issueById = issueRepository.findById(id).orElseThrow(() -> {
+            throw new BusinessException(ExceptionReason.ISSUE_NOT_FOUND);
+        });
+        if (type != null) {
+            issueById.setType(IssueType.valueOf(type));
+        }
+        if (state != null) {
+            issueById.setState(IssueState.valueOf(state));
+        }
+        return IssueMapper.INSTANCE.modelToDto(issueRepository.save(issueById));
+    }
+
+    @Override
+    public Long deleteIssue(Long id) {
+        Issue issueById = issueRepository.findById(id).orElseThrow(() -> {
+            throw new BusinessException(ExceptionReason.ISSUE_NOT_FOUND);
+        });
+        final Set<IssueImage> images = issueById.getImages();
+        issueImageRepository.deleteAll(images);
+        final Set<CitizenReactions> citizenReactions = issueById.getCitizenReactions();
+        citizenReactionsRepository.deleteAll(citizenReactions);
+        issueRepository.delete(issueById);
+        return id;
     }
 
     @Override

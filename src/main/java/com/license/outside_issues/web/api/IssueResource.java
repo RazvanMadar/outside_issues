@@ -4,12 +4,9 @@ import com.license.outside_issues.service.issue.IssueService;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 
 @RestController
@@ -22,7 +19,7 @@ public class IssueResource {
         this.issueService = issueService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> getAllIssues(@RequestParam(required = false, defaultValue = "false") Boolean hasLocation) {
         return ResponseEntity.ok(issueService.getAllIssues(hasLocation));
     }
@@ -30,6 +27,17 @@ public class IssueResource {
     @PostMapping
     public ResponseEntity<Long> addIssue(@RequestBody IssueDTO issue) {
         return ResponseEntity.status(HttpStatus.CREATED).body(issueService.addIssue(issue));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<IssueDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(issueService.findById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<IssueDTO> updateIssue(@PathVariable Long id, @RequestParam(required = false) String type,
+                                                @RequestParam(required = false) String state) {
+        return ResponseEntity.ok(issueService.updateIssue(id, type, state));
     }
 
     @GetMapping("/filtered")
@@ -40,5 +48,10 @@ public class IssueResource {
                                                      @RequestParam(required = false, defaultValue = "false") boolean hasLocation,
                                                      Pageable pageable) {
         return ResponseEntity.ok(issueService.findIssues(type, state, fromDate, toDate, hasLocation, pageable));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> deleteIssue(@PathVariable Long id) {
+        return ResponseEntity.ok(issueService.deleteIssue(id));
     }
 }

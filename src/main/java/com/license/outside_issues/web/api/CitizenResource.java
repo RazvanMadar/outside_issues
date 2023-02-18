@@ -4,6 +4,7 @@ import com.license.outside_issues.service.citizen.CitizenService;
 import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -20,6 +21,11 @@ public class CitizenResource {
     @GetMapping
     public ResponseEntity<?> getAllCitizens() {
         return ResponseEntity.ok(citizenService.getAllCitizens());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findCitizenById(@PathVariable Long id) {
+        return ResponseEntity.ok(citizenService.findById(id));
     }
 
     @PostMapping

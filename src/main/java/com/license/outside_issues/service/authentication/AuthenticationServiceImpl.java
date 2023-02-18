@@ -35,7 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             Authentication authentication = authenticate(request);
             Citizen citizen = (Citizen) authentication.getPrincipal();
             String token = jwtUtil.generateAccessToken(citizen);
-            return ResponseEntity.ok(new AuthenticationResponse(citizen.getId(), citizen.getEmail(), token));
+            return ResponseEntity.ok(new AuthenticationResponse(citizen.getId(), citizen.getEmail(), citizen.getRoles().iterator().next().getName(), token));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
