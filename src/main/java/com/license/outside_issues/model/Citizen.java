@@ -30,6 +30,9 @@ public class Citizen implements UserDetails {
     @OneToMany(mappedBy = "citizen")
     Set<CitizenReactions> citizenReactions;
 
+    @OneToOne(mappedBy = "citizen")
+    private Blacklist blacklist;
+
 //    @OneToMany(
 //            mappedBy = "citizen",
 //            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
@@ -141,6 +144,14 @@ public class Citizen implements UserDetails {
         this.citizenReactions = citizenReactions;
     }
 
+    public Blacklist getBlacklist() {
+        return blacklist;
+    }
+
+    public void setBlacklist(Blacklist blacklist) {
+        this.blacklist = blacklist;
+    }
+
     @Override
     public String toString() {
         return "Citizen{" +
@@ -152,6 +163,7 @@ public class Citizen implements UserDetails {
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 ", citizenReactions=" + citizenReactions +
+                ", blacklist=" + blacklist +
                 '}';
     }
 }

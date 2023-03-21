@@ -7,6 +7,7 @@ import com.license.outside_issues.mapper.IssueMapper;
 import com.license.outside_issues.model.Issue;
 import com.license.outside_issues.service.issue.dtos.AddressDTO;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
+import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,16 @@ public class IssueJdbcRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.citizenRepository = citizenRepository;
         this.issueRepository = issueRepository;
+    }
+
+    public List<StatisticsDTO> getBasicStatistics(String email) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String query = "SELECT state, COUNT(state) AS val FROM issues ";
+        if (email != null) {
+            query += "WHERE citizen_email = " + "'" + email + "'";
+        }
+        query += " GROUP BY state";
+        return jdbcTemplate.query(query, parameters, (rs, rowNum) -> mapToStatisticsDTO(rs));
     }
 
     public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, Pageable pageable) {
@@ -110,15 +121,18 @@ public class IssueJdbcRepository {
         issue.setAddress(new AddressDTO(rs.getDouble("lat"), rs.getDouble("lng")));
         issue.setLikesNumber(rs.getInt("likes_number"));
         issue.setDislikesNumber(rs.getInt("dislikes_number"));
+        issue.setCitizenEmail(rs.getString("citizen_email"));
 
 //        issue.setFromDate("start_date", LocalDate.class);
 //        issue.setToDate("to_date", LocalDate.class);
         return issue;
     }
 
-    private List<IssueDTO> convertIssuesToDTOS(List<Issue> issues) {
-        return issues.stream()
-                .map(IssueMapper.INSTANCE::modelToDto)
-                .collect(Collectors.toList());
+    private StatisticsDTO mapToStatisticsDTO(ResultSet rs) throws SQLException {
+        StatisticsDTO statisticsDTO = new StatisticsDTO();
+        statisticsDTO.setState(rs.getString("state"));
+        statisticsDTO.setVal(rs.getInt("val"));
+
+        return statisticsDTO;
     }
 }

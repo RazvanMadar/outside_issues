@@ -2,6 +2,7 @@ package com.license.outside_issues.web.api;
 
 import com.license.outside_issues.service.citizen.CitizenService;
 import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
@@ -19,13 +20,18 @@ public class CitizenResource {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCitizens() {
-        return ResponseEntity.ok(citizenService.getAllCitizens());
+    public ResponseEntity<?> getAllCitizens(@RequestParam(required = false) String email, Pageable pageable) {
+        return ResponseEntity.ok(citizenService.getAllCitizens(email, pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findCitizenById(@PathVariable Long id) {
         return ResponseEntity.ok(citizenService.findById(id));
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> findCitizenByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(citizenService.findByEmail(email));
     }
 
     @PostMapping

@@ -30,7 +30,7 @@ public class Issue {
     private String description;
     private Boolean hasLocation;
     private String actualLocation;
-    private Long citizenId;
+    private String citizenEmail;
 
     @OneToMany(
             mappedBy = "issue",
@@ -115,12 +115,12 @@ public class Issue {
         this.description = description;
     }
 
-    public Long getCitizenId() {
-        return citizenId;
+    public String getCitizenEmail() {
+        return citizenEmail;
     }
 
-    public void setCitizenId(Long citizenId) {
-        this.citizenId = citizenId;
+    public void setCitizenEmail(String citizenEmail) {
+        this.citizenEmail = citizenEmail;
     }
 
     public Boolean getHasLocation() {
@@ -168,7 +168,7 @@ public class Issue {
                 ", description='" + description + '\'' +
                 ", hasLocation=" + hasLocation +
                 ", actualLocation='" + actualLocation + '\'' +
-                ", citizenId=" + citizenId +
+                ", citizenEmail=" + citizenEmail +
                 ", images=" + images +
                 ", citizenReactions=" + citizenReactions +
                 '}';

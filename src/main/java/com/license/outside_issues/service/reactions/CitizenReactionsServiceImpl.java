@@ -31,7 +31,10 @@ public class CitizenReactionsServiceImpl implements CitizenReactionsService {
     @Override
     public Boolean findByCitizenIdAndIssueId(Long citizenId, Long issueId) {
         final Optional<CitizenReactions> byCitizenIdAndIssueId = citizenReactionsRepository.findByCitizenIdAndIssueId(citizenId, issueId);
-        return byCitizenIdAndIssueId.isPresent() ? byCitizenIdAndIssueId.get().isType() : null;
+        if (byCitizenIdAndIssueId.isEmpty()) {
+            throw new BusinessException(ExceptionReason.REACTION_NOT_FOUND);
+        }
+        return byCitizenIdAndIssueId.get().isType();
     }
 
     @Override

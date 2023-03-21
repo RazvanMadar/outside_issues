@@ -5,12 +5,13 @@ import com.license.outside_issues.enums.IssueType;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.mapper.IssueMapper;
-import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.model.CitizenReactions;
 import com.license.outside_issues.model.Issue;
 import com.license.outside_issues.model.IssueImage;
 import com.license.outside_issues.repository.*;
+import com.license.outside_issues.service.email.EmailSender;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
+import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,19 +27,26 @@ public class IssueServiceImpl implements IssueService {
     private final IssueJdbcRepository issueJdbcRepository;
     private final CitizenReactionsRepository citizenReactionsRepository;
     private final IssueImageRepository issueImageRepository;
+    private final EmailSender emailSender;
 
-    public IssueServiceImpl(IssueRepository issueRepository, CitizenRepository citizenRepository, IssueJdbcRepository issueJdbcRepository, CitizenReactionsRepository citizenReactionsRepository, IssueImageRepository issueImageRepository) {
+    public IssueServiceImpl(IssueRepository issueRepository, CitizenRepository citizenRepository, IssueJdbcRepository issueJdbcRepository, CitizenReactionsRepository citizenReactionsRepository, IssueImageRepository issueImageRepository, EmailSender emailSender) {
         this.issueRepository = issueRepository;
         this.citizenRepository = citizenRepository;
         this.issueJdbcRepository = issueJdbcRepository;
         this.citizenReactionsRepository = citizenReactionsRepository;
         this.issueImageRepository = issueImageRepository;
+        this.emailSender = emailSender;
     }
 
     @Override
     public List<Issue> getAllIssues(Boolean hasLocation) {
         return hasLocation ? issueRepository.findAll().stream()
                 .filter(Issue::getHasLocation).collect(Collectors.toList()) : issueRepository.findAll();
+    }
+
+    @Override
+    public List<StatisticsDTO> getBasicStatistics(String email) {
+        return issueJdbcRepository.getBasicStatistics(email);
     }
 
 //    private IssueCardDTO mapIssuesCardsDTO(Issue issue) {
@@ -54,12 +62,11 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public Long addIssue(IssueDTO issue) {
-        Citizen citizenById = citizenRepository.findById(issue.getCitizenId()).orElseThrow(() -> {
-            throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
-        });
+//        Citizen citizenById = citizenRepository.findByEmail(issue.getCitizenEmail()).orElseThrow(() -> {
+//            throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
+//        });
         Issue savedIssue = IssueMapper.INSTANCE.dtoToModel(issue);
-//        savedIssue.setCitizen(citizenById);
-        savedIssue.setCitizenId(citizenById.getId());
+//        savedIssue.setCitizenEmail(issue.getCitizenEmail());
         issueRepository.save(savedIssue);
         return savedIssue.getId();
     }

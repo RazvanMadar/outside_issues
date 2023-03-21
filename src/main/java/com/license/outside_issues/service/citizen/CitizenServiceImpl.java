@@ -5,38 +5,68 @@ import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.mapper.citizen.DisplayCitizenMapper;
 import com.license.outside_issues.mapper.citizen.RegisterCitizenMapper;
 import com.license.outside_issues.model.Citizen;
+import com.license.outside_issues.model.Role;
+import com.license.outside_issues.repository.CitizenJdbcRepository;
 import com.license.outside_issues.repository.CitizenRepository;
+import com.license.outside_issues.repository.RoleRepository;
 import com.license.outside_issues.service.citizen.dtos.DisplayCitizenDTO;
 import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 public class CitizenServiceImpl implements CitizenService {
     private final CitizenRepository citizenRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private final CitizenJdbcRepository citizenJdbcRepository;
 
-    public CitizenServiceImpl(CitizenRepository citizenRepository, PasswordEncoder passwordEncoder) {
+    public CitizenServiceImpl(CitizenRepository citizenRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, CitizenJdbcRepository citizenJdbcRepository) {
         this.citizenRepository = citizenRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+        this.citizenJdbcRepository = citizenJdbcRepository;
     }
 
     @Override
-    public List<DisplayCitizenDTO> getAllCitizens() {
-        return convertCitizensToDTOS(citizenRepository.findAll());
+    public Page<DisplayCitizenDTO> getAllCitizens(String email, Pageable pageable) {
+        return citizenJdbcRepository.findCitizens(email, pageable);
+//        return email.isBlank() || email.isEmpty() ? citizenRepository.findAll().stream()
+//                    .map(this::convertCitizenToDTO)
+//                    .collect(Collectors.toList()) :
+//        citizenRepository.findByEmailContainingIgnoreCase(email).stream()
+//                .map(this::convertCitizenToDTO)
+//                .collect(Collectors.toList());
     }
 
     @Override
     public Long registerCitizen(RegisterCitizenDTO citizenDTO) {
         String rawPassword = citizenDTO.getPassword();
-        String encodedPassword = passwordEncoder.encode(rawPassword);
+        String encodedPassword = rawPassword != null ? passwordEncoder.encode(rawPassword) : null;
         Citizen citizen = RegisterCitizenMapper.INSTANCE.dtoToModel(citizenDTO);
         citizen.setPassword(encodedPassword);
+        Set<Role> roles = new HashSet<>();
+        Role roleById = roleRepository.findById(2).orElseThrow(() -> {
+            throw new BusinessException(ExceptionReason.ROLE_NOT_FOUND);
+        });
+        roles.add(roleById);
+        citizen.setRoles(roles);
         citizenRepository.save(citizen);
         return citizen.getId();
+    }
+
+    @Override
+    public DisplayCitizenDTO findByEmail(String email) {
+        final Citizen citizen = citizenRepository.findByEmail(email).orElseThrow(() -> {
+            throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
+        });
+        return DisplayCitizenMapper.INSTANCE.modelToDto(citizen);
     }
 
     @Override
@@ -47,9 +77,14 @@ public class CitizenServiceImpl implements CitizenService {
         return DisplayCitizenMapper.INSTANCE.modelToDto(citizenById);
     }
 
-    private List<DisplayCitizenDTO> convertCitizensToDTOS(List<Citizen> citizens) {
-        return citizens.stream()
-                .map(DisplayCitizenMapper.INSTANCE::modelToDto)
-                .collect(Collectors.toList());
+    private DisplayCitizenDTO convertCitizenToDTO(Citizen citizen) {
+        DisplayCitizenDTO displayCitizenDTO = new DisplayCitizenDTO();
+        displayCitizenDTO.setId(citizen.getId());
+        displayCitizenDTO.setEmail(citizen.getEmail());
+        displayCitizenDTO.setFirstName(citizen.getFirstName());
+        displayCitizenDTO.setLastName(citizen.getLastName());;
+        displayCitizenDTO.setPhoneNumber(citizen.getPhoneNumber());
+
+        return displayCitizenDTO;
     }
 }

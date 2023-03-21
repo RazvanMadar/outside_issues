@@ -2,11 +2,14 @@ package com.license.outside_issues.web.api;
 
 import com.license.outside_issues.service.issue.IssueService;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
+import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -22,6 +25,11 @@ public class IssueResource {
     @GetMapping
     public ResponseEntity<?> getAllIssues(@RequestParam(required = false, defaultValue = "false") Boolean hasLocation) {
         return ResponseEntity.ok(issueService.getAllIssues(hasLocation));
+    }
+
+    @GetMapping("/basic-statistics")
+    public ResponseEntity<List<StatisticsDTO>> getBasicStatistics(@RequestParam(required = false) String email) {
+        return ResponseEntity.ok(issueService.getBasicStatistics(email));
     }
 
     @PostMapping

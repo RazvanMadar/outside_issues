@@ -6,6 +6,7 @@ public class DisplayCitizenDTO {
     private String phoneNumber;
     private String firstName;
     private String lastName;
+    private boolean isBlocked;
 
     public DisplayCitizenDTO() {}
 
@@ -55,5 +56,25 @@ public class DisplayCitizenDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
+    @Override
+    public String toString() {
+        return "DisplayCitizenDTO{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", isBlocked=" + isBlocked +
+                '}';
     }
 }

@@ -15,7 +15,7 @@ public class IssueDTO {
     private Integer dislikesNumber;
     private String description;
     private Boolean hasLocation;
-    private Long citizenId;
+    private String citizenEmail;
     private String actualLocation;
 
     public Long getId() {
@@ -74,12 +74,12 @@ public class IssueDTO {
         this.description = description;
     }
 
-    public Long getCitizenId() {
-        return citizenId;
+    public String getCitizenEmail() {
+        return citizenEmail;
     }
 
-    public void setCitizenId(Long citizenId) {
-        this.citizenId = citizenId;
+    public void setCitizenEmail(String citizenEmail) {
+        this.citizenEmail = citizenEmail;
     }
 
     public AddressDTO getAddress() {
