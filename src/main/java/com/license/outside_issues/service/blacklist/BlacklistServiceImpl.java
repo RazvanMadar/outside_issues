@@ -6,8 +6,10 @@ import com.license.outside_issues.model.Blacklist;
 import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.repository.BlacklistRepository;
 import com.license.outside_issues.repository.CitizenRepository;
+import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,5 +50,19 @@ public class BlacklistServiceImpl implements BlacklistService {
         });
         blacklistRepository.delete(blacklist);
         return blacklist.getId();
+    }
+
+    @Override
+    public List<StatisticsDTO> getBasicStatistics() {
+        final long totalCitizens = citizenRepository.count();
+        final long totalBlockedCitizens = blacklistRepository.count();
+        StatisticsDTO statisticsDTO1 = new StatisticsDTO();
+        statisticsDTO1.setState("UNBLOCKED");
+        statisticsDTO1.setVal((int) totalCitizens);
+        StatisticsDTO statisticsDTO2 = new StatisticsDTO();
+        statisticsDTO2.setState("BLOCKED");
+        statisticsDTO2.setVal((int) totalBlockedCitizens);
+
+        return List.of(statisticsDTO1, statisticsDTO2);
     }
 }

@@ -76,15 +76,4 @@ public class CitizenServiceImpl implements CitizenService {
         });
         return DisplayCitizenMapper.INSTANCE.modelToDto(citizenById);
     }
-
-    private DisplayCitizenDTO convertCitizenToDTO(Citizen citizen) {
-        DisplayCitizenDTO displayCitizenDTO = new DisplayCitizenDTO();
-        displayCitizenDTO.setId(citizen.getId());
-        displayCitizenDTO.setEmail(citizen.getEmail());
-        displayCitizenDTO.setFirstName(citizen.getFirstName());
-        displayCitizenDTO.setLastName(citizen.getLastName());;
-        displayCitizenDTO.setPhoneNumber(citizen.getPhoneNumber());
-
-        return displayCitizenDTO;
-    }
 }

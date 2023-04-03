@@ -1,10 +1,12 @@
 package com.license.outside_issues.web.api;
 
 import com.license.outside_issues.service.blacklist.BlacklistService;
-import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;
+import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -29,5 +31,10 @@ public class BlacklistResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteCitizenFromBlacklist(@PathVariable Long id) {
         return ResponseEntity.ok(blacklistService.deleteCitizenFromBlacklist(id));
+    }
+
+    @GetMapping("/blocked-statistics")
+    public ResponseEntity<List<StatisticsDTO>> getBasicStatistics() {
+        return ResponseEntity.ok(blacklistService.getBasicStatistics());
     }
 }

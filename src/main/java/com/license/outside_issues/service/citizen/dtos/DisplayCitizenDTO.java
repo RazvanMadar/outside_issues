@@ -6,16 +6,21 @@ public class DisplayCitizenDTO {
     private String phoneNumber;
     private String firstName;
     private String lastName;
+    private Integer totalReported;
+    private Integer totalRejected;
     private boolean isBlocked;
 
     public DisplayCitizenDTO() {}
 
-    public DisplayCitizenDTO(Long id, String email, String phoneNumber, String firstName, String lastName) {
+    public DisplayCitizenDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Integer totalReported, Integer totalRejected, boolean isBlocked) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.totalReported = totalReported;
+        this.totalRejected = totalRejected;
+        this.isBlocked = isBlocked;
     }
 
     public Long getId() {
@@ -66,6 +71,22 @@ public class DisplayCitizenDTO {
         isBlocked = blocked;
     }
 
+    public Integer getTotalReported() {
+        return totalReported;
+    }
+
+    public void setTotalReported(Integer totalReported) {
+        this.totalReported = totalReported;
+    }
+
+    public Integer getTotalRejected() {
+        return totalRejected;
+    }
+
+    public void setTotalRejected(Integer totalRejected) {
+        this.totalRejected = totalRejected;
+    }
+
     @Override
     public String toString() {
         return "DisplayCitizenDTO{" +
@@ -74,6 +95,8 @@ public class DisplayCitizenDTO {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", totalReported=" + totalReported +
+                ", totalRejected=" + totalRejected +
                 ", isBlocked=" + isBlocked +
                 '}';
     }

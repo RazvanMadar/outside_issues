@@ -20,10 +20,14 @@ import java.util.Objects;
 public class CitizenJdbcRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final BlacklistService blacklistService;
+    private final IssueRepository issueRepository;
+    private final RejectedIssuesRepository rejectedIssuesRepository;
 
-    public CitizenJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate, BlacklistService blacklistService) {
+    public CitizenJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate, BlacklistService blacklistService, IssueRepository issueRepository, RejectedIssuesRepository rejectedIssuesRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.blacklistService = blacklistService;
+        this.issueRepository = issueRepository;
+        this.rejectedIssuesRepository = rejectedIssuesRepository;
     }
 
     public Page<DisplayCitizenDTO> findCitizens(String email, Pageable pageable) {
@@ -58,6 +62,10 @@ public class CitizenJdbcRepository {
         displayCitizenDTO.setFirstName(rs.getString("first_name"));
         displayCitizenDTO.setLastName(rs.getString("last_name"));
         displayCitizenDTO.setPhoneNumber(rs.getString("phone_number"));
+        long totalReportedIssues = issueRepository.countByCitizenEmail(rs.getString("email"));
+        long totalRejectedIssues = rejectedIssuesRepository.countByCitizenId(rs.getLong("id"));
+        displayCitizenDTO.setTotalReported((int) totalReportedIssues);
+        displayCitizenDTO.setTotalRejected((int) totalRejectedIssues);
         final boolean isCitizenBlocked = blacklistService.isCitizenBlocked(rs.getLong("id"));
         displayCitizenDTO.setBlocked(isCitizenBlocked);
         return displayCitizenDTO;
