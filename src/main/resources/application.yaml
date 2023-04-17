@@ -16,6 +16,8 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
+  main:
+    allow-circular-references: true
   jpa:
     hibernate:
       ddl-auto: update
@@ -48,3 +50,20 @@ logging:
         security: DEBUG
 base_url:
   issue: "http://localhost:3000/issues/"
+
+rabbitmq:
+  host: localhost
+  virtualhost: /
+  port: 15672
+  username: guest
+  password: guest
+  exchange: rabbitmq.exchange
+  queue: rabbitmq.queue
+  routingkey: rabbitmq.routingkey
+  reply:
+    timeout: 60000
+  concurrent:
+    consumers: 1
+  max:
+    concurrent:
+      consumers: 1

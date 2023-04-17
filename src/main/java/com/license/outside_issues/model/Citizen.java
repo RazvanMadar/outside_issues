@@ -33,6 +33,9 @@ public class Citizen implements UserDetails {
     @OneToOne(mappedBy = "citizen")
     private Blacklist blacklist;
 
+    @OneToOne(mappedBy = "citizen")
+    private CitizenImage citizenImage;
+
 //    @OneToMany(
 //            mappedBy = "citizen",
 //            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
@@ -152,6 +155,14 @@ public class Citizen implements UserDetails {
         this.blacklist = blacklist;
     }
 
+    public CitizenImage getCitizenImage() {
+        return citizenImage;
+    }
+
+    public void setCitizenImage(CitizenImage citizenImage) {
+        this.citizenImage = citizenImage;
+    }
+
     @Override
     public String toString() {
         return "Citizen{" +
@@ -164,6 +175,7 @@ public class Citizen implements UserDetails {
                 ", roles=" + roles +
                 ", citizenReactions=" + citizenReactions +
                 ", blacklist=" + blacklist +
+                ", citizenImage=" + citizenImage +
                 '}';
     }
 }
