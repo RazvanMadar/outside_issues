@@ -4,6 +4,13 @@ public class StatisticsDTO {
     private String state;
     private Integer val;
 
+    public StatisticsDTO() {}
+
+    public StatisticsDTO(String state, Integer val) {
+        this.state = state;
+        this.val = val;
+    }
+
     public String getState() {
         return state;
     }

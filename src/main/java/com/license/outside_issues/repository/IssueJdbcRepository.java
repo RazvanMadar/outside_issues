@@ -44,7 +44,12 @@ public class IssueJdbcRepository {
             query += "WHERE citizen_email = " + "'" + email + "'";
         }
         query += " GROUP BY state";
-        return jdbcTemplate.query(query, parameters, (rs, rowNum) -> mapToStatisticsDTO(rs));
+        List<StatisticsDTO> statistics = jdbcTemplate.query(query, parameters, (rs, rowNum) -> mapToStatisticsDTO(rs));
+        fillWithZeroIfNoIssuesReported(statistics, "REGISTERED");
+        fillWithZeroIfNoIssuesReported(statistics, "PLANNED");
+        fillWithZeroIfNoIssuesReported(statistics, "WORKING");
+        fillWithZeroIfNoIssuesReported(statistics, "SOLVED");
+        return statistics;
     }
 
     public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, Pageable pageable) {
@@ -134,5 +139,19 @@ public class IssueJdbcRepository {
         statisticsDTO.setVal(rs.getInt("val"));
 
         return statisticsDTO;
+    }
+
+    private List<StatisticsDTO> fillWithZeroIfNoIssuesReported(List<StatisticsDTO> statisticsDTOS, String state) {
+        boolean exists = false;
+        for (StatisticsDTO statisticsDTO : statisticsDTOS) {
+            if (state.equals(statisticsDTO.getState())) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            statisticsDTOS.add(new StatisticsDTO(state, 0));
+        }
+        return statisticsDTOS;
     }
 }

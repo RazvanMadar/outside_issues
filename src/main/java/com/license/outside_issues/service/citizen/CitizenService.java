@@ -1,5 +1,6 @@
 package com.license.outside_issues.service.citizen;
 
+import com.license.outside_issues.service.citizen.dtos.ChatCitizenDTO;
 import com.license.outside_issues.service.citizen.dtos.DisplayCitizenDTO;
 import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;
 import org.springframework.data.domain.Page;
@@ -13,4 +14,5 @@ public interface CitizenService {
     Long registerCitizen(RegisterCitizenDTO citizen);
     DisplayCitizenDTO findByEmail(String email);
     DisplayCitizenDTO findById(Long id);
+    List<ChatCitizenDTO> getChatUsersByRole(String role);
 }

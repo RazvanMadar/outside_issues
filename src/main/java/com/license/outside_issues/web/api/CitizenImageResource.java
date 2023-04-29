@@ -1,12 +1,15 @@
 package com.license.outside_issues.web.api;
 
 import com.license.outside_issues.service.citizen.CitizenImageService;
+import com.license.outside_issues.service.citizen.dtos.CitizenImageDTO;
 import com.license.outside_issues.service.issue.dtos.IssueImageDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/citizen/images")
@@ -24,7 +27,7 @@ public class CitizenImageResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<byte[]> getImage1(@PathVariable Long id) {
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png"))
                 .body(citizenImageService.getCitizenImage(id));
     }

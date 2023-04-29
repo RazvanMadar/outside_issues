@@ -4,15 +4,15 @@ import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.model.Message;
+import com.license.outside_issues.model.Role;
 import com.license.outside_issues.repository.CitizenRepository;
 import com.license.outside_issues.repository.MessageRepository;
+import com.license.outside_issues.service.citizen.dtos.ChatCitizenDTO;
 import com.license.outside_issues.service.message.dtos.MessageDTO;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,12 +50,45 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public MessageDTO getLatestMessage(Long fromCitizenId, Long toCitizenId) {
-        final List<Message> byFromCitizenIdAndToCitizenId = messageRepository.findByFromCitizenIdAndToCitizenId(toCitizenId, fromCitizenId);
-        byFromCitizenIdAndToCitizenId.addAll(messageRepository.findByFromCitizenIdAndToCitizenId(fromCitizenId, toCitizenId));
-        final Optional<MessageDTO> lastMessage = byFromCitizenIdAndToCitizenId.stream()
-                .map(this::convertEntityToDTO).max(Comparator.comparing(MessageDTO::getDate));
-        return lastMessage.orElseGet(MessageDTO::new);
+    public List<MessageDTO> getLatestMessage(Long fromCitizenId, Long toCitizenId) {
+        return messageRepository.findNeededMessages().stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
+//        final List<Message> byFromCitizenIdAndToCitizenId = messageRepository.findByFromCitizenIdAndToCitizenId(toCitizenId, fromCitizenId);
+//        byFromCitizenIdAndToCitizenId.addAll(messageRepository.findByFromCitizenIdAndToCitizenId(fromCitizenId, toCitizenId));
+//        final Optional<MessageDTO> lastMessage = byFromCitizenIdAndToCitizenId.stream()
+//                .map(this::convertEntityToDTO).max(Comparator.comparing(MessageDTO::getDate));
+//        return lastMessage.orElseGet(MessageDTO::new);
+    }
+
+    @Override
+    public MessageDTO findLatestMessageByEmail(String email) {
+        final Message message = messageRepository.findLatestMessageByEmail(email).orElseThrow(() -> {
+            throw new BusinessException(ExceptionReason.MESSAGE_NOT_FOUND);
+        });
+        return convertEntityToDTO(message);
+    }
+
+    public List<ChatCitizenDTO> getChatUsersByRole(String role) {
+        List<Citizen> result = new ArrayList<>();
+        final List<Citizen> allUsers = citizenRepository.findAll();
+        for (Citizen citizen : allUsers) {
+            final Set<Role> roles = citizen.getRoles();
+            Iterator<Role> iterator = roles.iterator();
+            final Role citizenRole = iterator.next();
+            if (role.equals(citizenRole.getName())) {
+                result.add(citizen);
+            }
+        }
+
+        return result.stream()
+                .map(this::mapCitizenToChatCitizen)
+                .collect(Collectors.toList());
+    }
+
+    private ChatCitizenDTO mapCitizenToChatCitizen(Citizen citizen) {
+        return new ChatCitizenDTO(citizen.getId(), citizen.getFirstName(), citizen.getLastName(), citizen.getEmail(),
+                citizen.getCitizenImage() != null ? citizen.getCitizenImage().getImage(): null);
     }
 
     private Message convertDTOToEntity(MessageDTO messageDTO) {

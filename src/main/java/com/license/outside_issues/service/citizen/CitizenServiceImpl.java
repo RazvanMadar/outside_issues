@@ -9,6 +9,7 @@ import com.license.outside_issues.model.Role;
 import com.license.outside_issues.repository.CitizenJdbcRepository;
 import com.license.outside_issues.repository.CitizenRepository;
 import com.license.outside_issues.repository.RoleRepository;
+import com.license.outside_issues.service.citizen.dtos.ChatCitizenDTO;
 import com.license.outside_issues.service.citizen.dtos.DisplayCitizenDTO;
 import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;
 import org.springframework.data.domain.Page;
@@ -16,9 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CitizenServiceImpl implements CitizenService {
@@ -75,5 +75,17 @@ public class CitizenServiceImpl implements CitizenService {
             throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
         });
         return DisplayCitizenMapper.INSTANCE.modelToDto(citizenById);
+    }
+
+    @Override
+    public List<ChatCitizenDTO> getChatUsersByRole(String role) {
+        return citizenRepository.getChatUsers(role).stream()
+                .map(this::mapCitizenToChatCitizen)
+                .collect(Collectors.toList());
+    }
+
+    private ChatCitizenDTO mapCitizenToChatCitizen(Citizen citizen) {
+        return new ChatCitizenDTO(citizen.getId(), citizen.getFirstName(), citizen.getLastName(), citizen.getEmail(),
+                citizen.getCitizenImage() != null ? citizen.getCitizenImage().getImage(): null);
     }
 }

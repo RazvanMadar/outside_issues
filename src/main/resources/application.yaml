@@ -51,19 +51,19 @@ logging:
 base_url:
   issue: "http://localhost:3000/issues/"
 
-rabbitmq:
-  host: localhost
-  virtualhost: /
-  port: 15672
-  username: guest
-  password: guest
-  exchange: rabbitmq.exchange
-  queue: rabbitmq.queue
-  routingkey: rabbitmq.routingkey
-  reply:
-    timeout: 60000
-  concurrent:
-    consumers: 1
-  max:
-    concurrent:
-      consumers: 1
+#rabbitmq:
+#  host: localhost
+#  virtualhost: /
+#  port: 15672
+#  username: guest
+#  password: guest
+#  exchange: rabbitmq.exchange
+#  queue: rabbitmq.queue
+#  routingkey: rabbitmq.routingkey
+#  reply:
+#    timeout: 60000
+#  concurrent:
+#    consumers: 1
+#  max:
+#    concurrent:
+#      consumers: 1

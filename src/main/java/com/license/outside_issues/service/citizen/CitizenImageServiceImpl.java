@@ -1,23 +1,20 @@
 package com.license.outside_issues.service.citizen;
 
 import com.license.outside_issues.common.ImageUtil;
-import com.license.outside_issues.enums.ImageType;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
-import com.license.outside_issues.mapper.IssueImageMapper;
 import com.license.outside_issues.mapper.citizen.CitizenImageMapper;
 import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.model.CitizenImage;
-import com.license.outside_issues.model.Issue;
-import com.license.outside_issues.model.IssueImage;
 import com.license.outside_issues.repository.CitizenImageRepository;
 import com.license.outside_issues.repository.CitizenRepository;
+import com.license.outside_issues.service.citizen.dtos.CitizenImageDTO;
 import com.license.outside_issues.service.issue.dtos.IssueImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.util.Map;
 
 @Service
 public class CitizenImageServiceImpl implements CitizenImageService {

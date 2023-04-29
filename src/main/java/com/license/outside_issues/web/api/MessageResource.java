@@ -31,12 +31,22 @@ public class MessageResource {
     }
 
     @GetMapping("/latest")
-    public ResponseEntity<MessageDTO> getLatestMessage(@RequestParam Long from, @RequestParam Long to) {
+    public ResponseEntity<?> getLatestMessage(@RequestParam Long from, @RequestParam Long to) {
         return ResponseEntity.ok(messageService.getLatestMessage(from, to));
     }
 
     @PostMapping
     public ResponseEntity<Long> sendMessage(@RequestBody MessageDTO messageDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(messageService.sendMessage(messageDTO));
+    }
+
+    @GetMapping("/role")
+    public ResponseEntity<?> getChatUsersByRole(@RequestParam String name) {
+        return ResponseEntity.ok(messageService.getChatUsersByRole(name));
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<MessageDTO> findLatestMessageByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(messageService.findLatestMessageByEmail(email));
     }
 }

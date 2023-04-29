@@ -38,4 +38,9 @@ public class CitizenResource {
     public ResponseEntity<Long> registerCitizen(@RequestBody RegisterCitizenDTO citizen) {
         return ResponseEntity.status(HttpStatus.CREATED).body(citizenService.registerCitizen(citizen));
     }
+
+    @GetMapping("/role")
+    public ResponseEntity<?> getChatUsersByRole(@RequestParam String name) {
+        return ResponseEntity.ok(citizenService.getChatUsersByRole(name));
+    }
 }
