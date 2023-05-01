@@ -58,6 +58,11 @@ public class IssueResource {
         return ResponseEntity.ok(issueService.findIssues(type, state, fromDate, toDate, hasLocation, pageable));
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Page<IssueDTO>> findIssues(@PathVariable String email, Pageable pageable) {
+        return ResponseEntity.ok(issueService.findAllByCitizenEmail(email, pageable));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteIssue(@PathVariable Long id) {
         return ResponseEntity.ok(issueService.deleteIssue(id));

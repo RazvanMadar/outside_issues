@@ -33,4 +33,9 @@ public class RejectedIssuesResource {
     public ResponseEntity<List<StatisticsDTO>> getAllRejected() {
         return ResponseEntity.ok(rejectedIssuesService.getAllRejected());
     }
+
+    @GetMapping("/citizen")
+    public ResponseEntity<List<StatisticsDTO>> getAllRejectedForCitizen(@RequestParam Long id, @RequestParam String email) {
+        return ResponseEntity.ok(rejectedIssuesService.getAllRejectedForCitizen(id, email));
+    }
 }

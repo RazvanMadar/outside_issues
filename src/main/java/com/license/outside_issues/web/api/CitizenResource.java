@@ -1,6 +1,7 @@
 package com.license.outside_issues.web.api;
 
 import com.license.outside_issues.service.citizen.CitizenService;
+import com.license.outside_issues.service.citizen.dtos.DisplayCitizenDTO;
 import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,12 @@ public class CitizenResource {
     public ResponseEntity<Long> registerCitizen(@RequestBody RegisterCitizenDTO citizen) {
         return ResponseEntity.status(HttpStatus.CREATED).body(citizenService.registerCitizen(citizen));
     }
+
+    @PutMapping
+    public ResponseEntity<Long> updateCitizen(@RequestBody DisplayCitizenDTO citizen) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(citizenService.updateCitizen(citizen));
+    }
+
 
     @GetMapping("/role")
     public ResponseEntity<?> getChatUsersByRole(@RequestParam String name) {

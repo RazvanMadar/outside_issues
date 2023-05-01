@@ -3,8 +3,6 @@ package com.license.outside_issues.repository;
 import com.license.outside_issues.common.PaginationUtil;
 import com.license.outside_issues.enums.IssueState;
 import com.license.outside_issues.enums.IssueType;
-import com.license.outside_issues.mapper.IssueMapper;
-import com.license.outside_issues.model.Issue;
 import com.license.outside_issues.service.issue.dtos.AddressDTO;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
 import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
@@ -16,14 +14,12 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Repository
 public class IssueJdbcRepository {
@@ -141,7 +137,7 @@ public class IssueJdbcRepository {
         return statisticsDTO;
     }
 
-    private List<StatisticsDTO> fillWithZeroIfNoIssuesReported(List<StatisticsDTO> statisticsDTOS, String state) {
+    private void fillWithZeroIfNoIssuesReported(List<StatisticsDTO> statisticsDTOS, String state) {
         boolean exists = false;
         for (StatisticsDTO statisticsDTO : statisticsDTOS) {
             if (state.equals(statisticsDTO.getState())) {
@@ -152,6 +148,5 @@ public class IssueJdbcRepository {
         if (!exists) {
             statisticsDTOS.add(new StatisticsDTO(state, 0));
         }
-        return statisticsDTOS;
     }
 }

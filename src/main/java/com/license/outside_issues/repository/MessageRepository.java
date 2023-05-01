@@ -26,6 +26,13 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query(value = "SELECT * " +
             "FROM messages " +
+            "WHERE (to_citizen_id = :fromId AND from_citizen_id = :toId) OR (to_citizen_id = :toId AND from_citizen_id = :fromId) " +
+            "ORDER BY date DESC " +
+            "LIMIT 1", nativeQuery = true)
+    Optional<Message> findLatestMessageForCitizen(@Param("fromId") Long fromId, @Param("toId") Long toId);
+
+    @Query(value = "SELECT * " +
+            "FROM messages " +
             "WHERE to_citizen_id IN (SELECT id FROM citizens WHERE email = :email) OR from_citizen_id IN (SELECT id FROM citizens WHERE email = :email) " +
             "ORDER BY date DESC " +
             "LIMIT 1", nativeQuery = true)

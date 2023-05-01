@@ -86,6 +86,14 @@ public class MessageServiceImpl implements MessageService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public MessageDTO findLatestMessageForCitizen(Long fromId, Long toId) {
+        final Message message = messageRepository.findLatestMessageForCitizen(fromId, toId).orElseThrow(() -> {
+            throw new BusinessException(ExceptionReason.MESSAGE_NOT_FOUND);
+        });
+        return convertEntityToDTO(message);
+    }
+
     private ChatCitizenDTO mapCitizenToChatCitizen(Citizen citizen) {
         return new ChatCitizenDTO(citizen.getId(), citizen.getFirstName(), citizen.getLastName(), citizen.getEmail(),
                 citizen.getCitizenImage() != null ? citizen.getCitizenImage().getImage(): null);

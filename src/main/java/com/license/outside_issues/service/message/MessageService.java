@@ -12,4 +12,5 @@ public interface MessageService {
     List<MessageDTO> getLatestMessage(Long fromCitizenId, Long toCitizenId);
     MessageDTO findLatestMessageByEmail(String email);
     List<ChatCitizenDTO> getChatUsersByRole(String role);
+    MessageDTO findLatestMessageForCitizen(Long fromId, Long toId);
 }

@@ -8,4 +8,5 @@ public interface RejectedIssuesService {
     Long addRejected(Long citizenId);
     long getRejectedForCitizen(Long citizenId);
     List<StatisticsDTO> getAllRejected();
+    List<StatisticsDTO> getAllRejectedForCitizen(Long id, String email);
 }

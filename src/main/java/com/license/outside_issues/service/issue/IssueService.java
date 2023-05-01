@@ -16,4 +16,5 @@ public interface IssueService {
     IssueDTO updateIssue(Long id, String type, String state);
     Long deleteIssue(Long id);
     Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, Pageable pageable);
+    Page<IssueDTO> findAllByCitizenEmail(String email, Pageable pageable);
 }

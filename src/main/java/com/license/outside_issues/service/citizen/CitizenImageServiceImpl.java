@@ -8,13 +8,12 @@ import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.model.CitizenImage;
 import com.license.outside_issues.repository.CitizenImageRepository;
 import com.license.outside_issues.repository.CitizenRepository;
-import com.license.outside_issues.service.citizen.dtos.CitizenImageDTO;
 import com.license.outside_issues.service.issue.dtos.IssueImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.Map;
 
 @Service
 public class CitizenImageServiceImpl implements CitizenImageService {
@@ -53,5 +52,16 @@ public class CitizenImageServiceImpl implements CitizenImageService {
             throw new BusinessException(ExceptionReason.IMAGE_NOT_FOUND);
         }
         return ImageUtil.decompressImage(citizen.getCitizenImage().getImage());
+    }
+
+    @Override
+    public Long deleteCitizenImage(Long id) {
+        Citizen citizen = citizenRepository.findById(id).orElseThrow(() -> {
+            throw new BusinessException(ExceptionReason.IMAGE_NOT_FOUND);
+        });
+        if (citizen.getCitizenImage() != null) {
+            citizenImageRepository.delete(citizen.getCitizenImage());
+        }
+        return id;
     }
 }

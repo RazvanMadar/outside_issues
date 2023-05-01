@@ -1,6 +1,7 @@
 package com.license.outside_issues.service.citizen;
 
 import com.license.outside_issues.model.RejectedIssues;
+import com.license.outside_issues.repository.CitizenRepository;
 import com.license.outside_issues.repository.IssueRepository;
 import com.license.outside_issues.repository.RejectedIssuesRepository;
 import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
@@ -13,11 +14,11 @@ import java.util.Optional;
 @Service
 public class RejectedIssuesServiceImpl implements RejectedIssuesService {
     private final RejectedIssuesRepository rejectedIssuesRepository;
-    private final IssueRepository issuseRepository;
+    private final IssueRepository issueRepository;
 
-    public RejectedIssuesServiceImpl(RejectedIssuesRepository rejectedIssuesRepository, IssueRepository issuseRepository) {
+    public RejectedIssuesServiceImpl(RejectedIssuesRepository rejectedIssuesRepository, IssueRepository issueRepository) {
         this.rejectedIssuesRepository = rejectedIssuesRepository;
-        this.issuseRepository = issuseRepository;
+        this.issueRepository = issueRepository;
     }
 
     @Override
@@ -45,10 +46,23 @@ public class RejectedIssuesServiceImpl implements RejectedIssuesService {
         StatisticsDTO statisticsIssuesDTO = new StatisticsDTO();
         statisticsIssuesDTO.setState("REJECTED");
         statisticsIssuesDTO.setVal((int) allRejected);
-        long allIssues = issuseRepository.count();
+        long allIssues = issueRepository.count();
         StatisticsDTO statisticsIssuesDTO2 = new StatisticsDTO();
         statisticsIssuesDTO2.setState("TOTAL");
         statisticsIssuesDTO2.setVal((int) allIssues);
+        return List.of(statisticsIssuesDTO, statisticsIssuesDTO2);
+    }
+
+    @Override
+    public List<StatisticsDTO> getAllRejectedForCitizen(Long id, String email) {
+        long totalReportedIssues = issueRepository.countByCitizenEmail(email);
+        long totalRejectedIssues = rejectedIssuesRepository.countByCitizenId(id);
+        StatisticsDTO statisticsIssuesDTO = new StatisticsDTO();
+        statisticsIssuesDTO.setState("REJECTED");
+        statisticsIssuesDTO.setVal((int) totalRejectedIssues);
+        StatisticsDTO statisticsIssuesDTO2 = new StatisticsDTO();
+        statisticsIssuesDTO2.setState("TOTAL");
+        statisticsIssuesDTO2.setVal((int) totalReportedIssues);
         return List.of(statisticsIssuesDTO, statisticsIssuesDTO2);
     }
 }

@@ -30,9 +30,14 @@ public class MessageResource {
         return ResponseEntity.ok(messageService.getChatMessages(from, to));
     }
 
+//    @GetMapping("/latest")
+//    public ResponseEntity<?> getLatestMessage(@RequestParam Long from, @RequestParam Long to) {
+//        return ResponseEntity.ok(messageService.getLatestMessage(from, to));
+//    }
+
     @GetMapping("/latest")
-    public ResponseEntity<?> getLatestMessage(@RequestParam Long from, @RequestParam Long to) {
-        return ResponseEntity.ok(messageService.getLatestMessage(from, to));
+    public ResponseEntity<?> findLatestMessageForCitizen(@RequestParam Long fromId, @RequestParam Long toId) {
+        return ResponseEntity.ok(messageService.findLatestMessageForCitizen(fromId, toId));
     }
 
     @PostMapping

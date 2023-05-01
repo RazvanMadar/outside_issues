@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -82,6 +83,21 @@ public class CitizenServiceImpl implements CitizenService {
         return citizenRepository.getChatUsers(role).stream()
                 .map(this::mapCitizenToChatCitizen)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long updateCitizen(DisplayCitizenDTO citizen) {
+        Citizen citizenById = citizenRepository.findById(citizen.getId()).orElseThrow(() -> {
+            throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
+        });
+        if (citizen.getFirstName() != null) {
+            citizenById.setFirstName(citizen.getFirstName());
+        }
+        if (citizen.getLastName() != null) {
+            citizenById.setLastName(citizen.getLastName());
+        }
+        citizenRepository.save(citizenById);
+        return citizenById.getId();
     }
 
     private ChatCitizenDTO mapCitizenToChatCitizen(Citizen citizen) {

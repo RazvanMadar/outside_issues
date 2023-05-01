@@ -10,12 +10,17 @@ import com.license.outside_issues.model.Issue;
 import com.license.outside_issues.model.IssueImage;
 import com.license.outside_issues.repository.*;
 import com.license.outside_issues.service.email.EmailSender;
+import com.license.outside_issues.service.issue.dtos.AddressDTO;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
 import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -109,5 +114,14 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, Pageable pageable) {
         return issueJdbcRepository.findIssues(type, state, fromDate, toDate, hasLocation, pageable);
+    }
+
+    @Override
+    public Page<IssueDTO> findAllByCitizenEmail(String email, Pageable pageable) {
+        long totalReportedIssues = issueRepository.countByCitizenEmail(email);
+        final List<IssueDTO> collectedIssues = issueRepository.findAllByCitizenEmail(email, pageable).stream()
+                .map(IssueMapper.INSTANCE::modelToDto)
+                .collect(Collectors.toList());
+        return new PageImpl<>(collectedIssues, pageable, totalReportedIssues);
     }
 }
