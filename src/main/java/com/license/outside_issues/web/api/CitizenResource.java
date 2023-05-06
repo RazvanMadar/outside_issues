@@ -21,8 +21,8 @@ public class CitizenResource {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCitizens(@RequestParam(required = false) String email, Pageable pageable) {
-        return ResponseEntity.ok(citizenService.getAllCitizens(email, pageable));
+    public ResponseEntity<?> getAllCitizens(@RequestParam(required = false) String email, @RequestParam(required = false) boolean isFiltered, Pageable pageable) {
+        return ResponseEntity.ok(citizenService.getAllCitizens(email, isFiltered, pageable));
     }
 
     @GetMapping("/{id}")
@@ -45,9 +45,13 @@ public class CitizenResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(citizenService.updateCitizen(citizen));
     }
 
-
     @GetMapping("/role")
     public ResponseEntity<?> getChatUsersByRole(@RequestParam String name) {
         return ResponseEntity.ok(citizenService.getChatUsersByRole(name));
+    }
+
+    @PostMapping("/test")
+    public ResponseEntity<String> test(@RequestBody String msg) {
+        return ResponseEntity.ok("Message received " + msg);
     }
 }

@@ -11,10 +11,11 @@ import java.util.List;
 
 
 public interface CitizenService {
-    Page<DisplayCitizenDTO> getAllCitizens(String email, Pageable pageable);
+    Page<DisplayCitizenDTO> getAllCitizens(String email, boolean isFiltered, Pageable pageable);
     Long registerCitizen(RegisterCitizenDTO citizen);
     DisplayCitizenDTO findByEmail(String email);
     DisplayCitizenDTO findById(Long id);
     List<ChatCitizenDTO> getChatUsersByRole(String role);
     Long updateCitizen(DisplayCitizenDTO citizen);
+    List<DisplayCitizenDTO> findAllCitizenUsers();
 }

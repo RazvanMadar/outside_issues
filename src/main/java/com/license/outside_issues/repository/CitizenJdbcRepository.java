@@ -30,13 +30,22 @@ public class CitizenJdbcRepository {
         this.rejectedIssuesRepository = rejectedIssuesRepository;
     }
 
-    public Page<DisplayCitizenDTO> findCitizens(String email, Pageable pageable) {
+    public Page<DisplayCitizenDTO> findCitizens(String email, boolean isFiltered, Pageable pageable) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        StringBuilder query = new StringBuilder("SELECT * FROM citizens ");
+        StringBuilder query = new StringBuilder("SELECT * FROM citizens c ");
+        if (isFiltered) {
+            query.append("INNER JOIN citizens_roles cr ON c.id = cr.citizen_id ").append("INNER JOIN roles r ON cr.role_id = r.id ").append("WHERE r.name = 'ROLE_USER' ");
+            parameters.addValue("isFiltered", true);
+        }
         if (email != null && !email.isBlank() && !email.isEmpty()) {
-            query.append("WHERE email LIKE '%").append(email).append("%'");
+            if (isFiltered) {
+                query.append(" AND c.email LIKE '%").append(email).append("%' ");
+            } else {
+                query.append("WHERE c.email LIKE '%").append(email).append("%' ");
+            }
             parameters.addValue("email", email);
         }
+
         System.out.println(query);
 
         Integer filteredCitizensSql = jdbcTemplate.queryForObject(query.toString().replace("*", "COUNT(*)"), parameters, Integer.class);

@@ -36,8 +36,8 @@ public class CitizenServiceImpl implements CitizenService {
     }
 
     @Override
-    public Page<DisplayCitizenDTO> getAllCitizens(String email, Pageable pageable) {
-        return citizenJdbcRepository.findCitizens(email, pageable);
+    public Page<DisplayCitizenDTO> getAllCitizens(String email, boolean isFiltered, Pageable pageable) {
+        return citizenJdbcRepository.findCitizens(email, isFiltered, pageable);
 //        return email.isBlank() || email.isEmpty() ? citizenRepository.findAll().stream()
 //                    .map(this::convertCitizenToDTO)
 //                    .collect(Collectors.toList()) :
@@ -80,7 +80,9 @@ public class CitizenServiceImpl implements CitizenService {
 
     @Override
     public List<ChatCitizenDTO> getChatUsersByRole(String role) {
-        return citizenRepository.getChatUsers(role).stream()
+        return "ROLE_ADMIN".equals(role) ? citizenRepository.getChatUsersForAdmin().stream()
+                .map(this::mapCitizenToChatCitizen)
+                .collect(Collectors.toList()) : citizenRepository.getChatUsersForCitizen().stream()
                 .map(this::mapCitizenToChatCitizen)
                 .collect(Collectors.toList());
     }
@@ -98,6 +100,13 @@ public class CitizenServiceImpl implements CitizenService {
         }
         citizenRepository.save(citizenById);
         return citizenById.getId();
+    }
+
+    @Override
+    public List<DisplayCitizenDTO> findAllCitizenUsers() {
+        return citizenRepository.findAllCitizenUsers().stream()
+                .map(DisplayCitizenMapper.INSTANCE::modelToDto)
+                .collect(Collectors.toList());
     }
 
     private ChatCitizenDTO mapCitizenToChatCitizen(Citizen citizen) {

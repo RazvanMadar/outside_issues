@@ -20,8 +20,8 @@ public class RejectedIssuesResource {
     }
 
     @PostMapping()
-    public ResponseEntity<Long> addRejected(@RequestParam Long id) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(rejectedIssuesService.addRejected(id));
+    public ResponseEntity<Long> addRejected(@RequestParam String email) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(rejectedIssuesService.addRejected(email));
     }
 
     @GetMapping("/{id}")

@@ -9,7 +9,7 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/outside_issues
     username: postgres
     password: postgres
   servlet:

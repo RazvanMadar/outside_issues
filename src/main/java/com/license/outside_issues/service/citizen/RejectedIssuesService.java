@@ -5,7 +5,7 @@ import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
 import java.util.List;
 
 public interface RejectedIssuesService {
-    Long addRejected(Long citizenId);
+    Long addRejected(String email);
     long getRejectedForCitizen(Long citizenId);
     List<StatisticsDTO> getAllRejected();
     List<StatisticsDTO> getAllRejectedForCitizen(Long id, String email);

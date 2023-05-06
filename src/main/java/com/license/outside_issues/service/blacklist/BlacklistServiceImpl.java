@@ -54,13 +54,13 @@ public class BlacklistServiceImpl implements BlacklistService {
 
     @Override
     public List<StatisticsDTO> getBasicStatistics() {
-        final long totalCitizens = citizenRepository.count();
+        final long totalCitizens = citizenRepository.countAllUserCitizens();
         final long totalBlockedCitizens = blacklistRepository.count();
         StatisticsDTO statisticsDTO1 = new StatisticsDTO();
-        statisticsDTO1.setState("UNBLOCKED");
+        statisticsDTO1.setState("Total");
         statisticsDTO1.setVal((int) totalCitizens);
         StatisticsDTO statisticsDTO2 = new StatisticsDTO();
-        statisticsDTO2.setState("BLOCKED");
+        statisticsDTO2.setState("Blocați");
         statisticsDTO2.setVal((int) totalBlockedCitizens);
 
         return List.of(statisticsDTO1, statisticsDTO2);
