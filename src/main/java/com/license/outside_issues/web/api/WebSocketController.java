@@ -1,17 +1,19 @@
 package com.license.outside_issues.web.api;
 
+import com.license.outside_issues.model.WebSocketMessage;
 import com.license.outside_issues.service.message.MessageService;
 import com.license.outside_issues.service.message.dtos.MessageDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.*;
-import com.license.outside_issues.model.WebSocketMessage;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("http://localhost:3000")

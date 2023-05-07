@@ -5,14 +5,18 @@ public class AuthenticationResponse {
     private String email;
     private String accessToken;
     private String role;
+    private String firstName;
+    private String lastName;
 
     public AuthenticationResponse() { }
 
-    public AuthenticationResponse(Long userId, String email, String role, String accessToken) {
+    public AuthenticationResponse(Long userId, String email, String role, String accessToken, String firstName, String lastName) {
         this.userId = userId;
         this.email = email;
         this.role = role;
         this.accessToken = accessToken;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -45,6 +49,22 @@ public class AuthenticationResponse {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
 

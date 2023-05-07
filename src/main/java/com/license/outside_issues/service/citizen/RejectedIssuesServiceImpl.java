@@ -66,18 +66,13 @@ public class RejectedIssuesServiceImpl implements RejectedIssuesService {
     @Override
     public List<StatisticsDTO> getAllRejectedForCitizen(Long id, String email) {
         long totalReportedIssues = issueRepository.countByCitizenEmail(email);
-
         Optional<RejectedIssues> rejectedIssues = rejectedIssuesRepository.findByCitizenId(id);
-        if (rejectedIssues.isPresent()) {
-            RejectedIssues currentRejectedIssues = rejectedIssues.get();
-            StatisticsDTO statisticsIssuesDTO = new StatisticsDTO();
-            statisticsIssuesDTO.setState("Respinse");
-            statisticsIssuesDTO.setVal(currentRejectedIssues.getRejectedNumber().intValue());
-            StatisticsDTO statisticsIssuesDTO2 = new StatisticsDTO();
-            statisticsIssuesDTO2.setState("Total");
-            statisticsIssuesDTO2.setVal((int) totalReportedIssues);
-            return List.of(statisticsIssuesDTO, statisticsIssuesDTO2);
-        }
-        return new ArrayList<>();
+        StatisticsDTO statisticsIssuesDTO = new StatisticsDTO();
+        statisticsIssuesDTO.setState("Respinse");
+        statisticsIssuesDTO.setVal(rejectedIssues.map(issues -> issues.getRejectedNumber().intValue()).orElse(0));
+        StatisticsDTO statisticsIssuesDTO2 = new StatisticsDTO();
+        statisticsIssuesDTO2.setState("Total");
+        statisticsIssuesDTO2.setVal((int) totalReportedIssues);
+        return List.of(statisticsIssuesDTO, statisticsIssuesDTO2);
     }
 }
