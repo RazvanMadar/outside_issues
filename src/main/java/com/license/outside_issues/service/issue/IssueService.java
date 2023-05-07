@@ -11,6 +11,7 @@ import java.util.List;
 public interface IssueService {
     List<Issue> getAllIssues(Boolean hasLocation);
     List<StatisticsDTO> getBasicStatistics(String email);
+    List<StatisticsDTO> getYearStatistics(String year);
     Long addIssue(IssueDTO issue);
     IssueDTO findById(Long id);
     IssueDTO updateIssue(Long id, String type, String state);

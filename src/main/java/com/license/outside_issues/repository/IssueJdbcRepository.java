@@ -18,8 +18,12 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Repository
 public class IssueJdbcRepository {
@@ -45,6 +49,29 @@ public class IssueJdbcRepository {
         fillWithZeroIfNoIssuesReported(statistics, "PLANNED");
         fillWithZeroIfNoIssuesReported(statistics, "WORKING");
         fillWithZeroIfNoIssuesReported(statistics, "SOLVED");
+        return statistics;
+    }
+
+    public List<StatisticsDTO> getYearStatistics(String year) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String query = "SELECT EXTRACT(MONTH FROM reported_date) as state, COUNT(*) as val " +
+                "FROM issues WHERE EXTRACT(YEAR FROM reported_date) = " + year +
+                " GROUP BY EXTRACT(MONTH FROM reported_date) ORDER BY EXTRACT(MONTH FROM reported_date)";
+
+        List<StatisticsDTO> statistics = jdbcTemplate.query(query, parameters, (rs, rowNum) -> mapToStatisticsDTO(rs));
+        fillWithZeroIfNoIssuesReported(statistics, "1");
+        fillWithZeroIfNoIssuesReported(statistics, "2");
+        fillWithZeroIfNoIssuesReported(statistics, "3");
+        fillWithZeroIfNoIssuesReported(statistics, "4");
+        fillWithZeroIfNoIssuesReported(statistics, "5");
+        fillWithZeroIfNoIssuesReported(statistics, "6");
+        fillWithZeroIfNoIssuesReported(statistics, "7");
+        fillWithZeroIfNoIssuesReported(statistics, "8");
+        fillWithZeroIfNoIssuesReported(statistics, "9");
+        fillWithZeroIfNoIssuesReported(statistics, "10");
+        fillWithZeroIfNoIssuesReported(statistics, "11");
+        fillWithZeroIfNoIssuesReported(statistics, "12");
+
         return statistics;
     }
 
@@ -127,6 +154,13 @@ public class IssueJdbcRepository {
 //        issue.setFromDate("start_date", LocalDate.class);
 //        issue.setToDate("to_date", LocalDate.class);
         return issue;
+    }
+
+    private StatisticsDTO getStatisticsFromIndex(int index, int val) {
+        StatisticsDTO statistics = new StatisticsDTO();
+        statistics.setState(Month.of(index).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+        statistics.setVal(val);
+        return statistics;
     }
 
     private StatisticsDTO mapToStatisticsDTO(ResultSet rs) throws SQLException {

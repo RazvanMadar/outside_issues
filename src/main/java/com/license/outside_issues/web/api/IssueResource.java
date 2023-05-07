@@ -32,6 +32,11 @@ public class IssueResource {
         return ResponseEntity.ok(issueService.getBasicStatistics(email));
     }
 
+    @GetMapping("/year-statistics")
+    public ResponseEntity<List<StatisticsDTO>> getYearStatistics(@RequestParam(defaultValue = "2023") String year) {
+        return ResponseEntity.ok(issueService.getYearStatistics(year));
+    }
+
     @PostMapping
     public ResponseEntity<Long> addIssue(@RequestBody IssueDTO issue) {
         return ResponseEntity.status(HttpStatus.CREATED).body(issueService.addIssue(issue));
