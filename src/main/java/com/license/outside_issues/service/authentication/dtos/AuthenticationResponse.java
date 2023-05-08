@@ -7,16 +7,18 @@ public class AuthenticationResponse {
     private String role;
     private String firstName;
     private String lastName;
+    private boolean isBlocked;
 
     public AuthenticationResponse() { }
 
-    public AuthenticationResponse(Long userId, String email, String role, String accessToken, String firstName, String lastName) {
+    public AuthenticationResponse(Long userId, String email, String role, String accessToken, String firstName, String lastName, boolean isBlocked) {
         this.userId = userId;
         this.email = email;
         this.role = role;
         this.accessToken = accessToken;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.isBlocked = isBlocked;
     }
 
     public String getEmail() {
@@ -65,6 +67,14 @@ public class AuthenticationResponse {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 }
 
