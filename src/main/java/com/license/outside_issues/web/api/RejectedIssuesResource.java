@@ -19,7 +19,7 @@ public class RejectedIssuesResource {
         this.rejectedIssuesService = rejectedIssuesService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Long> addRejected(@RequestParam String email) {
         return ResponseEntity.status(HttpStatus.CREATED).body(rejectedIssuesService.addRejected(email));
     }

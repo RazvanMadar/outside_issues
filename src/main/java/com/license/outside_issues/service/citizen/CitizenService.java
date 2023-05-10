@@ -15,7 +15,8 @@ public interface CitizenService {
     Long registerCitizen(RegisterCitizenDTO citizen);
     DisplayCitizenDTO findByEmail(String email);
     DisplayCitizenDTO findById(Long id);
-    List<ChatCitizenDTO> getChatUsersByRole(String role);
+    List<ChatCitizenDTO> findByName(String name);
+    List<ChatCitizenDTO> getChatUsersByRole(String role, String searchPerson);
     Long updateCitizen(DisplayCitizenDTO citizen);
     List<DisplayCitizenDTO> findAllCitizenUsers();
 }

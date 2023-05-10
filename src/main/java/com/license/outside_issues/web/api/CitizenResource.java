@@ -35,6 +35,11 @@ public class CitizenResource {
         return ResponseEntity.ok(citizenService.findByEmail(email));
     }
 
+    @GetMapping("/name/{name}")
+    public ResponseEntity<?> findCitizenByName(@PathVariable String name) {
+        return ResponseEntity.ok(citizenService.findByName(name));
+    }
+
     @PostMapping
     public ResponseEntity<Long> registerCitizen(@RequestBody RegisterCitizenDTO citizen) {
         return ResponseEntity.status(HttpStatus.CREATED).body(citizenService.registerCitizen(citizen));
@@ -46,12 +51,7 @@ public class CitizenResource {
     }
 
     @GetMapping("/role")
-    public ResponseEntity<?> getChatUsersByRole(@RequestParam String name) {
-        return ResponseEntity.ok(citizenService.getChatUsersByRole(name));
-    }
-
-    @PostMapping("/test")
-    public ResponseEntity<String> test(@RequestBody String msg) {
-        return ResponseEntity.ok("Message received " + msg);
+    public ResponseEntity<?> getChatUsersByRole(@RequestParam String name, @RequestParam(defaultValue = "") String searchPerson) {
+        return ResponseEntity.ok(citizenService.getChatUsersByRole(name, searchPerson));
     }
 }

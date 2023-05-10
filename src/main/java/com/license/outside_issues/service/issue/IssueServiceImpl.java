@@ -58,6 +58,11 @@ public class IssueServiceImpl implements IssueService {
         return issueJdbcRepository.getYearStatistics(year);
     }
 
+    @Override
+    public List<StatisticsDTO> getTypeStatistics() {
+        return issueJdbcRepository.getTypeStatistics();
+    }
+
 //    private IssueCardDTO mapIssuesCardsDTO(Issue issue) {
 //        IssueCardDTO issueCardDTO = new IssueCardDTO();
 //        issueCardDTO.setId(issue.getId());

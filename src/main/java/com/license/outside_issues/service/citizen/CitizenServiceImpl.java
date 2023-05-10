@@ -79,10 +79,24 @@ public class CitizenServiceImpl implements CitizenService {
     }
 
     @Override
-    public List<ChatCitizenDTO> getChatUsersByRole(String role) {
-        return "ROLE_ADMIN".equals(role) ? citizenRepository.getChatUsersForAdmin().stream()
+    public List<ChatCitizenDTO> findByName(String name) {
+        return citizenRepository.findAllCitizenUsers().stream()
+                .filter(citizen -> citizen.getLastName().toLowerCase().contains(name.toLowerCase()) || citizen.getFirstName().toLowerCase().contains(name.toLowerCase()))
                 .map(this::mapCitizenToChatCitizen)
-                .collect(Collectors.toList()) : citizenRepository.getChatUsersForCitizen().stream()
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ChatCitizenDTO> getChatUsersByRole(String role, String searchPerson) {
+        if ("ROLE_ADMIN".equals(role)) {
+            if (searchPerson.length() > 0) {
+                return findByName(searchPerson);
+            }
+            return citizenRepository.getChatUsersForAdmin().stream()
+                    .map(this::mapCitizenToChatCitizen)
+                    .collect(Collectors.toList());
+        }
+        return citizenRepository.getChatUsersForCitizen().stream()
                 .map(this::mapCitizenToChatCitizen)
                 .collect(Collectors.toList());
     }

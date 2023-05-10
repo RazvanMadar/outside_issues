@@ -20,9 +20,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.TextStyle;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -52,6 +50,14 @@ public class IssueJdbcRepository {
         return statistics;
     }
 
+    public List<StatisticsDTO> getTypeStatistics() {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String query = "SELECT type as state, COUNT(*) as val " +
+                "FROM issues GROUP BY type";
+
+        return jdbcTemplate.query(query, parameters, (rs, rowNum) -> mapToStatisticsDTO(rs));
+    }
+
     public List<StatisticsDTO> getYearStatistics(String year) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String query = "SELECT EXTRACT(MONTH FROM reported_date) as state, COUNT(*) as val " +
@@ -72,6 +78,12 @@ public class IssueJdbcRepository {
         fillWithZeroIfNoIssuesReported(statistics, "11");
         fillWithZeroIfNoIssuesReported(statistics, "12");
 
+        for (StatisticsDTO statisticsDTO : statistics) {
+            if (statisticsDTO.getState().length() == 1) {
+                statisticsDTO.setState("0" + statisticsDTO.getState());
+            }
+        }
+        statistics.sort(Comparator.comparing(StatisticsDTO::getState));
         return statistics;
     }
 
@@ -148,6 +160,7 @@ public class IssueJdbcRepository {
         issue.setActualLocation(rs.getString("actual_location"));
         issue.setAddress(new AddressDTO(rs.getDouble("lat"), rs.getDouble("lng")));
         issue.setLikesNumber(rs.getInt("likes_number"));
+        issue.setHasLocation(rs.getBoolean("has_location"));
         issue.setDislikesNumber(rs.getInt("dislikes_number"));
         issue.setCitizenEmail(rs.getString("citizen_email"));
 

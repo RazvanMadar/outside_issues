@@ -37,6 +37,11 @@ public class IssueResource {
         return ResponseEntity.ok(issueService.getYearStatistics(year));
     }
 
+    @GetMapping("/type-statistics")
+    public ResponseEntity<List<StatisticsDTO>> getTypeStatistics() {
+        return ResponseEntity.ok(issueService.getTypeStatistics());
+    }
+
     @PostMapping
     public ResponseEntity<Long> addIssue(@RequestBody IssueDTO issue) {
         return ResponseEntity.status(HttpStatus.CREATED).body(issueService.addIssue(issue));

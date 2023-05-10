@@ -4,6 +4,7 @@ import com.license.outside_issues.repository.CitizenRepository;
 import com.license.outside_issues.service.authentication.jwt.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -53,9 +54,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .and()
                 .authorizeRequests()
+                .antMatchers("/login", "/api/citizens", "/api/citizen/images/*", "/send/**", "/sendMessage/**", "/send-message/**", "/topic/**", "/message/**", "/app/**", "/ws-message/**", "/sender/**").permitAll()
                 .antMatchers("/admin").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers("/user").hasAnyAuthority("ROLE_USER")
-                .antMatchers("/api/**", "/login", "/send/**", "/sendMessage/**", "/send-message/**", "/topic/**", "/message/**", "/app/**", "/ws-message/**", "/sender/**").permitAll()
+                .antMatchers("/api/blacklists/**").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/api/citizen/images/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/api/citizen-reactions").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .antMatchers(HttpMethod.POST, "/api/citizen-reactions").hasAnyAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/api/citizens").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/api/citizens/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .antMatchers("/api/email").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/images/*").hasAnyAuthority("ROLE_USER")
+                .antMatchers("/api/images/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .antMatchers("/api/images/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .antMatchers(HttpMethod.PUT, "/api/issues/*").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/issues/*").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/issues").hasAnyAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/api/issues/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .antMatchers("/api/messages/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .antMatchers(HttpMethod.POST, "/api/rejected").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/rejected/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .anyRequest().authenticated();
 
         http.exceptionHandling()

@@ -1,6 +1,10 @@
 package com.license.outside_issues.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -9,6 +13,10 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "roles", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    Set<Citizen> citizens = new HashSet<>();
 
     public Role() {}
 
@@ -30,6 +38,14 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Citizen> getCitizens() {
+        return citizens;
+    }
+
+    public void setCitizens(Set<Citizen> citizens) {
+        this.citizens = citizens;
     }
 
     @Override
