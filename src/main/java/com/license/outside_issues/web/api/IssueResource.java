@@ -1,5 +1,8 @@
 package com.license.outside_issues.web.api;
 
+import com.license.outside_issues.model.WebSocketMessageUpdate;
+import com.license.outside_issues.service.citizen.CitizenService;
+import com.license.outside_issues.service.citizen.dtos.DisplayCitizenDTO;
 import com.license.outside_issues.service.issue.IssueService;
 import com.license.outside_issues.service.issue.dtos.IssueDTO;
 import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -17,9 +21,13 @@ import java.util.List;
 @RequestMapping("/api/issues")
 public class IssueResource {
     private final IssueService issueService;
+    private final CitizenService citizenService;
+    private final WebSocketController webSocketController;
 
-    public IssueResource(IssueService issueService) {
+    public IssueResource(IssueService issueService, CitizenService citizenService, WebSocketController webSocketController) {
         this.issueService = issueService;
+        this.citizenService = citizenService;
+        this.webSocketController = webSocketController;
     }
 
     @GetMapping
@@ -44,7 +52,9 @@ public class IssueResource {
 
     @PostMapping
     public ResponseEntity<Long> addIssue(@RequestBody IssueDTO issue) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(issueService.addIssue(issue));
+        Long issueId = issueService.addIssue(issue);
+        sendMessagesViaWebSocketOnUpdate(citizenService.findAllUsersExceptOne(issue.getCitizenEmail()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(issueId);
     }
 
     @GetMapping("/{id}")
@@ -55,7 +65,9 @@ public class IssueResource {
     @PutMapping("/{id}")
     public ResponseEntity<IssueDTO> updateIssue(@PathVariable Long id, @RequestParam(required = false) String type,
                                                 @RequestParam(required = false) String state) {
-        return ResponseEntity.ok(issueService.updateIssue(id, type, state));
+        final IssueDTO issueDTO = issueService.updateIssue(id, type, state);
+        sendMessagesViaWebSocketOnUpdate(citizenService.findAllCitizenUsers().stream().map(DisplayCitizenDTO::getEmail).collect(Collectors.toList()));
+        return ResponseEntity.ok(issueDTO);
     }
 
     @GetMapping("/filtered")
@@ -75,6 +87,15 @@ public class IssueResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteIssue(@PathVariable Long id) {
-        return ResponseEntity.ok(issueService.deleteIssue(id));
+        final Long deletedIssueId = issueService.deleteIssue(id);
+        sendMessagesViaWebSocketOnUpdate(citizenService.findAllCitizenUsers().stream().map(DisplayCitizenDTO::getEmail).collect(Collectors.toList()));
+        return ResponseEntity.ok(deletedIssueId);
+    }
+
+    private void sendMessagesViaWebSocketOnUpdate(List<String> emails) {
+        final List<WebSocketMessageUpdate> webSocketMessageUpdates = emails.stream()
+                .map(WebSocketMessageUpdate::new)
+                .collect(Collectors.toList());
+        webSocketController.sendUpdate(webSocketMessageUpdates);
     }
 }

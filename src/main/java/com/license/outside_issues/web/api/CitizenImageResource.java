@@ -19,7 +19,7 @@ public class CitizenImageResource {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<IssueImageDTO> saveCitizenImage(@PathVariable Long id, @RequestParam("image") MultipartFile file) {
+    public ResponseEntity<IssueImageDTO> saveCitizenImage(@PathVariable Long id, @RequestParam(value = "image", required = false) MultipartFile file) {
         return ResponseEntity.status(HttpStatus.CREATED).body(citizenImageService.saveImage(id, file));
     }
 

@@ -30,6 +30,9 @@ public class CitizenImageServiceImpl implements CitizenImageService {
         Citizen citizen = citizenRepository.findById(id).orElseThrow(() -> {
             throw new BusinessException(ExceptionReason.ISSUE_NOT_FOUND);
         });
+        if (file == null) {
+            return new IssueImageDTO();
+        }
         CitizenImage citizenImage = new CitizenImage();
         citizenImage.setType(file.getContentType());
         try {

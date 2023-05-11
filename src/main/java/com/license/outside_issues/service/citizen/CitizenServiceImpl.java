@@ -123,6 +123,14 @@ public class CitizenServiceImpl implements CitizenService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<String> findAllUsersExceptOne(String email) {
+        return citizenRepository.findAll().stream()
+                .map(Citizen::getEmail)
+                .filter(citizenEmail -> !citizenEmail.equals(email))
+                .collect(Collectors.toList());
+    }
+
     private ChatCitizenDTO mapCitizenToChatCitizen(Citizen citizen) {
         return new ChatCitizenDTO(citizen.getId(), citizen.getFirstName(), citizen.getLastName(), citizen.getEmail(),
                 citizen.getCitizenImage() != null ? citizen.getCitizenImage().getImage(): null);

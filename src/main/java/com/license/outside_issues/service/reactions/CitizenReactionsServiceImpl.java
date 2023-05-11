@@ -30,6 +30,9 @@ public class CitizenReactionsServiceImpl implements CitizenReactionsService {
 
     @Override
     public int findByCitizenIdAndIssueId(Long citizenId, Long issueId) {
+        if (citizenId == null && issueId == null) {
+            return 0;
+        }
         final Optional<CitizenReactions> byCitizenIdAndIssueId = citizenReactionsRepository.findByCitizenIdAndIssueId(citizenId, issueId);
         if (byCitizenIdAndIssueId.isPresent()) {
             boolean type = byCitizenIdAndIssueId.get().isType();

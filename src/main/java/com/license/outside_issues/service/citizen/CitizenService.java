@@ -19,4 +19,5 @@ public interface CitizenService {
     List<ChatCitizenDTO> getChatUsersByRole(String role, String searchPerson);
     Long updateCitizen(DisplayCitizenDTO citizen);
     List<DisplayCitizenDTO> findAllCitizenUsers();
+    List<String> findAllUsersExceptOne(String email);
 }

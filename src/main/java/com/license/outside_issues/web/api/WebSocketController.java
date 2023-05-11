@@ -1,6 +1,7 @@
 package com.license.outside_issues.web.api;
 
 import com.license.outside_issues.model.WebSocketMessage;
+import com.license.outside_issues.model.WebSocketMessageUpdate;
 import com.license.outside_issues.service.message.MessageService;
 import com.license.outside_issues.service.message.dtos.MessageDTO;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -42,6 +45,12 @@ public class WebSocketController {
     public ResponseEntity<Long> sendMessage(@RequestBody WebSocketMessage message) {
         template.convertAndSendToUser(message.getToEmail(), "/private", message);
         return ResponseEntity.ok(messageService.sendMessage(new MessageDTO(message.getMessage(), message.getFromEmail(), message.getToEmail())));
+    }
+
+    @PostMapping("/send-update")
+    public ResponseEntity<Void> sendUpdate(@RequestBody List<WebSocketMessageUpdate> messages) {
+        messages.forEach(message -> template.convertAndSendToUser(message.getTo(), "/private", message));
+        return ResponseEntity.noContent().build();
     }
 
     @SendTo("/topic/message")
