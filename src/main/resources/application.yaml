@@ -18,6 +18,7 @@ spring:
       max-request-size: 20MB
   main:
     allow-circular-references: true
+    allow-bean-definition-overriding: true
   jpa:
     hibernate:
       ddl-auto: update

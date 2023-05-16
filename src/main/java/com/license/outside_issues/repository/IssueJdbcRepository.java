@@ -106,11 +106,13 @@ public class IssueJdbcRepository {
         if (fromDate != null) {
             query.append(isConditionPresent ? "AND " : "WHERE ");
             query.append("reported_date >= :from_date ");
+            isConditionPresent = true;
             parameters.addValue("from_date", LocalDate.parse(fromDate));
         }
         if (toDate != null) {
             query.append(isConditionPresent ? "AND " : "WHERE ");
             query.append("reported_date <= :to_date ");
+            isConditionPresent = true;
             parameters.addValue("to_date", LocalDate.parse(toDate));
         }
         if (hasLocation) {

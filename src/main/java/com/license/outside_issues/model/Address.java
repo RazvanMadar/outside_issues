@@ -30,4 +30,12 @@ public class Address {
     public void setLng(Double lng) {
         this.lng = lng;
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "lat=" + lat +
+                ", lng=" + lng +
+                '}';
+    }
 }

@@ -35,16 +35,12 @@ public class ArduinoSerialCommunication {
             byte[] readBuffer = new byte[serialPort.bytesAvailable()];
             int numRead = serialPort.readBytes(readBuffer, readBuffer.length);
             if (numRead > 0) {
-                try {
-                    // Deserialize the object
-                    ByteArrayInputStream byteStream = new ByteArrayInputStream(readBuffer);
-                    ObjectInputStream objStream = new ObjectInputStream(byteStream);
-                    Object obj = objStream.readObject();
-                    System.out.println("Received object: id=" + obj);
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-//                String receivedData = new String(readBuffer, 0, numRead);
+                // Deserialize the object
+//                    ByteArrayInputStream byteStream = new ByteArrayInputStream(readBuffer);
+//                    ObjectInputStream objStream = new ObjectInputStream(byteStream);
+//                    Object obj = objStream.readObject();
+                System.out.println("Received object: id=" + numRead);
+                //                String receivedData = new String(readBuffer, 0, numRead);
 //                System.out.println("Received data: " + receivedData);
             }
         }
@@ -68,8 +64,7 @@ public class ArduinoSerialCommunication {
     }
 
     public void startListeningScheduled() {
-//        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-//        scheduler.scheduleAtFixedRate(this::startSerialCommunicationListening, 0, 10, TimeUnit.SECONDS);
-//        scheduler.scheduleAtFixedRate(this::startSerialCommunicationSending, 0, 5, TimeUnit.SECONDS);
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(this::startSerialCommunicationListening, 0, 10, TimeUnit.SECONDS);
     }
 }

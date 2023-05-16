@@ -25,8 +25,6 @@ public class Issue {
     private LocalDate reportedDate;
     private Integer likesNumber;
     private Integer dislikesNumber;
-    //
-
     private String description;
     private Boolean hasLocation;
     private String actualLocation;
