@@ -2,6 +2,7 @@ package com.license.outside_issues.exception;
 
 public class ExceptionReason {
     public static final String CITIZEN_NOT_FOUND = "Citizen not found";
+    public static final String CITIZEN_EXISTS = "Citizen already exists";
     public static final String ISSUE_NOT_FOUND = "Issue not found";
     public static final String ROLE_NOT_FOUND = "Role not found";
     public static final String INVALID_PAGE_PARAMETERS = "Invalid parameters for page";

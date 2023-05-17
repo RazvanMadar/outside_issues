@@ -47,19 +47,45 @@ public class CitizenServiceImpl implements CitizenService {
     }
 
     @Override
-    public Long registerCitizen(RegisterCitizenDTO citizenDTO) {
-        String rawPassword = citizenDTO.getPassword();
-        String encodedPassword = rawPassword != null ? passwordEncoder.encode(rawPassword) : null;
-        Citizen citizen = RegisterCitizenMapper.INSTANCE.dtoToModel(citizenDTO);
-        citizen.setPassword(encodedPassword);
-        Set<Role> roles = new HashSet<>();
-        Role roleById = roleRepository.findById(2).orElseThrow(() -> {
-            throw new BusinessException(ExceptionReason.ROLE_NOT_FOUND);
-        });
-        roles.add(roleById);
-        citizen.setRoles(roles);
-        citizenRepository.save(citizen);
-        return citizen.getId();
+    public Long registerCitizen(RegisterCitizenDTO citizenDTO, boolean isAuth) {
+        final Optional<Citizen> alreadyPresentCitizen = citizenRepository.findAll().stream()
+                .filter(citizen -> citizen.getEmail().equals(citizenDTO.getEmail()))
+                .findAny();
+        if (alreadyPresentCitizen.isPresent() && alreadyPresentCitizen.get().getPassword() != null) {
+            throw new BusinessException(ExceptionReason.CITIZEN_EXISTS);
+        }
+
+        if (!isAuth) {
+            if (alreadyPresentCitizen.isPresent()) {
+                return alreadyPresentCitizen.get().getId();
+            }
+        }
+        if (alreadyPresentCitizen.isPresent() && alreadyPresentCitizen.get().getPassword() == null) {
+            Citizen citizen = alreadyPresentCitizen.get();
+            String rawPassword = citizenDTO.getPassword();
+            String encodedPassword = rawPassword != null ? passwordEncoder.encode(rawPassword) : null;
+            citizen.setPassword(encodedPassword);
+            citizen.setPhoneNumber(citizenDTO.getPhoneNumber());
+            citizen.setFirstName(citizenDTO.getFirstName());
+            citizen.setLastName(citizenDTO.getLastName());
+            citizenRepository.save(citizen);
+            return citizen.getId();
+        }
+        else {
+            String rawPassword = citizenDTO.getPassword();
+
+            String encodedPassword = rawPassword != null ? passwordEncoder.encode(rawPassword) : null;
+            Citizen citizen = RegisterCitizenMapper.INSTANCE.dtoToModel(citizenDTO);
+            citizen.setPassword(encodedPassword);
+            Set<Role> roles = new HashSet<>();
+            Role roleById = roleRepository.findById(2).orElseThrow(() -> {
+                throw new BusinessException(ExceptionReason.ROLE_NOT_FOUND);
+            });
+            roles.add(roleById);
+            citizen.setRoles(roles);
+            citizenRepository.save(citizen);
+            return citizen.getId();
+        }
     }
 
     @Override
@@ -133,6 +159,6 @@ public class CitizenServiceImpl implements CitizenService {
 
     private ChatCitizenDTO mapCitizenToChatCitizen(Citizen citizen) {
         return new ChatCitizenDTO(citizen.getId(), citizen.getFirstName(), citizen.getLastName(), citizen.getEmail(),
-                citizen.getCitizenImage() != null ? citizen.getCitizenImage().getImage(): null);
+                citizen.getCitizenImage() != null ? citizen.getCitizenImage().getImage() : null);
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import javax.annotation.PostConstruct;
 
 @SpringBootApplication
-//@EnableAutoConfiguration(exclude={org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration.class})
 public class OutsideIssuesApplication {
 
 	public static void main(String[] args) {
@@ -35,7 +34,7 @@ public class OutsideIssuesApplication {
 	@PostConstruct
 	public void setup() {
 		SerialPort[] ports = SerialPort.getCommPorts();
-//		if (ports.length > 0) {
+		if (ports.length > 0) {
 			SerialPort serialPort = ports[0];
 			serialPort.setBaudRate(9600);
 			serialPort.setParity(SerialPort.NO_PARITY);
@@ -46,7 +45,6 @@ public class OutsideIssuesApplication {
 				System.out.println("Port is open");
 				serialPort.addDataListener(arduinoSerialListener);
 			}
-//		}
+		}
 	}
-
 }

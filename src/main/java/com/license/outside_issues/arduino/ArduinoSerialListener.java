@@ -15,6 +15,10 @@ import com.license.outside_issues.repository.IssueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDate;
 
 @Component
@@ -80,8 +84,56 @@ public class ArduinoSerialListener implements SerialPortDataListener {
         issue.setAddress(issueAddress);
         issue.setReportedDate(LocalDate.now());
         issue.setDescription("");
-        // TODO: add actual location
-        System.out.println(issue);
+        String actualLocation = computeActualLocation(addressLat, addressLng);
+        issue.setActualLocation(actualLocation);
         issueRepository.save(issue);
+    }
+
+    private String computeActualLocation(Double addressLat, Double addressLng) {
+        try {
+            String path = "https://nominatim.openstreetmap.org/reverse?lat=" + addressLat + "&lon=" + addressLng + "&format=json";
+            URL url = new URL(path);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+
+            String actualAddress = "";
+            boolean moreThanOneWord = false;
+            JsonElement element = gson.fromJson(String.valueOf(content), JsonElement.class);
+            JsonObject obj = element.getAsJsonObject().get("address").getAsJsonObject();
+            final JsonElement road = obj.get("road");
+            if (road != null) {
+                actualAddress += road.getAsString();
+                moreThanOneWord = true;
+            }
+            final JsonElement houseNumber = obj.get("house_number");
+            if (houseNumber != null) {
+                if (moreThanOneWord) {
+                    actualAddress += ", ";
+                }
+                actualAddress += houseNumber.getAsString();
+                moreThanOneWord = true;
+            }
+            final JsonElement suburb = obj.get("suburb");
+            if (suburb != null) {
+                if (moreThanOneWord) {
+                    actualAddress += ", ";
+                }
+                actualAddress += suburb.getAsString();
+            }
+
+            return actualAddress;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

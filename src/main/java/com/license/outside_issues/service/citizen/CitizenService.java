@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface CitizenService {
     Page<DisplayCitizenDTO> getAllCitizens(String email, boolean isFiltered, Pageable pageable);
-    Long registerCitizen(RegisterCitizenDTO citizen);
+    Long registerCitizen(RegisterCitizenDTO citizen, boolean isAuth);
     DisplayCitizenDTO findByEmail(String email);
     DisplayCitizenDTO findById(Long id);
     List<ChatCitizenDTO> findByName(String name);

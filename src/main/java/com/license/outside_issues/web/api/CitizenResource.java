@@ -40,9 +40,9 @@ public class CitizenResource {
         return ResponseEntity.ok(citizenService.findByName(name));
     }
 
-    @PostMapping
-    public ResponseEntity<Long> registerCitizen(@RequestBody RegisterCitizenDTO citizen) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(citizenService.registerCitizen(citizen));
+    @PostMapping("/auth")
+    public ResponseEntity<Long> registerCitizen(@RequestBody RegisterCitizenDTO citizen, @RequestParam(defaultValue = "true") boolean isAuth) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(citizenService.registerCitizen(citizen, isAuth));
     }
 
     @PutMapping

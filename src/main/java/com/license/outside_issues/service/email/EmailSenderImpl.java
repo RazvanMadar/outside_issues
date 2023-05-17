@@ -30,13 +30,10 @@ public class EmailSenderImpl implements EmailSender {
         MimeMessageHelper mimeMessageHelper;
         try {
             URL url = new URL(issueURL + emailMessage.getIssueId());
-//            content.append("Sesizarea făcută de dumneavoastră de tipul ").append(type).append(" a fost înregistrată cu succes").append(state)
-//                    .append(".\nPentru a vedea sesizarea, accesați linkul: ").append(url)
-//                    .append(".\nVă mulțumim pentru contribuția dumneavoastră la menținerea si dezvoltarea orașului! ");
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(fromEmail);
             mimeMessageHelper.setTo(emailMessage.getToEmail());
-            mimeMessageHelper.setText(emailMessage.getContent() + ".\n\nPentru a vedea sesizarea, accesați linkul: " + url);
+            mimeMessageHelper.setText(emailMessage.getContent());
             mimeMessageHelper.setSubject(emailMessage.getSubject());
 
             mailSender.send(mimeMessage);
