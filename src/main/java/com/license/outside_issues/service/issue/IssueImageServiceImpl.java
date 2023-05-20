@@ -2,6 +2,7 @@ package com.license.outside_issues.service.issue;
 
 import com.license.outside_issues.common.ImageUtil;
 import com.license.outside_issues.enums.ImageType;
+import com.license.outside_issues.enums.IssueType;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.mapper.IssueImageMapper;
@@ -10,11 +11,19 @@ import com.license.outside_issues.model.IssueImage;
 import com.license.outside_issues.repository.IssueImageRepository;
 import com.license.outside_issues.repository.IssueRepository;
 import com.license.outside_issues.service.issue.dtos.IssueImageDTO;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

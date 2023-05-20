@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface RejectedIssuesRepository extends JpaRepository<RejectedIssues, Long> {
     Optional<RejectedIssues> findByCitizenId(Long citizenId);
     long countByCitizenId(Long citizenId);
-    @Query(value = "SELECT SUM(rejected_number) FROM rejected_issues", nativeQuery = true)
+    @Query(value = "SELECT COALESCE(SUM(rejected_number), 0) FROM rejected_issues", nativeQuery = true)
     long getNumberOfRejectedIssues();
 }

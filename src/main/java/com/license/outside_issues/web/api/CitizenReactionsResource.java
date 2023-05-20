@@ -18,7 +18,7 @@ public class CitizenReactionsResource {
         this.citizenReactionsService = citizenReactionsService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> getReactionsForSomeCitizenAndIssue(@RequestParam(required = false) Long citizenId, @RequestParam(required = false) Long issueId) {
         return ResponseEntity.ok(citizenReactionsService.findByCitizenIdAndIssueId(citizenId, issueId));
     }

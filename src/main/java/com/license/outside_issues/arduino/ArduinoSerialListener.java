@@ -55,14 +55,14 @@ public class ArduinoSerialListener implements SerialPortDataListener {
             JsonArray array = element.getAsJsonArray();
             for (int i = 0; i < array.size(); i++) {
                 JsonObject obj = array.get(i).getAsJsonObject();
-                createIssueFromJson(obj);
+                handleDataFromJson(obj);
             }
 
             bufferReadToString = "";
         }
     }
 
-    private void createIssueFromJson(JsonObject json) {
+    private void handleDataFromJson(JsonObject json) {
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         JsonObject address = json.getAsJsonObject().get("address").getAsJsonObject();
@@ -74,19 +74,33 @@ public class ArduinoSerialListener implements SerialPortDataListener {
         int likesNumber = jsonObject.get("likesNumber").getAsInt();
         int dislikesNumber = jsonObject.get("dislikesNumber").getAsInt();
         boolean hasLocation = jsonObject.get("hasLocation").getAsBoolean();
+        int value = jsonObject.get("value").getAsInt();
 
-        Issue issue = new Issue();
-        issue.setType(IssueType.valueOf(type));
-        issue.setState(IssueState.valueOf(state));
-        issue.setLikesNumber(likesNumber);
-        issue.setDislikesNumber(dislikesNumber);
-        issue.setHasLocation(hasLocation);
-        issue.setAddress(issueAddress);
-        issue.setReportedDate(LocalDate.now());
-        issue.setDescription("");
-        String actualLocation = computeActualLocation(addressLat, addressLng);
-        issue.setActualLocation(actualLocation);
-        issueRepository.save(issue);
+        if (isAvailableIssue(type, value)) {
+            Issue issue = new Issue();
+            issue.setType(IssueType.valueOf(type));
+            issue.setState(IssueState.valueOf(state));
+            issue.setLikesNumber(likesNumber);
+            issue.setDislikesNumber(dislikesNumber);
+            issue.setHasLocation(hasLocation);
+            issue.setAddress(issueAddress);
+            issue.setReportedDate(LocalDate.now());
+            issue.setDescription("");
+            String actualLocation = computeActualLocation(addressLat, addressLng);
+            issue.setActualLocation(actualLocation);
+            System.out.println(issue);
+            //        issueRepository.save(issue);
+        }
+    }
+
+    private boolean isAvailableIssue(String type, int value) {
+        if (IssueType.PUBLIC_DISORDER.name().equals(type)) {
+            return value > 100;
+        } else if (IssueType.LIGHTNING.name().equals(type)) {
+            return value < 100;
+        } else {
+            return value > 10;
+        }
     }
 
     private String computeActualLocation(Double addressLat, Double addressLng) {
