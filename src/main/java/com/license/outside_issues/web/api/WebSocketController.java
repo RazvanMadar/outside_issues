@@ -43,8 +43,9 @@ public class WebSocketController {
 
     @PostMapping("/send-message")
     public ResponseEntity<Long> sendMessage(@RequestBody WebSocketMessage message) {
+        final Long messageId = messageService.sendMessage(new MessageDTO(message.getMessage(), message.getFromEmail(), message.getToEmail()));
         template.convertAndSendToUser(message.getToEmail(), "/private", message);
-        return ResponseEntity.ok(messageService.sendMessage(new MessageDTO(message.getMessage(), message.getFromEmail(), message.getToEmail())));
+        return ResponseEntity.ok(messageId);
     }
 
     @PostMapping("/send-update")

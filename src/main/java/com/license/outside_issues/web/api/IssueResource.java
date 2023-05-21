@@ -46,8 +46,8 @@ public class IssueResource {
     }
 
     @GetMapping("/type-statistics")
-    public ResponseEntity<List<StatisticsDTO>> getTypeStatistics() {
-        return ResponseEntity.ok(issueService.getTypeStatistics());
+    public ResponseEntity<List<StatisticsDTO>> getTypeStatistics(@RequestParam(required = false) String email) {
+        return ResponseEntity.ok(issueService.getTypeStatistics(email));
     }
 
     @PostMapping
@@ -76,8 +76,9 @@ public class IssueResource {
                                                      @RequestParam(required = false) String fromDate,
                                                      @RequestParam(required = false) String toDate,
                                                      @RequestParam(required = false, defaultValue = "false") boolean hasLocation,
+                                                     @RequestParam(required = false, defaultValue = "false") boolean all,
                                                      Pageable pageable) {
-        return ResponseEntity.ok(issueService.findIssues(type, state, fromDate, toDate, hasLocation, pageable));
+        return ResponseEntity.ok(issueService.findIssues(type, state, fromDate, toDate, hasLocation, all, pageable));
     }
 
     @GetMapping("/email/{email}")

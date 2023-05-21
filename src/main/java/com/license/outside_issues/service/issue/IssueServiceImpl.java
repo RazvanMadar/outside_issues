@@ -59,8 +59,8 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public List<StatisticsDTO> getTypeStatistics() {
-        return issueJdbcRepository.getTypeStatistics();
+    public List<StatisticsDTO> getTypeStatistics(String email) {
+        return issueJdbcRepository.getTypeStatistics(email);
     }
 
 //    private IssueCardDTO mapIssuesCardsDTO(Issue issue) {
@@ -79,6 +79,9 @@ public class IssueServiceImpl implements IssueService {
 //        Citizen citizenById = citizenRepository.findByEmail(issue.getCitizenEmail()).orElseThrow(() -> {
 //            throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
 //        });
+        if (issue.getDescription() != null && issue.getDescription().length() > 0) {
+            issue.setDescription(issue.getDescription().trim());
+        }
         Issue savedIssue = IssueMapper.INSTANCE.dtoToModel(issue);
 //        savedIssue.setCitizenEmail(issue.getCitizenEmail());
         issueRepository.save(savedIssue);
@@ -121,8 +124,8 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, Pageable pageable) {
-        return issueJdbcRepository.findIssues(type, state, fromDate, toDate, hasLocation, pageable);
+    public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, boolean all, Pageable pageable) {
+        return issueJdbcRepository.findIssues(type, state, fromDate, toDate, hasLocation, all, pageable);
     }
 
     @Override

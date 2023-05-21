@@ -97,7 +97,7 @@ public class ArduinoSerialListener implements SerialPortDataListener {
         if (IssueType.PUBLIC_DISORDER.name().equals(type)) {
             return value > 100;
         } else if (IssueType.LIGHTNING.name().equals(type)) {
-            return value < 100;
+            return value < 5000;
         } else {
             return value > 10;
         }

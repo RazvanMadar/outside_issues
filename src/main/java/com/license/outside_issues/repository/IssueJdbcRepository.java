@@ -50,12 +50,25 @@ public class IssueJdbcRepository {
         return statistics;
     }
 
-    public List<StatisticsDTO> getTypeStatistics() {
+    public List<StatisticsDTO> getTypeStatistics(String email) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String query = "SELECT type as state, COUNT(*) as val " +
-                "FROM issues GROUP BY type";
-
-        return jdbcTemplate.query(query, parameters, (rs, rowNum) -> mapToStatisticsDTO(rs));
+                "FROM issues ";
+        if (email != null) {
+            query += "WHERE citizen_email = '" + email + "' ";
+        }
+        query += "GROUP BY type";
+        final List<StatisticsDTO> statistics = jdbcTemplate.query(query, parameters, (rs, rowNum) -> mapToStatisticsDTO(rs));
+        fillWithZeroIfNoIssuesReported(statistics, "ROAD");
+        fillWithZeroIfNoIssuesReported(statistics, "LIGHTNING");
+        fillWithZeroIfNoIssuesReported(statistics, "GREEN_SPACES");
+        fillWithZeroIfNoIssuesReported(statistics, "PUBLIC_DOMAIN");
+        fillWithZeroIfNoIssuesReported(statistics, "PUBLIC_DISORDER");
+        fillWithZeroIfNoIssuesReported(statistics, "PUBLIC_TRANSPORT");
+        fillWithZeroIfNoIssuesReported(statistics, "BUILDINGS");
+        fillWithZeroIfNoIssuesReported(statistics, "TRAFFIC_ROAD_SIGNS");
+        fillWithZeroIfNoIssuesReported(statistics, "ANIMALS");
+        return statistics;
     }
 
     public List<StatisticsDTO> getYearStatistics(String year) {
@@ -87,7 +100,7 @@ public class IssueJdbcRepository {
         return statistics;
     }
 
-    public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, Pageable pageable) {
+    public Page<IssueDTO> findIssues(String type, String state, String fromDate, String toDate, boolean hasLocation, boolean all, Pageable pageable) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         StringBuilder query = new StringBuilder("SELECT * FROM issues ");
         boolean isConditionPresent = false;
@@ -118,6 +131,11 @@ public class IssueJdbcRepository {
         if (hasLocation) {
             query.append(isConditionPresent ? "AND " : "WHERE ");
             query.append("has_location = true ");
+            isConditionPresent = true;
+        }
+        if (!all) {
+            query.append(isConditionPresent ? "AND " : "WHERE ");
+            query.append("reported_date >= CURRENT_DATE - INTERVAL '30 days' ");
         }
 
         System.out.println(query);
