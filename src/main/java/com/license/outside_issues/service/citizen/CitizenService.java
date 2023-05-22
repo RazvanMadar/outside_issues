@@ -20,4 +20,5 @@ public interface CitizenService {
     Long updateCitizen(DisplayCitizenDTO citizen);
     List<DisplayCitizenDTO> findAllCitizenUsers();
     List<String> findAllUsersExceptOne(String email);
+    List<String> findAllValidEmails();
 }

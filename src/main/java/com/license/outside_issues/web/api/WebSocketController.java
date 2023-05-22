@@ -23,7 +23,6 @@ import java.util.List;
 public class WebSocketController {
     private final SimpMessagingTemplate template;
     private final MessageService messageService;
-    private static final Logger logger = LogManager.getLogger(WebSocketController.class.toString());
 
     public WebSocketController(SimpMessagingTemplate template, MessageService messageService) {
         this.template = template;

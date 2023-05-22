@@ -11,7 +11,10 @@ import com.license.outside_issues.enums.IssueState;
 import com.license.outside_issues.enums.IssueType;
 import com.license.outside_issues.model.Address;
 import com.license.outside_issues.model.Issue;
+import com.license.outside_issues.model.WebSocketMessageUpdate;
 import com.license.outside_issues.repository.IssueRepository;
+import com.license.outside_issues.service.citizen.CitizenService;
+import com.license.outside_issues.web.api.WebSocketController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +23,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ArduinoSerialListener implements SerialPortDataListener {
     @Autowired
     private final IssueRepository issueRepository;
+    @Autowired
+    private WebSocketController webSocketController;
+    @Autowired
+    private CitizenService citizenService;
     private String bufferReadToString = "";
     private final Gson gson = new Gson();
 
@@ -88,8 +97,8 @@ public class ArduinoSerialListener implements SerialPortDataListener {
             issue.setDescription("");
             String actualLocation = computeActualLocation(addressLat, addressLng);
             issue.setActualLocation(actualLocation);
-            System.out.println(issue);
-            //        issueRepository.save(issue);
+            issueRepository.save(issue);
+            sendMessagesViaWebSocketOnUpdate(citizenService.findAllValidEmails());
         }
     }
 
@@ -99,7 +108,7 @@ public class ArduinoSerialListener implements SerialPortDataListener {
         } else if (IssueType.LIGHTNING.name().equals(type)) {
             return value < 5000;
         } else {
-            return value > 10;
+            return value > 8;
         }
     }
 
@@ -149,5 +158,12 @@ public class ArduinoSerialListener implements SerialPortDataListener {
         }
 
         return null;
+    }
+
+    private void sendMessagesViaWebSocketOnUpdate(List<String> emails) {
+        final List<WebSocketMessageUpdate> webSocketMessageUpdates = emails.stream()
+                .map(WebSocketMessageUpdate::new)
+                .collect(Collectors.toList());
+        webSocketController.sendUpdate(webSocketMessageUpdates);
     }
 }

@@ -157,6 +157,14 @@ public class CitizenServiceImpl implements CitizenService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<String> findAllValidEmails() {
+        return citizenRepository.findAll().stream()
+                .filter(citizen -> citizen.getPassword() != null)
+                .map(Citizen::getEmail)
+                .collect(Collectors.toList());
+    }
+
     private ChatCitizenDTO mapCitizenToChatCitizen(Citizen citizen) {
         return new ChatCitizenDTO(citizen.getId(), citizen.getFirstName(), citizen.getLastName(), citizen.getEmail(),
                 citizen.getCitizenImage() != null ? citizen.getCitizenImage().getImage() : null);

@@ -2,7 +2,6 @@ package com.license.outside_issues;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.license.outside_issues.arduino.ArduinoSerialListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,26 +9,15 @@ import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 public class OutsideIssuesApplication {
+	private final ArduinoSerialListener arduinoSerialListener;
+
+	public OutsideIssuesApplication(ArduinoSerialListener arduinoSerialListener) {
+		this.arduinoSerialListener = arduinoSerialListener;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(OutsideIssuesApplication.class, args);
 	}
-
-//		SerialPort[] ports = SerialPort.getCommPorts();
-//		SerialPort serialPort = ports[0];
-//		serialPort.setBaudRate(9600);
-//		serialPort.setParity(SerialPort.NO_PARITY);  // without error checking
-//		serialPort.setNumStopBits(SerialPort.ONE_STOP_BIT);
-//		serialPort.setNumDataBits(8);
-//
-//		if (serialPort.openPort()) {
-//			System.out.println("Port is open");
-//			ArduinoSerialListener listenerObject = new ArduinoSerialListener(issueRepository);
-//			serialPort.addDataListener(listenerObject);
-//		}
-
-	@Autowired
-	private ArduinoSerialListener arduinoSerialListener;
 
 	@PostConstruct
 	public void setup() {
