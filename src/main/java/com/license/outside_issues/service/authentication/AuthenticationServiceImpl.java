@@ -1,5 +1,7 @@
 package com.license.outside_issues.service.authentication;
 
+import com.license.outside_issues.exception.BusinessException;
+import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.service.authentication.dtos.AuthenticationRequest;
 import com.license.outside_issues.service.authentication.dtos.AuthenticationResponse;
@@ -34,6 +36,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public ResponseEntity<Object> generateToken(AuthenticationRequest request) {
+        if (request.getEmail() == null || request.getPassword() == null) {
+            throw new BusinessException(ExceptionReason.BAD_REQUEST);
+        }
         try {
             Authentication authentication = authenticate(request);
             Citizen citizen = (Citizen) authentication.getPrincipal();

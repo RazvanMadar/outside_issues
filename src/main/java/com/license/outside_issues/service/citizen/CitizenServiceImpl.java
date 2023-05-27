@@ -38,16 +38,13 @@ public class CitizenServiceImpl implements CitizenService {
     @Override
     public Page<DisplayCitizenDTO> getAllCitizens(String email, boolean isFiltered, Pageable pageable) {
         return citizenJdbcRepository.findCitizens(email, isFiltered, pageable);
-//        return email.isBlank() || email.isEmpty() ? citizenRepository.findAll().stream()
-//                    .map(this::convertCitizenToDTO)
-//                    .collect(Collectors.toList()) :
-//        citizenRepository.findByEmailContainingIgnoreCase(email).stream()
-//                .map(this::convertCitizenToDTO)
-//                .collect(Collectors.toList());
     }
 
     @Override
     public Long registerCitizen(RegisterCitizenDTO citizenDTO, boolean isAuth) {
+        if (citizenDTO.getEmail() == null) {
+            throw new BusinessException(ExceptionReason.BAD_REQUEST);
+        }
         final Optional<Citizen> alreadyPresentCitizen = citizenRepository.findAll().stream()
                 .filter(citizen -> citizen.getEmail().equals(citizenDTO.getEmail()))
                 .findAny();
