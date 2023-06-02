@@ -27,7 +27,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Long sendMessage(MessageDTO messageDTO) {
-        messageDTO.setDate(LocalDateTime.now());
+        messageDTO.setDate(LocalDateTime.now().plusHours(3));
         return messageRepository.save(convertDTOToEntity(messageDTO)).getFromCitizen().getId();
     }
 

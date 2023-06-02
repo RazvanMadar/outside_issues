@@ -28,6 +28,10 @@ public class CitizenServiceImpl implements CitizenService {
     private final RoleRepository roleRepository;
     private final CitizenJdbcRepository citizenJdbcRepository;
 
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
+    }
+
     public CitizenServiceImpl(CitizenRepository citizenRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, CitizenJdbcRepository citizenJdbcRepository) {
         this.citizenRepository = citizenRepository;
         this.passwordEncoder = passwordEncoder;
@@ -75,10 +79,26 @@ public class CitizenServiceImpl implements CitizenService {
             Citizen citizen = RegisterCitizenMapper.INSTANCE.dtoToModel(citizenDTO);
             citizen.setPassword(encodedPassword);
             Set<Role> roles = new HashSet<>();
-            Role roleById = roleRepository.findById(2).orElseThrow(() -> {
+            Optional<Role> roleById = roleRepository.findById(1L);
+            if (roleById.isEmpty()) {
+                final Role roleAdmin = roleRepository.save(new Role("ROLE_ADMIN"));
+                roles.add(roleAdmin);
+                citizen.setRoles(roles);
+                citizenRepository.save(citizen);
+                return citizen.getId();
+            }
+            roleById = roleRepository.findById(2L);
+            if (roleById.isEmpty()) {
+                final Role roleUser = roleRepository.save(new Role("ROLE_USER"));
+                roles.add(roleUser);
+                citizen.setRoles(roles);
+                citizenRepository.save(citizen);
+                return citizen.getId();
+            }
+            Role role = roleRepository.findById(2L).orElseThrow(() -> {
                 throw new BusinessException(ExceptionReason.ROLE_NOT_FOUND);
             });
-            roles.add(roleById);
+            roles.add(role);
             citizen.setRoles(roles);
             citizenRepository.save(citizen);
             return citizen.getId();

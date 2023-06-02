@@ -1,13 +1,15 @@
 package com.license.outside_issues.web.api;
 
+import com.license.outside_issues.model.Role;
 import com.license.outside_issues.service.citizen.CitizenService;
 import com.license.outside_issues.service.citizen.dtos.DisplayCitizenDTO;
 import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @CrossOrigin("http://localhost:3000")
@@ -38,6 +40,11 @@ public class CitizenResource {
     @GetMapping("/name/{name}")
     public ResponseEntity<?> findCitizenByName(@PathVariable String name) {
         return ResponseEntity.ok(citizenService.findByName(name));
+    }
+
+    @GetMapping("/test")
+    public List<Role> getAllRoles() {
+        return citizenService.getAllRoles();
     }
 
     @PostMapping("/auth")

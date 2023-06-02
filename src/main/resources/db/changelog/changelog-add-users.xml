@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="20230501131000" author="razvan.madar">
+        <sql>
+            INSERT INTO citizens (email, first_name, last_name, password, phone_number)
+            VALUES ('admin@gmail.com', 'Admin', 'Oradea', '$2a$10$poZIFVdVE/xiq1Iyo8QHAenZ8JXQ2lH6z96q.IWRzNwqky4kqS9oG', '0746817239');
+            INSERT INTO citizens (email, first_name, last_name, password, phone_number)
+            VALUES ('razvanmadar@gmail.com', 'Razvan', 'Madar', '$2a$10$hDPRFMezWqc1ZHY7CYB5EexjtanYwkQqh/Ehwx85ZFHnyVOoF91KW', '0767827239');
+            INSERT INTO citizens (email, first_name, last_name, password, phone_number)
+            VALUES ('mihaidan@gmail.com', 'Mihai', 'Dan', '$2a$10$hDPRFMezWqc1ZHY7CYB5EexjtanYwkQqh/Ehwx85ZFHnyVOoF91KW', '0765827232');
+        </sql>
+    </changeSet>
+
+    <changeSet id="20230501131500" author="razvan.madar">
+        <sql>
+            INSERT INTO citizens_roles VALUES (1, 1);
+            INSERT INTO citizens_roles VALUES (2, 2);
+            INSERT INTO citizens_roles VALUES (3, 2);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

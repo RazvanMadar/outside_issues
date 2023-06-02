@@ -1,15 +1,6 @@
-#spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-#spring.jpa.hibernate.ddl-auto=update
-#spring.jpa.show-sql=true
-#spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
-#spring.datasource.username=postgres
-#spring.datasource.password=postgres
-#jwt.expirationTime=3600000
-#jwt.secretKey=mySecret
-
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/outside_issues
+    url: jdbc:postgresql://postgresdb:5432/postgres
     username: postgres
     password: postgres
   servlet:
@@ -21,12 +12,15 @@ spring:
     allow-bean-definition-overriding: true
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.xml
   mail:
     host: smtp.gmail.com
     port: 587
@@ -51,20 +45,3 @@ logging:
         security: DEBUG
 base_url:
   issue: "http://localhost:3000/issues/"
-
-#rabbitmq:
-#  host: localhost
-#  virtualhost: /
-#  port: 15672
-#  username: guest
-#  password: guest
-#  exchange: rabbitmq.exchange
-#  queue: rabbitmq.queue
-#  routingkey: rabbitmq.routingkey
-#  reply:
-#    timeout: 60000
-#  concurrent:
-#    consumers: 1
-#  max:
-#    concurrent:
-#      consumers: 1

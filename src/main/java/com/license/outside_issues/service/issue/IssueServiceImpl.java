@@ -63,27 +63,12 @@ public class IssueServiceImpl implements IssueService {
         return issueJdbcRepository.getTypeStatistics(email);
     }
 
-//    private IssueCardDTO mapIssuesCardsDTO(Issue issue) {
-//        IssueCardDTO issueCardDTO = new IssueCardDTO();
-//        issueCardDTO.setId(issue.getId());
-//        issueCardDTO.setType(issue.getType());
-//        issueCardDTO.setLat(issue.getAddress().getLat());
-//        issueCardDTO.setLng(issueCardDTO.getLng());
-//        issueCardDTO.setState(issue.getState());
-//        issueCardDTO.setReportedDate(issue.getReportedDate());
-//        issueCardDTO.set
-//    }
-
     @Override
     public Long addIssue(IssueDTO issue) {
-//        Citizen citizenById = citizenRepository.findByEmail(issue.getCitizenEmail()).orElseThrow(() -> {
-//            throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
-//        });
         if (issue.getDescription() != null && issue.getDescription().length() > 0) {
             issue.setDescription(issue.getDescription().trim());
         }
         Issue savedIssue = IssueMapper.INSTANCE.dtoToModel(issue);
-//        savedIssue.setCitizenEmail(issue.getCitizenEmail());
         issueRepository.save(savedIssue);
         return savedIssue.getId();
     }
