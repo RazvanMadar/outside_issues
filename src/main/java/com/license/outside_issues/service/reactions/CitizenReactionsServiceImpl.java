@@ -8,7 +8,7 @@ import com.license.outside_issues.model.Issue;
 import com.license.outside_issues.repository.CitizenReactionsRepository;
 import com.license.outside_issues.repository.CitizenRepository;
 import com.license.outside_issues.repository.IssueRepository;
-import com.license.outside_issues.service.reactions.dtos.CitizenReactionsDTO;
+import com.license.outside_issues.dto.CitizenReactionsDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

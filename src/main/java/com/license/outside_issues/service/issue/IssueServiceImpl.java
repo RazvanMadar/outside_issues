@@ -4,15 +4,15 @@ import com.license.outside_issues.enums.IssueState;
 import com.license.outside_issues.enums.IssueType;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
-import com.license.outside_issues.mapper.IssueMapper;
 import com.license.outside_issues.model.CitizenReactions;
 import com.license.outside_issues.model.Issue;
 import com.license.outside_issues.model.IssueImage;
-import com.license.outside_issues.repository.*;
-import com.license.outside_issues.service.citizen.RejectedIssuesService;
-import com.license.outside_issues.service.email.EmailSender;
-import com.license.outside_issues.service.issue.dtos.IssueDTO;
-import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
+import com.license.outside_issues.repository.CitizenReactionsRepository;
+import com.license.outside_issues.repository.IssueImageRepository;
+import com.license.outside_issues.repository.IssueJdbcRepository;
+import com.license.outside_issues.repository.IssueRepository;
+import com.license.outside_issues.dto.IssueDTO;
+import com.license.outside_issues.dto.StatisticsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,21 +25,15 @@ import java.util.stream.Collectors;
 @Service
 public class IssueServiceImpl implements IssueService {
     private final IssueRepository issueRepository;
-    private final CitizenRepository citizenRepository;
     private final IssueJdbcRepository issueJdbcRepository;
     private final CitizenReactionsRepository citizenReactionsRepository;
     private final IssueImageRepository issueImageRepository;
-    private final EmailSender emailSender;
-    private final RejectedIssuesService rejectedIssuesService;
 
-    public IssueServiceImpl(IssueRepository issueRepository, CitizenRepository citizenRepository, IssueJdbcRepository issueJdbcRepository, CitizenReactionsRepository citizenReactionsRepository, IssueImageRepository issueImageRepository, EmailSender emailSender, RejectedIssuesService rejectedIssuesService) {
+    public IssueServiceImpl(IssueRepository issueRepository, IssueJdbcRepository issueJdbcRepository, CitizenReactionsRepository citizenReactionsRepository, IssueImageRepository issueImageRepository) {
         this.issueRepository = issueRepository;
-        this.citizenRepository = citizenRepository;
         this.issueJdbcRepository = issueJdbcRepository;
         this.citizenReactionsRepository = citizenReactionsRepository;
         this.issueImageRepository = issueImageRepository;
-        this.emailSender = emailSender;
-        this.rejectedIssuesService = rejectedIssuesService;
     }
 
     @Override
@@ -68,7 +62,7 @@ public class IssueServiceImpl implements IssueService {
         if (issue.getDescription() != null && issue.getDescription().length() > 0) {
             issue.setDescription(issue.getDescription().trim());
         }
-        Issue savedIssue = IssueMapper.INSTANCE.dtoToModel(issue);
+        Issue savedIssue = new Issue(issue);
         issueRepository.save(savedIssue);
         return savedIssue.getId();
     }
@@ -78,7 +72,7 @@ public class IssueServiceImpl implements IssueService {
         Issue issueById = issueRepository.findById(id).orElseThrow(() -> {
             throw new BusinessException(ExceptionReason.ISSUE_NOT_FOUND);
         });
-        return IssueMapper.INSTANCE.modelToDto(issueById);
+        return new IssueDTO(issueById);
     }
 
     @Override
@@ -92,7 +86,7 @@ public class IssueServiceImpl implements IssueService {
         if (state != null) {
             issueById.setState(IssueState.valueOf(state));
         }
-        return IssueMapper.INSTANCE.modelToDto(issueRepository.save(issueById));
+        return new IssueDTO(issueRepository.save(issueById));
     }
 
     @Override
@@ -117,7 +111,7 @@ public class IssueServiceImpl implements IssueService {
     public Page<IssueDTO> findAllByCitizenEmail(String email, Pageable pageable) {
         long totalReportedIssues = issueRepository.countByCitizenEmail(email);
         final List<IssueDTO> collectedIssues = issueRepository.findAllByCitizenEmail(email, pageable).stream()
-                .map(IssueMapper.INSTANCE::modelToDto)
+                .map(IssueDTO::new)
                 .collect(Collectors.toList());
         return new PageImpl<>(collectedIssues, pageable, totalReportedIssues);
     }

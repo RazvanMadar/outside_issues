@@ -2,7 +2,7 @@ package com.license.outside_issues.repository;
 
 import com.license.outside_issues.common.PaginationUtil;
 import com.license.outside_issues.service.blacklist.BlacklistService;
-import com.license.outside_issues.service.citizen.dtos.DisplayCitizenDTO;
+import com.license.outside_issues.dto.DisplayCitizenDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

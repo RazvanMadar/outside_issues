@@ -1,7 +1,7 @@
 package com.license.outside_issues.service.message;
 
-import com.license.outside_issues.service.citizen.dtos.ChatCitizenDTO;
-import com.license.outside_issues.service.message.dtos.MessageDTO;
+import com.license.outside_issues.dto.ChatCitizenDTO;
+import com.license.outside_issues.dto.MessageDTO;
 
 import java.util.List;
 

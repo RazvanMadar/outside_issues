@@ -1,5 +1,7 @@
 package com.license.outside_issues.model;
 
+import com.license.outside_issues.dto.AddressDTO;
+
 import javax.persistence.Embeddable;
 
 
@@ -13,6 +15,11 @@ public class Address {
     public Address(Double lat, Double lng) {
         this.lat = lat;
         this.lng = lng;
+    }
+
+    public Address(AddressDTO addressDTO) {
+        this.lat = addressDTO.getLat();
+        this.lng = addressDTO.getLng();
     }
 
     public Double getLat() {

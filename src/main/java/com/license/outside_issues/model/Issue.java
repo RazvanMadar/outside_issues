@@ -2,6 +2,7 @@ package com.license.outside_issues.model;
 
 import com.license.outside_issues.enums.IssueState;
 import com.license.outside_issues.enums.IssueType;
+import com.license.outside_issues.dto.IssueDTO;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -47,6 +48,19 @@ public class Issue {
     Set<CitizenReactions> citizenReactions;
 
     public Issue() {
+    }
+
+    public Issue(IssueDTO issueDTO) {
+        this.type = issueDTO.getType();
+        this.address = new Address(issueDTO.getAddress());
+        this.state = issueDTO.getState();
+        this.reportedDate = issueDTO.getReportedDate();
+        this.likesNumber = issueDTO.getLikesNumber();
+        this.dislikesNumber = issueDTO.getDislikesNumber();
+        this.description = issueDTO.getDescription();
+        this.citizenEmail = issueDTO.getCitizenEmail();
+        this.hasLocation = issueDTO.getHasLocation();
+        this.actualLocation = issueDTO.getActualLocation();
     }
 
     public Long getId() {

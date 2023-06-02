@@ -7,8 +7,8 @@ import com.license.outside_issues.model.Message;
 import com.license.outside_issues.model.Role;
 import com.license.outside_issues.repository.CitizenRepository;
 import com.license.outside_issues.repository.MessageRepository;
-import com.license.outside_issues.service.citizen.dtos.ChatCitizenDTO;
-import com.license.outside_issues.service.message.dtos.MessageDTO;
+import com.license.outside_issues.dto.ChatCitizenDTO;
+import com.license.outside_issues.dto.MessageDTO;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

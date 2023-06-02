@@ -3,7 +3,6 @@ package com.license.outside_issues.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "citizens_reactions")

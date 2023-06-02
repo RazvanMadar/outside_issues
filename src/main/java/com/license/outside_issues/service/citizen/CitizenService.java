@@ -1,9 +1,8 @@
 package com.license.outside_issues.service.citizen;
 
-import com.license.outside_issues.model.Role;
-import com.license.outside_issues.service.citizen.dtos.ChatCitizenDTO;
-import com.license.outside_issues.service.citizen.dtos.DisplayCitizenDTO;
-import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;
+import com.license.outside_issues.dto.ChatCitizenDTO;
+import com.license.outside_issues.dto.DisplayCitizenDTO;
+import com.license.outside_issues.dto.RegisterCitizenDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,5 +20,4 @@ public interface CitizenService {
     List<DisplayCitizenDTO> findAllCitizenUsers();
     List<String> findAllUsersExceptOne(String email);
     List<String> findAllValidEmails();
-    List<Role> getAllRoles();
 }

@@ -1,5 +1,6 @@
 package com.license.outside_issues.model;
 
+import com.license.outside_issues.dto.RegisterCitizenDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +44,14 @@ public class Citizen implements UserDetails {
 //    private Set<Issue> issues = new HashSet<>();
 
     public Citizen() {}
+
+    public Citizen(RegisterCitizenDTO registerCitizenDTO) {
+        this.firstName = registerCitizenDTO.getFirstName();
+        this.lastName = registerCitizenDTO.getLastName();
+        this.email = registerCitizenDTO.getEmail();
+        this.phoneNumber = registerCitizenDTO.getPhoneNumber();
+        this.password = registerCitizenDTO.getPassword();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

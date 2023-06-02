@@ -7,10 +7,9 @@ import com.license.outside_issues.model.RejectedIssues;
 import com.license.outside_issues.repository.CitizenRepository;
 import com.license.outside_issues.repository.IssueRepository;
 import com.license.outside_issues.repository.RejectedIssuesRepository;
-import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
+import com.license.outside_issues.dto.StatisticsDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

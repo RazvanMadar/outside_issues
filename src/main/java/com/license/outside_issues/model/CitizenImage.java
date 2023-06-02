@@ -1,10 +1,8 @@
 package com.license.outside_issues.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-
 
 @Entity
 @Table(name = "citizen_images")

@@ -6,7 +6,7 @@ import com.license.outside_issues.model.Blacklist;
 import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.repository.BlacklistRepository;
 import com.license.outside_issues.repository.CitizenRepository;
-import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
+import com.license.outside_issues.dto.StatisticsDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

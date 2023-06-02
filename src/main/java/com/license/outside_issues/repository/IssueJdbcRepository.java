@@ -3,9 +3,9 @@ package com.license.outside_issues.repository;
 import com.license.outside_issues.common.PaginationUtil;
 import com.license.outside_issues.enums.IssueState;
 import com.license.outside_issues.enums.IssueType;
-import com.license.outside_issues.service.issue.dtos.AddressDTO;
-import com.license.outside_issues.service.issue.dtos.IssueDTO;
-import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
+import com.license.outside_issues.dto.AddressDTO;
+import com.license.outside_issues.dto.IssueDTO;
+import com.license.outside_issues.dto.StatisticsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +20,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.TextStyle;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 @Repository
 public class IssueJdbcRepository {

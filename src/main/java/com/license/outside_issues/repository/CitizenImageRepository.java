@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CitizenImageRepository extends JpaRepository<CitizenImage, Long> {
-    long deleteByCitizen_Id(Long citizenId);
 }

@@ -2,23 +2,23 @@ package com.license.outside_issues.service.citizen;
 
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
-import com.license.outside_issues.mapper.citizen.DisplayCitizenMapper;
-import com.license.outside_issues.mapper.citizen.RegisterCitizenMapper;
 import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.model.Role;
 import com.license.outside_issues.repository.CitizenJdbcRepository;
 import com.license.outside_issues.repository.CitizenRepository;
 import com.license.outside_issues.repository.RoleRepository;
-import com.license.outside_issues.service.citizen.dtos.ChatCitizenDTO;
-import com.license.outside_issues.service.citizen.dtos.DisplayCitizenDTO;
-import com.license.outside_issues.service.citizen.dtos.RegisterCitizenDTO;
+import com.license.outside_issues.dto.ChatCitizenDTO;
+import com.license.outside_issues.dto.DisplayCitizenDTO;
+import com.license.outside_issues.dto.RegisterCitizenDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,10 +27,6 @@ public class CitizenServiceImpl implements CitizenService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final CitizenJdbcRepository citizenJdbcRepository;
-
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
-    }
 
     public CitizenServiceImpl(CitizenRepository citizenRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, CitizenJdbcRepository citizenJdbcRepository) {
         this.citizenRepository = citizenRepository;
@@ -76,7 +72,7 @@ public class CitizenServiceImpl implements CitizenService {
             String rawPassword = citizenDTO.getPassword();
 
             String encodedPassword = rawPassword != null ? passwordEncoder.encode(rawPassword) : null;
-            Citizen citizen = RegisterCitizenMapper.INSTANCE.dtoToModel(citizenDTO);
+            Citizen citizen = new Citizen(citizenDTO);
             citizen.setPassword(encodedPassword);
             Set<Role> roles = new HashSet<>();
             Optional<Role> roleById = roleRepository.findById(1L);
@@ -110,7 +106,8 @@ public class CitizenServiceImpl implements CitizenService {
         final Citizen citizen = citizenRepository.findByEmail(email).orElseThrow(() -> {
             throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
         });
-        return DisplayCitizenMapper.INSTANCE.modelToDto(citizen);
+//        return DisplayCitizenMapper.INSTANCE.modelToDto(citizen);
+        return new DisplayCitizenDTO(citizen);
     }
 
     @Override
@@ -118,7 +115,8 @@ public class CitizenServiceImpl implements CitizenService {
         Citizen citizenById = citizenRepository.findById(id).orElseThrow(() -> {
             throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
         });
-        return DisplayCitizenMapper.INSTANCE.modelToDto(citizenById);
+//        return DisplayCitizenMapper.INSTANCE.modelToDto(citizenById);
+        return new DisplayCitizenDTO(citizenById);
     }
 
     @Override
@@ -162,7 +160,7 @@ public class CitizenServiceImpl implements CitizenService {
     @Override
     public List<DisplayCitizenDTO> findAllCitizenUsers() {
         return citizenRepository.findAllCitizenUsers().stream()
-                .map(DisplayCitizenMapper.INSTANCE::modelToDto)
+                .map(DisplayCitizenDTO::new)
                 .collect(Collectors.toList());
     }
 

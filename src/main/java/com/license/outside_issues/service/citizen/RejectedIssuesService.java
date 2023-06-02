@@ -1,6 +1,6 @@
 package com.license.outside_issues.service.citizen;
 
-import com.license.outside_issues.service.issue.dtos.StatisticsDTO;
+import com.license.outside_issues.dto.StatisticsDTO;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.license.outside_issues;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.license.outside_issues.arduino.ArduinoSerialListener;
+import com.license.outside_issues.service.arduino.ArduinoSerialListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -1,6 +1,6 @@
 package com.license.outside_issues.service.reactions;
 
-import com.license.outside_issues.service.reactions.dtos.CitizenReactionsDTO;
+import com.license.outside_issues.dto.CitizenReactionsDTO;
 
 import java.util.List;
 
