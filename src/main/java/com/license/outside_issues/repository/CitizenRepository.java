@@ -11,7 +11,6 @@ import java.util.Optional;
 @Repository
 public interface CitizenRepository extends JpaRepository<Citizen, Long> {
     Optional<Citizen> findByEmail(String email);
-    List<Citizen> findByEmailContainingIgnoreCase(String email);
     @Query(value = "SELECT c.* FROM citizens c " +
             "INNER JOIN messages m ON c.id = m.from_citizen_id " +
             "INNER JOIN citizens_roles cr ON c.id = cr.citizen_id " +

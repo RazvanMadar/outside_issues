@@ -1,6 +1,6 @@
 package com.license.outside_issues.dto;
 
-public class AuthenticationResponse {
+public class AuthenticationResponseDTO {
     private Long userId;
     private String email;
     private String accessToken;
@@ -9,9 +9,9 @@ public class AuthenticationResponse {
     private String lastName;
     private boolean isBlocked;
 
-    public AuthenticationResponse() { }
+    public AuthenticationResponseDTO() { }
 
-    public AuthenticationResponse(Long userId, String email, String role, String accessToken, String firstName, String lastName, boolean isBlocked) {
+    public AuthenticationResponseDTO(Long userId, String email, String role, String accessToken, String firstName, String lastName, boolean isBlocked) {
         this.userId = userId;
         this.email = email;
         this.role = role;

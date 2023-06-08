@@ -3,8 +3,8 @@ package com.license.outside_issues.service.authentication;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.model.Citizen;
-import com.license.outside_issues.dto.AuthenticationRequest;
-import com.license.outside_issues.dto.AuthenticationResponse;
+import com.license.outside_issues.dto.AuthenticationRequestDTO;
+import com.license.outside_issues.dto.AuthenticationResponseDTO;
 import com.license.outside_issues.service.authentication.jwt.JwtUtil;
 import com.license.outside_issues.service.blacklist.BlacklistService;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.blacklistService = blacklistService;
     }
 
-    private Authentication authenticate(AuthenticationRequest request) {
+    private Authentication authenticate(AuthenticationRequestDTO request) {
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(), request.getPassword())
@@ -35,7 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ResponseEntity<Object> generateToken(AuthenticationRequest request) {
+    public ResponseEntity<Object> generateToken(AuthenticationRequestDTO request) {
         if (request.getEmail() == null || request.getPassword() == null) {
             throw new BusinessException(ExceptionReason.BAD_REQUEST);
         }
@@ -44,7 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             Citizen citizen = (Citizen) authentication.getPrincipal();
             String token = jwtUtil.generateAccessToken(citizen);
             final boolean isBlocked = blacklistService.isCitizenBlocked(citizen.getId());
-            return ResponseEntity.ok(new AuthenticationResponse(citizen.getId(), citizen.getEmail(), citizen.getRoles().iterator().next().getName(), token, citizen.getFirstName(), citizen.getLastName(), isBlocked));
+            return ResponseEntity.ok(new AuthenticationResponseDTO(citizen.getId(), citizen.getEmail(), citizen.getRoles().iterator().next().getName(), token, citizen.getFirstName(), citizen.getLastName(), isBlocked));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

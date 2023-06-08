@@ -84,6 +84,7 @@ public class ArduinoSerialListener implements SerialPortDataListener {
         int dislikesNumber = jsonObject.get("dislikesNumber").getAsInt();
         boolean hasLocation = jsonObject.get("hasLocation").getAsBoolean();
         int value = jsonObject.get("value").getAsInt();
+        System.out.println("Ajunge aici? cu val " + value);
 
         if (isAvailableIssue(type, value)) {
             Issue issue = new Issue();
@@ -97,6 +98,7 @@ public class ArduinoSerialListener implements SerialPortDataListener {
             issue.setDescription("");
             String actualLocation = computeActualLocation(addressLat, addressLng);
             issue.setActualLocation(actualLocation);
+            System.out.println("Se si salveAZA");
             issueRepository.save(issue);
             sendMessagesViaWebSocketOnUpdate(citizenService.findAllValidEmails());
         }

@@ -1,7 +1,7 @@
 package com.license.outside_issues.controller.api;
 
 import com.license.outside_issues.service.authentication.AuthenticationService;
-import com.license.outside_issues.dto.AuthenticationRequest;
+import com.license.outside_issues.dto.AuthenticationRequestDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ public class AuthenticationResource {
     }
 
     @PostMapping
-    public ResponseEntity<Object> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<Object> authenticate(@RequestBody AuthenticationRequestDTO request) {
         return authenticationService.generateToken(request);
     }
 }

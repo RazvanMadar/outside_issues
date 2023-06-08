@@ -2,18 +2,18 @@ package com.license.outside_issues.dto;
 
 import com.sun.istack.NotNull;
 
-public class AuthenticationRequest {
+public class AuthenticationRequestDTO {
     @NotNull
     private String email;
 
     @NotNull
     private String password;
 
-    public AuthenticationRequest() {
+    public AuthenticationRequestDTO() {
 
     }
 
-    public AuthenticationRequest(String email, String password) {
+    public AuthenticationRequestDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }

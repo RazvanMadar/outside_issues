@@ -6,6 +6,9 @@ services:
     build: .
     ports:
       - "8080:8080"
+    privileged: true
+    devices:
+      - "/dev/ttyS4:/dev/ttyS4"
     depends_on:
       - postgresdb
   postgresdb:
