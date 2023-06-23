@@ -1,4 +1,4 @@
-package com.license.outside_issues.model;
+package com.license.outside_issues.dto;
 
 import java.io.Serializable;
 

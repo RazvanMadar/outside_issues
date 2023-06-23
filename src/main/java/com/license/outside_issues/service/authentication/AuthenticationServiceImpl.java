@@ -1,5 +1,7 @@
 package com.license.outside_issues.service.authentication;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.model.Citizen;
@@ -35,7 +37,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ResponseEntity<Object> generateToken(AuthenticationRequestDTO request) {
+    public ResponseEntity<Object> generateToken(AuthenticationRequestDTO request) throws JsonProcessingException {
         if (request.getEmail() == null || request.getPassword() == null) {
             throw new BusinessException(ExceptionReason.BAD_REQUEST);
         }
@@ -46,7 +48,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             final boolean isBlocked = blacklistService.isCitizenBlocked(citizen.getId());
             return ResponseEntity.ok(new AuthenticationResponseDTO(citizen.getId(), citizen.getEmail(), citizen.getRoles().iterator().next().getName(), token, citizen.getFirstName(), citizen.getLastName(), isBlocked));
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            String errorMessage = "Failed to authenticate since password does not match stored value";
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(errorMessage);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(json);
         }
     }
 }

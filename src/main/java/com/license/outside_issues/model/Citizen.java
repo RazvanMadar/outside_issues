@@ -37,12 +37,6 @@ public class Citizen implements UserDetails {
     @OneToOne(mappedBy = "citizen")
     private CitizenImage citizenImage;
 
-//    @OneToMany(
-//            mappedBy = "citizen",
-//            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
-//    )
-//    private Set<Issue> issues = new HashSet<>();
-
     public Citizen() {}
 
     public Citizen(RegisterCitizenDTO registerCitizenDTO) {
@@ -56,9 +50,7 @@ public class Citizen implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        roles.forEach(role ->
-                authorities.add(new SimpleGrantedAuthority(role.getName()))
-        );
+        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         return authorities;
     }
 

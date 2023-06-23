@@ -13,14 +13,19 @@ import java.util.Date;
 public class JwtUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
 
+    @Value("${jwt.secretKey}")
+    private String SECRET_KEY;
     @Value("${jwt.expirationTime}")
     private Long EXPIRE_DURATION;
 
-    @Value("${jwt.secretKey}")
-    private String SECRET_KEY;
+    public Claims parseClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+    }
 
     public String generateAccessToken(Citizen citizen) {
-
         return Jwts.builder()
                 .setSubject(String.format("%s, %s", citizen.getId(), citizen.getEmail()))
                 .setIssuer("Razvan")
@@ -52,12 +57,5 @@ public class JwtUtil {
 
     public String getSubject(String token) {
         return parseClaims(token).getSubject();
-    }
-
-    public Claims parseClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
     }
 }

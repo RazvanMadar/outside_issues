@@ -38,7 +38,6 @@ public class IssueImageServiceImpl implements IssueImageService {
             issueImage.setImage(ImageUtil.compressImage(file.getBytes()));
             issueImage.setIssue(issueById);
             issueImage.setImageType(imageType);
-//            return IssueImageMapper.INSTANCE.modelToDto(issueImageRepository.save(issueImage));
             return new IssueImageDTO(issueImageRepository.save(issueImage));
         }
         catch (IOException e) {

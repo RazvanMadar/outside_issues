@@ -46,8 +46,6 @@ public class CitizenJdbcRepository {
             parameters.addValue("email", email);
         }
 
-        System.out.println(query);
-
         Integer filteredCitizensSql = jdbcTemplate.queryForObject(query.toString().replace("*", "COUNT(*)"), parameters, Integer.class);
         int filteredCitizensSize = Objects.requireNonNullElse(filteredCitizensSql, 0);
 

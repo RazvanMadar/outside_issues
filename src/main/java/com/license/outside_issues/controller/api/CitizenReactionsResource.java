@@ -19,12 +19,12 @@ public class CitizenReactionsResource {
     }
 
     @GetMapping
-    public ResponseEntity<?> getReactionsForSomeCitizenAndIssue(@RequestParam(required = false) Long citizenId, @RequestParam(required = false) Long issueId) {
+    public ResponseEntity<Integer> getReactionsForSomeCitizenAndIssue(@RequestParam(required = false) Long citizenId, @RequestParam(required = false) Long issueId) {
         return ResponseEntity.ok(citizenReactionsService.findByCitizenIdAndIssueId(citizenId, issueId));
     }
 
     @PostMapping
-    public ResponseEntity<?> addCitizenReaction(@RequestBody List<CitizenReactionsDTO> citizenReactionsDTOs) {
+    public ResponseEntity<List<Long>> addCitizenReaction(@RequestBody List<CitizenReactionsDTO> citizenReactionsDTOs) {
         return ResponseEntity.status(HttpStatus.CREATED).body(citizenReactionsService.addCitizenReaction(citizenReactionsDTOs));
     }
 }

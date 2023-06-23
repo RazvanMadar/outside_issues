@@ -7,16 +7,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.license.outside_issues.controller.api.WebSocketResource;
+import com.license.outside_issues.dto.WebSocketMessageUpdate;
 import com.license.outside_issues.enums.IssueState;
 import com.license.outside_issues.enums.IssueType;
 import com.license.outside_issues.model.Address;
 import com.license.outside_issues.model.Issue;
-import com.license.outside_issues.model.WebSocketMessageUpdate;
 import com.license.outside_issues.repository.IssueRepository;
 import com.license.outside_issues.service.citizen.CitizenService;
-import com.license.outside_issues.controller.api.WebSocketController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,12 +26,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class ArduinoSerialListener implements SerialPortDataListener {
     @Autowired
     private final IssueRepository issueRepository;
     @Autowired
-    private WebSocketController webSocketController;
+    private WebSocketResource webSocketResource;
     @Autowired
     private CitizenService citizenService;
     private String bufferReadToString = "";
@@ -84,8 +84,6 @@ public class ArduinoSerialListener implements SerialPortDataListener {
         int dislikesNumber = jsonObject.get("dislikesNumber").getAsInt();
         boolean hasLocation = jsonObject.get("hasLocation").getAsBoolean();
         int value = jsonObject.get("value").getAsInt();
-        System.out.println("Ajunge aici? cu val " + value);
-
         if (isAvailableIssue(type, value)) {
             Issue issue = new Issue();
             issue.setType(IssueType.valueOf(type));
@@ -98,7 +96,6 @@ public class ArduinoSerialListener implements SerialPortDataListener {
             issue.setDescription("");
             String actualLocation = computeActualLocation(addressLat, addressLng);
             issue.setActualLocation(actualLocation);
-            System.out.println("Se si salveAZA");
             issueRepository.save(issue);
             sendMessagesViaWebSocketOnUpdate(citizenService.findAllValidEmails());
         }
@@ -166,6 +163,6 @@ public class ArduinoSerialListener implements SerialPortDataListener {
         final List<WebSocketMessageUpdate> webSocketMessageUpdates = emails.stream()
                 .map(WebSocketMessageUpdate::new)
                 .collect(Collectors.toList());
-        webSocketController.sendUpdate(webSocketMessageUpdates);
+        webSocketResource.sendUpdate(webSocketMessageUpdates);
     }
 }

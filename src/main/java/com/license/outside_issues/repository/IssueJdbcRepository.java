@@ -117,7 +117,6 @@ public class IssueJdbcRepository {
             isConditionPresent = true;
             parameters.addValue("state", state);
         }
-
         if (fromDate != null) {
             query.append(isConditionPresent ? "AND " : "WHERE ");
             query.append("reported_date >= :from_date ");
@@ -150,24 +149,7 @@ public class IssueJdbcRepository {
         query.append(queryOrder);
         final String pagination = PaginationUtil.createPaginationQuery(pageable);
         query.append(pagination);
-
-        System.out.println(query);
-//        List<Issue> issues = new ArrayList<>();
-//                jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) ->
-//                new Issue(
-//                        rs.getLong("id"), IssueType.valueOf(rs.getString("type")),
-//                        new Address(rs.getDouble("lat"),
-//                        rs.getDouble("lng")),
-//                        IssueState.valueOf(rs.getString("state")),
-//                        new Date(rs.getDate("reported_date").getTime()).toLocalDate(),
-//                        rs.getInt("likes_number"), rs.getInt("dislikes_number"),
-//                        rs.getString("description"),
-//                        Boolean.TRUE, new HashSet<>(),
-//                        citizenRepository.findById(rs.getLong("citizen_id")).get())
-//        );
-//        List<IssueDTO> issueDTOS = convertIssuesToDTOS(issues);
         List<IssueDTO> issues = jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) -> mapToIssuesDTO(rs));
-        System.out.println(issues);
 
         return new PageImpl<>(issues, pageable, filteredIssuesSize);
     }

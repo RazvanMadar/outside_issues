@@ -1,5 +1,6 @@
 package com.license.outside_issues.controller.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.license.outside_issues.service.authentication.AuthenticationService;
 import com.license.outside_issues.dto.AuthenticationRequestDTO;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class AuthenticationResource {
     }
 
     @PostMapping
-    public ResponseEntity<Object> authenticate(@RequestBody AuthenticationRequestDTO request) {
+    public ResponseEntity<Object> authenticate(@RequestBody AuthenticationRequestDTO request) throws JsonProcessingException {
         return authenticationService.generateToken(request);
     }
 }

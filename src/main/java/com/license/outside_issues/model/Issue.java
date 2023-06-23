@@ -17,8 +17,6 @@ public class Issue {
     private Long id;
     @Enumerated(EnumType.STRING)
     private IssueType type;
-
-    // astea 5 ar putea lipsi daca as face un DTO pt creare issue
     @Embedded
     private Address address;
     @Enumerated(EnumType.STRING)
@@ -36,10 +34,6 @@ public class Issue {
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
     )
     private Set<IssueImage> images;
-//    @ManyToOne
-//    @JsonIgnore
-//    @JoinColumn(name = "citizen_id", nullable = false)
-//    private Citizen citizen;
 
     @OneToMany(
             mappedBy = "issue",

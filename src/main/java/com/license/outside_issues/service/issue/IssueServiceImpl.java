@@ -37,12 +37,6 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public List<Issue> getAllIssues(Boolean hasLocation) {
-        return hasLocation ? issueRepository.findAll().stream()
-                .filter(Issue::getHasLocation).collect(Collectors.toList()) : issueRepository.findAll();
-    }
-
-    @Override
     public List<StatisticsDTO> getBasicStatistics(String email) {
         return issueJdbcRepository.getBasicStatistics(email);
     }

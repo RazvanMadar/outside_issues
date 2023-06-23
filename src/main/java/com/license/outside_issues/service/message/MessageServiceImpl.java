@@ -27,7 +27,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Long sendMessage(MessageDTO messageDTO) {
-        messageDTO.setDate(LocalDateTime.now().plusHours(3));
+        messageDTO.setDate(LocalDateTime.now());
         return messageRepository.save(convertDTOToEntity(messageDTO)).getFromCitizen().getId();
     }
 
@@ -47,18 +47,6 @@ public class MessageServiceImpl implements MessageService {
                 .map(this::convertEntityToDTO)
                 .sorted(Comparator.comparing(MessageDTO::getDate))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<MessageDTO> getLatestMessage(Long fromCitizenId, Long toCitizenId) {
-        return messageRepository.findNeededMessages().stream()
-                .map(this::convertEntityToDTO)
-                .collect(Collectors.toList());
-//        final List<Message> byFromCitizenIdAndToCitizenId = messageRepository.findByFromCitizenIdAndToCitizenId(toCitizenId, fromCitizenId);
-//        byFromCitizenIdAndToCitizenId.addAll(messageRepository.findByFromCitizenIdAndToCitizenId(fromCitizenId, toCitizenId));
-//        final Optional<MessageDTO> lastMessage = byFromCitizenIdAndToCitizenId.stream()
-//                .map(this::convertEntityToDTO).max(Comparator.comparing(MessageDTO::getDate));
-//        return lastMessage.orElseGet(MessageDTO::new);
     }
 
     @Override

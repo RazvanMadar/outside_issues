@@ -1,7 +1,7 @@
 package com.license.outside_issues.controller.api;
 
-import com.license.outside_issues.model.WebSocketMessage;
-import com.license.outside_issues.model.WebSocketMessageUpdate;
+import com.license.outside_issues.dto.WebSocketMessage;
+import com.license.outside_issues.dto.WebSocketMessageUpdate;
 import com.license.outside_issues.service.message.MessageService;
 import com.license.outside_issues.dto.MessageDTO;
 import org.springframework.http.ResponseEntity;
@@ -18,24 +18,25 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
-public class WebSocketController {
+public class WebSocketResource {
     private final SimpMessagingTemplate template;
     private final MessageService messageService;
 
-    public WebSocketController(SimpMessagingTemplate template, MessageService messageService) {
+    public WebSocketResource(SimpMessagingTemplate template, MessageService messageService) {
         this.template = template;
         this.messageService = messageService;
     }
 
     @MessageMapping("/sendMessage")
-    public void receiveMessage(@Payload WebSocketMessage message) {
+    public ResponseEntity<Void> receiveMessage(@Payload WebSocketMessage message) {
         template.convertAndSend("/topic/message", message);
+        return null;
     }
 
     @MessageMapping("/send")
-    public void receivePrivateMessage(@Payload WebSocketMessage message) {
-        System.out.println(message);
+    public ResponseEntity<Void> receivePrivateMessage(@Payload WebSocketMessage message) {
         template.convertAndSendToUser(message.getToEmail(), "/private", message);
+        return null;
     }
 
     @PostMapping("/send-message")

@@ -76,11 +76,9 @@ public class JwtFilter extends OncePerRequestFilter {
         Claims claims = jwtUtil.parseClaims(token);
         String subject = (String) claims.get(Claims.SUBJECT);
         String roles = (String) claims.get("roles");
-//        String country = (String) claims.get("country");
 
         LOGGER.info("Subject {}", subject);
         LOGGER.info("Roles {}", roles);
-//        LOGGER.info("Country {}", country);
         roles = roles.replace("[", "").replace("]", "").replace(" ", "");
         String[] roleNames = roles.split(",");
 
@@ -90,7 +88,6 @@ public class JwtFilter extends OncePerRequestFilter {
         String[] jwtSubject = subject.split(",");
         userDetails.setId(Long.parseLong(jwtSubject[0]));
         userDetails.setEmail(jwtSubject[1]);
-//        userDetails.setCountry(EuropeCountry.valueOf(country));
 
         return userDetails;
     }

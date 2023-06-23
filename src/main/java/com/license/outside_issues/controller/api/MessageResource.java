@@ -1,5 +1,6 @@
 package com.license.outside_issues.controller.api;
 
+import com.license.outside_issues.dto.ChatCitizenDTO;
 import com.license.outside_issues.service.message.MessageService;
 import com.license.outside_issues.dto.MessageDTO;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,8 @@ public class MessageResource {
         return ResponseEntity.ok(messageService.getChatMessages(from, to));
     }
 
-//    @GetMapping("/latest")
-//    public ResponseEntity<?> getLatestMessage(@RequestParam Long from, @RequestParam Long to) {
-//        return ResponseEntity.ok(messageService.getLatestMessage(from, to));
-//    }
-
     @GetMapping("/latest")
-    public ResponseEntity<?> findLatestMessageForCitizen(@RequestParam Long fromId, @RequestParam Long toId) {
+    public ResponseEntity<MessageDTO> findLatestMessageForCitizen(@RequestParam Long fromId, @RequestParam Long toId) {
         return ResponseEntity.ok(messageService.findLatestMessageForCitizen(fromId, toId));
     }
 
@@ -44,7 +40,7 @@ public class MessageResource {
     }
 
     @GetMapping("/role")
-    public ResponseEntity<?> getChatUsersByRole(@RequestParam String name) {
+    public ResponseEntity<List<ChatCitizenDTO>> getChatUsersByRole(@RequestParam String name) {
         return ResponseEntity.ok(messageService.getChatUsersByRole(name));
     }
 

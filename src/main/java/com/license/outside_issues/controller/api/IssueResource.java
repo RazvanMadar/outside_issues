@@ -1,6 +1,6 @@
 package com.license.outside_issues.controller.api;
 
-import com.license.outside_issues.model.WebSocketMessageUpdate;
+import com.license.outside_issues.dto.WebSocketMessageUpdate;
 import com.license.outside_issues.service.citizen.CitizenService;
 import com.license.outside_issues.dto.DisplayCitizenDTO;
 import com.license.outside_issues.service.issue.IssueService;
@@ -22,17 +22,12 @@ import java.util.stream.Collectors;
 public class IssueResource {
     private final IssueService issueService;
     private final CitizenService citizenService;
-    private final WebSocketController webSocketController;
+    private final WebSocketResource webSocketResource;
 
-    public IssueResource(IssueService issueService, CitizenService citizenService, WebSocketController webSocketController) {
+    public IssueResource(IssueService issueService, CitizenService citizenService, WebSocketResource webSocketResource) {
         this.issueService = issueService;
         this.citizenService = citizenService;
-        this.webSocketController = webSocketController;
-    }
-
-    @GetMapping
-    public ResponseEntity<?> getAllIssues(@RequestParam(required = false, defaultValue = "false") Boolean hasLocation) {
-        return ResponseEntity.ok(issueService.getAllIssues(hasLocation));
+        this.webSocketResource = webSocketResource;
     }
 
     @GetMapping("/basic-statistics")
@@ -97,6 +92,6 @@ public class IssueResource {
         final List<WebSocketMessageUpdate> webSocketMessageUpdates = emails.stream()
                 .map(WebSocketMessageUpdate::new)
                 .collect(Collectors.toList());
-        webSocketController.sendUpdate(webSocketMessageUpdates);
+        webSocketResource.sendUpdate(webSocketMessageUpdates);
     }
 }

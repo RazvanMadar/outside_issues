@@ -36,7 +36,6 @@ public class CitizenImageServiceImpl implements CitizenImageService {
         try {
             citizenImage.setImage(ImageUtil.compressImage(file.getBytes()));
             citizenImage.setCitizen(citizen);
-//            return CitizenImageMapper.INSTANCE.modelToDto(citizenImageRepository.save(citizenImage));
             return new IssueImageDTO(citizenImageRepository.save(citizenImage));
         }
         catch (IOException e) {
