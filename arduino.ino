@@ -68,7 +68,7 @@ void setup() {
 
 void loop() {
   if (Serial) {
-    delay(50000);
+    delay(180000);
     StaticJsonDocument<2000> doc;
     JsonArray array = doc.to<JsonArray>();
     for (int i = 0; i < 12; i++) {
