@@ -11,10 +11,10 @@ import java.util.List;
 @CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/api/citizen-reactions")
-public class CitizenReactionsResource {
+public class CitizenReactionsController {
     private final CitizenReactionsService citizenReactionsService;
 
-    public CitizenReactionsResource(CitizenReactionsService citizenReactionsService) {
+    public CitizenReactionsController(CitizenReactionsService citizenReactionsService) {
         this.citizenReactionsService = citizenReactionsService;
     }
 

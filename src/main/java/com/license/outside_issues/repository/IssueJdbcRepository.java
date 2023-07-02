@@ -149,12 +149,12 @@ public class IssueJdbcRepository {
         query.append(queryOrder);
         final String pagination = PaginationUtil.createPaginationQuery(pageable);
         query.append(pagination);
-        List<IssueDTO> issues = jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) -> mapToIssuesDTO(rs));
+        List<IssueDTO> issues = jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) -> mapToIssues(rs));
 
         return new PageImpl<>(issues, pageable, filteredIssuesSize);
     }
 
-    private IssueDTO mapToIssuesDTO(ResultSet rs) throws SQLException {
+    private IssueDTO mapToIssues(ResultSet rs) throws SQLException {
         IssueDTO issue = new IssueDTO();
         issue.setId(rs.getLong("id"));
         issue.setType(IssueType.valueOf(rs.getString("type")));

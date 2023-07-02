@@ -12,10 +12,10 @@ import org.springframework.http.MediaType;
 @RestController
 @RequestMapping("/api/images")
 @CrossOrigin("http://localhost:3000")
-public class IssueImageResource {
+public class IssueImageController {
     private final IssueImageService issueImageService;
 
-    public IssueImageResource(IssueImageService issueImageService) {
+    public IssueImageController(IssueImageService issueImageService) {
         this.issueImageService = issueImageService;
     }
 

@@ -21,6 +21,19 @@ public class IssueDTO {
 
     public IssueDTO() {}
 
+    public IssueDTO(IssueType type, AddressDTO address, IssueState state, LocalDate reportedDate, Integer likesNumber, Integer dislikesNumber, String description, Boolean hasLocation, String citizenEmail, String actualLocation) {
+        this.type = type;
+        this.address = address;
+        this.state = state;
+        this.reportedDate = reportedDate;
+        this.likesNumber = likesNumber;
+        this.dislikesNumber = dislikesNumber;
+        this.description = description;
+        this.hasLocation = hasLocation;
+        this.citizenEmail = citizenEmail;
+        this.actualLocation = actualLocation;
+    }
+
     public IssueDTO(Issue issue) {
         this.id = issue.getId();
         this.type = issue.getType();

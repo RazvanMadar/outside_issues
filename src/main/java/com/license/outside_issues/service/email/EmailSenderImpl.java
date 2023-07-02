@@ -1,6 +1,6 @@
 package com.license.outside_issues.service.email;
 
-import com.license.outside_issues.dto.EmailMessage;
+import com.license.outside_issues.dto.EmailMessageDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,7 +22,7 @@ public class EmailSenderImpl implements EmailSender {
 
     @Async
     @Override
-    public void sendEmail(EmailMessage emailMessage) {
+    public void sendEmail(EmailMessageDTO emailMessage) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
         try {

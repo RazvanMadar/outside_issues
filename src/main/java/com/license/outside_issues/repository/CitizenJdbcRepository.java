@@ -56,13 +56,13 @@ public class CitizenJdbcRepository {
         final String pagination = PaginationUtil.createPaginationQuery(pageable);
         query.append(pagination);
 
-        List<DisplayCitizenDTO> citizenDTOS = jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) -> mapToCitizenDTO(rs));
+        List<DisplayCitizenDTO> citizenDTOS = jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) -> mapToCitizen(rs));
         System.out.println(citizenDTOS);
 
         return new PageImpl<>(citizenDTOS, pageable, filteredCitizensSize);
     }
 
-    private DisplayCitizenDTO mapToCitizenDTO(ResultSet rs) throws SQLException {
+    private DisplayCitizenDTO mapToCitizen(ResultSet rs) throws SQLException {
         DisplayCitizenDTO displayCitizenDTO = new DisplayCitizenDTO();
         displayCitizenDTO.setId(rs.getLong("id"));
         displayCitizenDTO.setEmail(rs.getString("email"));

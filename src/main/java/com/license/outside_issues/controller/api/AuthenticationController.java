@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/login")
-public class AuthenticationResource {
+public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
-    public AuthenticationResource(AuthenticationService authenticationService) {
+    public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 

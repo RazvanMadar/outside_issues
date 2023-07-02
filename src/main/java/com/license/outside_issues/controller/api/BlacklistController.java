@@ -11,10 +11,10 @@ import java.util.List;
 @CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/api/blacklists")
-public class BlacklistResource {
+public class BlacklistController {
     private final BlacklistService blacklistService;
 
-    public BlacklistResource(BlacklistService blacklistService) {
+    public BlacklistController(BlacklistService blacklistService) {
         this.blacklistService = blacklistService;
     }
 

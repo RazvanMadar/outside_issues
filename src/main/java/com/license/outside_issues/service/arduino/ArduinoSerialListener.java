@@ -7,8 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.license.outside_issues.controller.api.WebSocketResource;
-import com.license.outside_issues.dto.WebSocketMessageUpdate;
+import com.license.outside_issues.controller.api.WebSocketController;
+import com.license.outside_issues.dto.WebSocketMessageUpdateDTO;
 import com.license.outside_issues.enums.IssueState;
 import com.license.outside_issues.enums.IssueType;
 import com.license.outside_issues.model.Address;
@@ -31,7 +31,7 @@ public class ArduinoSerialListener implements SerialPortDataListener {
     @Autowired
     private final IssueRepository issueRepository;
     @Autowired
-    private WebSocketResource webSocketResource;
+    private WebSocketController webSocketResource;
     @Autowired
     private CitizenService citizenService;
     private String bufferReadToString = "";
@@ -160,8 +160,8 @@ public class ArduinoSerialListener implements SerialPortDataListener {
     }
 
     private void sendMessagesViaWebSocketOnUpdate(List<String> emails) {
-        final List<WebSocketMessageUpdate> webSocketMessageUpdates = emails.stream()
-                .map(WebSocketMessageUpdate::new)
+        final List<WebSocketMessageUpdateDTO> webSocketMessageUpdates = emails.stream()
+                .map(WebSocketMessageUpdateDTO::new)
                 .collect(Collectors.toList());
         webSocketResource.sendUpdate(webSocketMessageUpdates);
     }

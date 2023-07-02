@@ -19,7 +19,8 @@ public class ImageUtil {
         }
         try {
             outputStream.close();
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return outputStream.toByteArray();
     }
@@ -36,7 +37,8 @@ public class ImageUtil {
                 outputStream.write(tmp, 0, count);
             }
             outputStream.close();
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return outputStream.toByteArray();
     }

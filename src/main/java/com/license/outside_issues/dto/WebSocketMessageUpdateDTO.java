@@ -2,13 +2,13 @@ package com.license.outside_issues.dto;
 
 import java.io.Serializable;
 
-public class WebSocketMessageUpdate implements Serializable {
+public class WebSocketMessageUpdateDTO implements Serializable {
     private static final long serialVersionUID = -1138446817700416884L;
     private String to;
 
-    public WebSocketMessageUpdate() {}
+    public WebSocketMessageUpdateDTO() {}
 
-    public WebSocketMessageUpdate(String to) {
+    public WebSocketMessageUpdateDTO(String to) {
         this.to = to;
     }
 

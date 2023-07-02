@@ -1,7 +1,7 @@
 package com.license.outside_issues.service.email;
 
-import com.license.outside_issues.dto.EmailMessage;
+import com.license.outside_issues.dto.EmailMessageDTO;
 
 public interface EmailSender {
-    void sendEmail(EmailMessage emailMessage);
+    void sendEmail(EmailMessageDTO emailMessage);
 }

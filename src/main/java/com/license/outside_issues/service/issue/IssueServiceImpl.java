@@ -57,8 +57,8 @@ public class IssueServiceImpl implements IssueService {
             issue.setDescription(issue.getDescription().trim());
         }
         Issue savedIssue = new Issue(issue);
-        issueRepository.save(savedIssue);
-        return savedIssue.getId();
+        final Issue newIssue = issueRepository.save(savedIssue);
+        return newIssue.getId();
     }
 
     @Override

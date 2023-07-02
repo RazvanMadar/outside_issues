@@ -65,8 +65,8 @@ public class CitizenServiceImpl implements CitizenService {
             citizen.setPhoneNumber(citizenDTO.getPhoneNumber());
             citizen.setFirstName(citizenDTO.getFirstName());
             citizen.setLastName(citizenDTO.getLastName());
-            citizenRepository.save(citizen);
-            return citizen.getId();
+            final Citizen savedUser = citizenRepository.save(citizen);
+            return savedUser.getId();
         }
         else {
             String rawPassword = citizenDTO.getPassword();
@@ -80,24 +80,24 @@ public class CitizenServiceImpl implements CitizenService {
                 final Role roleAdmin = roleRepository.save(new Role("ROLE_ADMIN"));
                 roles.add(roleAdmin);
                 citizen.setRoles(roles);
-                citizenRepository.save(citizen);
-                return citizen.getId();
+                final Citizen savedUser = citizenRepository.save(citizen);
+                return savedUser.getId();
             }
             roleById = roleRepository.findById(2L);
             if (roleById.isEmpty()) {
                 final Role roleUser = roleRepository.save(new Role("ROLE_USER"));
                 roles.add(roleUser);
                 citizen.setRoles(roles);
-                citizenRepository.save(citizen);
-                return citizen.getId();
+                final Citizen savedUser = citizenRepository.save(citizen);
+                return savedUser.getId();
             }
             Role role = roleRepository.findById(2L).orElseThrow(() -> {
                 throw new BusinessException(ExceptionReason.ROLE_NOT_FOUND);
             });
             roles.add(role);
             citizen.setRoles(roles);
-            citizenRepository.save(citizen);
-            return citizen.getId();
+            final Citizen savedUser = citizenRepository.save(citizen);
+            return savedUser.getId();
         }
     }
 
@@ -153,8 +153,8 @@ public class CitizenServiceImpl implements CitizenService {
         if (citizen.getLastName() != null) {
             citizenById.setLastName(citizen.getLastName());
         }
-        citizenRepository.save(citizenById);
-        return citizenById.getId();
+        final Citizen updatedCitizen = citizenRepository.save(citizenById);
+        return updatedCitizen.getId();
     }
 
     @Override

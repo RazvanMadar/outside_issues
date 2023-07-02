@@ -12,10 +12,10 @@ import java.util.List;
 @RestController
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/messages")
-public class MessageResource {
+public class MessageController {
     private final MessageService messageService;
 
-    public MessageResource(MessageService messageService) {
+    public MessageController(MessageService messageService) {
         this.messageService = messageService;
     }
 

@@ -1,6 +1,6 @@
 package com.license.outside_issues.controller.api;
 
-import com.license.outside_issues.dto.WebSocketMessageUpdate;
+import com.license.outside_issues.dto.WebSocketMessageUpdateDTO;
 import com.license.outside_issues.service.citizen.CitizenService;
 import com.license.outside_issues.dto.DisplayCitizenDTO;
 import com.license.outside_issues.service.issue.IssueService;
@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/issues")
-public class IssueResource {
+public class IssueController {
     private final IssueService issueService;
     private final CitizenService citizenService;
-    private final WebSocketResource webSocketResource;
+    private final WebSocketController webSocketResource;
 
-    public IssueResource(IssueService issueService, CitizenService citizenService, WebSocketResource webSocketResource) {
+    public IssueController(IssueService issueService, CitizenService citizenService, WebSocketController webSocketResource) {
         this.issueService = issueService;
         this.citizenService = citizenService;
         this.webSocketResource = webSocketResource;
@@ -89,8 +89,8 @@ public class IssueResource {
     }
 
     private void sendMessagesViaWebSocketOnUpdate(List<String> emails) {
-        final List<WebSocketMessageUpdate> webSocketMessageUpdates = emails.stream()
-                .map(WebSocketMessageUpdate::new)
+        final List<WebSocketMessageUpdateDTO> webSocketMessageUpdates = emails.stream()
+                .map(WebSocketMessageUpdateDTO::new)
                 .collect(Collectors.toList());
         webSocketResource.sendUpdate(webSocketMessageUpdates);
     }

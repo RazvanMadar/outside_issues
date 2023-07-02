@@ -2,16 +2,16 @@ package com.license.outside_issues.dto;
 
 import java.io.Serializable;
 
-public class WebSocketMessage implements Serializable {
+public class WebSocketMessageDTO implements Serializable {
     private static final long serialVersionUID = -1138446817700416884L;
     private String message;
     private String fromEmail;
     private String toEmail;
 
-    public WebSocketMessage() {
+    public WebSocketMessageDTO() {
     }
 
-    public WebSocketMessage(String message, String fromEmail, String toEmail) {
+    public WebSocketMessageDTO(String message, String fromEmail, String toEmail) {
         this.message = message;
         this.fromEmail = fromEmail;
         this.toEmail = toEmail;
@@ -44,7 +44,7 @@ public class WebSocketMessage implements Serializable {
 
     @Override
     public String toString() {
-        return "WebSocketMessage{" +
+        return "WebSocketMessageDTO{" +
                 "message='" + message + '\'' +
                 ", fromEmail='" + fromEmail + '\'' +
                 ", toEmail='" + toEmail + '\'' +

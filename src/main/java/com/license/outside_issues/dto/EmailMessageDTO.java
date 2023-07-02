@@ -1,14 +1,14 @@
 package com.license.outside_issues.dto;
 
-public class EmailMessage {
+public class EmailMessageDTO {
     private String subject;
     private String toEmail;
     private String content;
     private Long issueId;
 
-    public EmailMessage() {}
+    public EmailMessageDTO() {}
 
-    public EmailMessage(String subject, String toEmail, String content, Long issueId) {
+    public EmailMessageDTO(String subject, String toEmail, String content, Long issueId) {
         this.subject = subject;
         this.toEmail = toEmail;
         this.content = content;

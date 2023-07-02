@@ -16,10 +16,10 @@ import java.util.List;
 @CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/api/citizens")
-public class CitizenResource {
+public class CitizenController {
     private final CitizenService citizenService;
 
-    public CitizenResource(CitizenService citizenService) {
+    public CitizenController(CitizenService citizenService) {
         this.citizenService = citizenService;
     }
 

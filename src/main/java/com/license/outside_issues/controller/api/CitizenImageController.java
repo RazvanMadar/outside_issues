@@ -11,10 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/citizen/images")
 @CrossOrigin("http://localhost:3000")
-public class CitizenImageResource {
+public class CitizenImageController {
     private final CitizenImageService citizenImageService;
 
-    public CitizenImageResource(CitizenImageService citizenImageService) {
+    public CitizenImageController(CitizenImageService citizenImageService) {
         this.citizenImageService = citizenImageService;
     }
 

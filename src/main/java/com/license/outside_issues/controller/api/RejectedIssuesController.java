@@ -11,10 +11,10 @@ import java.util.List;
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/rejected")
 @RestController
-public class RejectedIssuesResource {
+public class RejectedIssuesController {
     private final RejectedIssuesService rejectedIssuesService;
 
-    public RejectedIssuesResource(RejectedIssuesService rejectedIssuesService) {
+    public RejectedIssuesController(RejectedIssuesService rejectedIssuesService) {
         this.rejectedIssuesService = rejectedIssuesService;
     }
 
