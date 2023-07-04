@@ -14,19 +14,29 @@ import java.util.Set;
 public class Issue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private IssueType type;
     @Embedded
     private Address address;
+    @Column(name = "state")
     @Enumerated(EnumType.STRING)
     private IssueState state;
+    @Column(name = "reported_date")
     private LocalDate reportedDate;
+    @Column(name = "likes_number")
     private Integer likesNumber;
+    @Column(name = "dislikes_number")
     private Integer dislikesNumber;
+    @Column(name = "description")
     private String description;
+    @Column(name = "has_location")
     private Boolean hasLocation;
+    @Column(name = "actual_location")
     private String actualLocation;
+    @Column(name = "citizen_email")
     private String citizenEmail;
 
     @OneToMany(

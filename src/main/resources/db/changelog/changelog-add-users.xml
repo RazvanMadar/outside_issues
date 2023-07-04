@@ -8,11 +8,11 @@
     <changeSet id="20230501131000" author="razvan.madar">
         <sql>
             INSERT INTO citizens (email, first_name, last_name, password, phone_number)
-            VALUES ('admin@gmail.com', 'Admin', 'Oradea', '$2a$10$poZIFVdVE/xiq1Iyo8QHAenZ8JXQ2lH6z96q.IWRzNwqky4kqS9oG', '0746817239');
+            VALUES ('admin@gmail.com', 'Admin', 'Oradea', '$2a$10$poZIFVdVE/xiq1Iyo8QHAenZ8JXQ2lH6z96q.IWRzNwqky4kqS9oG', '+40746817239');
             INSERT INTO citizens (email, first_name, last_name, password, phone_number)
-            VALUES ('razvanmadar@gmail.com', 'Razvan', 'Madar', '$2a$10$hDPRFMezWqc1ZHY7CYB5EexjtanYwkQqh/Ehwx85ZFHnyVOoF91KW', '0767827239');
+            VALUES ('razvanmadar@gmail.com', 'Razvan', 'Madar', '$2a$10$hDPRFMezWqc1ZHY7CYB5EexjtanYwkQqh/Ehwx85ZFHnyVOoF91KW', '+40767827239');
             INSERT INTO citizens (email, first_name, last_name, password, phone_number)
-            VALUES ('mihaidan@gmail.com', 'Mihai', 'Dan', '$2a$10$hDPRFMezWqc1ZHY7CYB5EexjtanYwkQqh/Ehwx85ZFHnyVOoF91KW', '0765827232');
+            VALUES ('mihaidan@gmail.com', 'Mihai', 'Dan', '$2a$10$hDPRFMezWqc1ZHY7CYB5EexjtanYwkQqh/Ehwx85ZFHnyVOoF91KW', '+40765827232');
         </sql>
     </changeSet>
 

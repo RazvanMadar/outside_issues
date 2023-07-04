@@ -1,11 +1,11 @@
 package com.license.outside_issues.repository;
 
 import com.license.outside_issues.common.PaginationUtil;
-import com.license.outside_issues.enums.IssueState;
-import com.license.outside_issues.enums.IssueType;
 import com.license.outside_issues.dto.AddressDTO;
 import com.license.outside_issues.dto.IssueDTO;
 import com.license.outside_issues.dto.StatisticsDTO;
+import com.license.outside_issues.enums.IssueState;
+import com.license.outside_issues.enums.IssueType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,23 +18,16 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.format.TextStyle;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 @Repository
 public class IssueJdbcRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final CitizenRepository citizenRepository;
-    private final IssueRepository issueRepository;
 
-    public IssueJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate, CitizenRepository citizenRepository, IssueRepository issueRepository) {
+    public IssueJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.citizenRepository = citizenRepository;
-        this.issueRepository = issueRepository;
     }
 
     public List<StatisticsDTO> getBasicStatistics(String email) {
@@ -138,13 +131,10 @@ public class IssueJdbcRepository {
             query.append(isConditionPresent ? "AND " : "WHERE ");
             query.append("reported_date >= CURRENT_DATE - INTERVAL '30 days' ");
         }
-
-        System.out.println(query);
         Integer filteredIssuesSql = jdbcTemplate.queryForObject(query.toString().replace("*", "COUNT(*)"), parameters, Integer.class);
         int filteredIssuesSize = Objects.requireNonNullElse(filteredIssuesSql, 0);
 
         final List<Sort.Order> orders = pageable.getSort().get().toList();
-        System.out.println(orders);
         final String queryOrder = PaginationUtil.createOrderQuery(orders);
         query.append(queryOrder);
         final String pagination = PaginationUtil.createPaginationQuery(pageable);
@@ -167,17 +157,7 @@ public class IssueJdbcRepository {
         issue.setHasLocation(rs.getBoolean("has_location"));
         issue.setDislikesNumber(rs.getInt("dislikes_number"));
         issue.setCitizenEmail(rs.getString("citizen_email"));
-
-//        issue.setFromDate("start_date", LocalDate.class);
-//        issue.setToDate("to_date", LocalDate.class);
         return issue;
-    }
-
-    private StatisticsDTO getStatisticsFromIndex(int index, int val) {
-        StatisticsDTO statistics = new StatisticsDTO();
-        statistics.setState(Month.of(index).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
-        statistics.setVal(val);
-        return statistics;
     }
 
     private StatisticsDTO mapToStatisticsDTO(ResultSet rs) throws SQLException {

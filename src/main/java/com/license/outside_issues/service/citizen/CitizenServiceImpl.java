@@ -106,7 +106,6 @@ public class CitizenServiceImpl implements CitizenService {
         final Citizen citizen = citizenRepository.findByEmail(email).orElseThrow(() -> {
             throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
         });
-//        return DisplayCitizenMapper.INSTANCE.modelToDto(citizen);
         return new DisplayCitizenDTO(citizen);
     }
 
@@ -115,7 +114,6 @@ public class CitizenServiceImpl implements CitizenService {
         Citizen citizenById = citizenRepository.findById(id).orElseThrow(() -> {
             throw new BusinessException(ExceptionReason.CITIZEN_NOT_FOUND);
         });
-//        return DisplayCitizenMapper.INSTANCE.modelToDto(citizenById);
         return new DisplayCitizenDTO(citizenById);
     }
 

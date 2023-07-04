@@ -7,8 +7,11 @@ import javax.persistence.*;
 public class RejectedIssues {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "citizen_id")
     private Long citizenId;
+    @Column(name = "rejected_number")
     private Long rejectedNumber;
 
     public RejectedIssues() {}

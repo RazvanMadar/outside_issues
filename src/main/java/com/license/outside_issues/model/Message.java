@@ -10,7 +10,9 @@ import java.time.LocalDateTime;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "message")
     private String message;
     @JsonIgnore
     @ManyToOne
@@ -20,6 +22,7 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "to_citizen_id", nullable = false, referencedColumnName = "id")
     private Citizen toCitizen;
+    @Column(name = "date")
     private LocalDateTime date;
 
     public Message() {}

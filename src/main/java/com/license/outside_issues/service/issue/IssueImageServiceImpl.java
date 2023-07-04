@@ -1,6 +1,7 @@
 package com.license.outside_issues.service.issue;
 
 import com.license.outside_issues.common.ImageUtil;
+import com.license.outside_issues.dto.IssueImageDTO;
 import com.license.outside_issues.enums.ImageType;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
@@ -8,14 +9,11 @@ import com.license.outside_issues.model.Issue;
 import com.license.outside_issues.model.IssueImage;
 import com.license.outside_issues.repository.IssueImageRepository;
 import com.license.outside_issues.repository.IssueRepository;
-import com.license.outside_issues.dto.IssueImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class IssueImageServiceImpl implements IssueImageService {
@@ -87,14 +85,5 @@ public class IssueImageServiceImpl implements IssueImageService {
             throw new BusinessException(ExceptionReason.IMAGE_NOT_FOUND);
         }
         return image.get();
-    }
-
-    public List<byte[]> getImages(Long id) {
-        Issue image = issueRepository.findById(id).orElseThrow(() -> {
-            throw new BusinessException(ExceptionReason.IMAGE_NOT_FOUND);
-        });
-        return image.getImages().stream()
-                .map(issueImage -> ImageUtil.decompressImage(issueImage.getImage()))
-                .collect(Collectors.toList());
     }
 }

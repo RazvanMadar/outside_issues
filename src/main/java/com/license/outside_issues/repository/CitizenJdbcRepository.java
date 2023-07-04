@@ -50,14 +50,12 @@ public class CitizenJdbcRepository {
         int filteredCitizensSize = Objects.requireNonNullElse(filteredCitizensSql, 0);
 
         final List<Sort.Order> orders = pageable.getSort().get().toList();
-        System.out.println(orders);
         final String queryOrder = PaginationUtil.createOrderQuery(orders);
         query.append(queryOrder);
         final String pagination = PaginationUtil.createPaginationQuery(pageable);
         query.append(pagination);
 
         List<DisplayCitizenDTO> citizenDTOS = jdbcTemplate.query(query.toString(), parameters, (rs, rowNum) -> mapToCitizen(rs));
-        System.out.println(citizenDTOS);
 
         return new PageImpl<>(citizenDTOS, pageable, filteredCitizensSize);
     }

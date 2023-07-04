@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class Blacklist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "citizen_id", referencedColumnName = "id")
