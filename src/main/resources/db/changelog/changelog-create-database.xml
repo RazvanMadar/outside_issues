@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
-    <changeSet id="20230501120000" author="razvan.madar">
+    <changeSet id="20230502120000" author="razvan.madar">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="citizens"/>
@@ -16,7 +16,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="email" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="first_name" type="VARCHAR(255)">
             </column>
@@ -29,8 +29,7 @@
         </createTable>
     </changeSet>
 
-    <!--        create issues table   -->
-    <changeSet id="20230501121000" author="razvan.madar">
+    <changeSet id="20230502121000" author="razvan.madar">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="issues"/>
@@ -68,8 +67,7 @@
         </createTable>
     </changeSet>
 
-    <!--        create roles table   -->
-    <changeSet id="20230501122000" author="razvan.madar">
+    <changeSet id="20230502122000" author="razvan.madar">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="roles"/>
@@ -85,8 +83,7 @@
         </createTable>
     </changeSet>
 
-    <!--        create roles table   -->
-    <changeSet id="20230501123000" author="razvan.madar">
+    <changeSet id="20230502123000" author="razvan.madar">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="citizens_roles"/>
@@ -113,7 +110,7 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="20230501123500" author="razvan.madar">
+    <changeSet id="20230502123500" author="razvan.madar">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="citizen_images"/>
@@ -140,7 +137,7 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="20230501124000" author="razvan.madar">
+    <changeSet id="20230502124000" author="razvan.madar">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="issue_images"/>
@@ -169,7 +166,7 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="20230501125000" author="razvan.madar">
+    <changeSet id="20230502125000" author="razvan.madar">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="rejected_issues"/>
@@ -193,7 +190,7 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="20230501125100" author="razvan.madar">
+    <changeSet id="20230502125100" author="razvan.madar">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="citizens_reactions"/>
@@ -226,7 +223,7 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="20230501125200" author="razvan.madar">
+    <changeSet id="20230502125200" author="razvan.madar">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="messages"/>
@@ -262,7 +259,7 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="20230501125300" author="razvan.madar">
+    <changeSet id="20230502125300" author="razvan.madar">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="blacklists"/>

@@ -1,5 +1,6 @@
 package com.license.outside_issues.service.reactions;
 
+import com.license.outside_issues.dto.CitizenReactionsDTO;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.model.Citizen;
@@ -8,10 +9,9 @@ import com.license.outside_issues.model.Issue;
 import com.license.outside_issues.repository.CitizenReactionsRepository;
 import com.license.outside_issues.repository.CitizenRepository;
 import com.license.outside_issues.repository.IssueRepository;
-import com.license.outside_issues.dto.CitizenReactionsDTO;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;

@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
-    <changeSet id="20230501130000" author="razvan.madar">
+    <changeSet id="20230502130000" author="razvan.madar">
         <insert tableName="roles">
             <column name="name" value="ROLE_ADMIN"/>
         </insert>

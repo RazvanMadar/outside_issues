@@ -6,7 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 
 @SpringBootApplication
 public class OutsideIssuesApplication {
@@ -29,10 +28,8 @@ public class OutsideIssuesApplication {
 			serialPort.setParity(SerialPort.NO_PARITY);
 			serialPort.setNumStopBits(SerialPort.ONE_STOP_BIT);
 			serialPort.setNumDataBits(8);
-			System.out.println(serialPort.getBaudRate());
 
 			if (serialPort.openPort()) {
-				System.out.println("Port is open");
 				serialPort.addDataListener(arduinoSerialListener);
 			}
 		}

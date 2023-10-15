@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 public class IssueController {
     private final IssueService issueService;
     private final CitizenService citizenService;
-    private final WebSocketController webSocketResource;
+    private final WebSocketController webSocketController;
 
-    public IssueController(IssueService issueService, CitizenService citizenService, WebSocketController webSocketResource) {
+    public IssueController(IssueService issueService, CitizenService citizenService, WebSocketController webSocketController) {
         this.issueService = issueService;
         this.citizenService = citizenService;
-        this.webSocketResource = webSocketResource;
+        this.webSocketController = webSocketController;
     }
 
     @GetMapping("/basic-statistics")
@@ -92,6 +92,6 @@ public class IssueController {
         final List<WebSocketMessageUpdateDTO> webSocketMessageUpdates = emails.stream()
                 .map(WebSocketMessageUpdateDTO::new)
                 .collect(Collectors.toList());
-        webSocketResource.sendUpdate(webSocketMessageUpdates);
+        webSocketController.sendUpdate(webSocketMessageUpdates);
     }
 }

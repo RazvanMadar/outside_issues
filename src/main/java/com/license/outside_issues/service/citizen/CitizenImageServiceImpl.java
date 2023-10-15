@@ -1,13 +1,13 @@
 package com.license.outside_issues.service.citizen;
 
 import com.license.outside_issues.common.ImageUtil;
+import com.license.outside_issues.dto.IssueImageDTO;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.model.CitizenImage;
 import com.license.outside_issues.repository.CitizenImageRepository;
 import com.license.outside_issues.repository.CitizenRepository;
-import com.license.outside_issues.dto.IssueImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

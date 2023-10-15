@@ -31,10 +31,10 @@ public class ArduinoSerialListener implements SerialPortDataListener {
     @Autowired
     private final IssueRepository issueRepository;
     @Autowired
-    private WebSocketController webSocketResource;
+    private WebSocketController webSocketController;
     @Autowired
     private CitizenService citizenService;
-    private String bufferReadToString = "";
+    private String buffer = "";
     private final Gson gson = new Gson();
 
     public ArduinoSerialListener(IssueRepository issueRepository) {
@@ -49,54 +49,53 @@ public class ArduinoSerialListener implements SerialPortDataListener {
 
     @Override
     public void serialEvent(SerialPortEvent event) {
-        byte[] buffer = new byte[event.getSerialPort().bytesAvailable()];
-        event.getSerialPort().readBytes(buffer, buffer.length);
+        byte[] content = new byte[event.getSerialPort().bytesAvailable()];
+        event.getSerialPort().readBytes(content, content.length);
 
-        String s = new String(buffer);
-        bufferReadToString = bufferReadToString.concat(s);
+        String s = new String(content);
+        buffer = buffer.concat(s);
 
         handleReceivedData();
     }
 
     private void handleReceivedData() {
-        if (bufferReadToString.indexOf(']') != -1) {
-            JsonElement element = gson.fromJson(bufferReadToString, JsonElement.class);
-            JsonArray array = element.getAsJsonArray();
-            for (int i = 0; i < array.size(); i++) {
-                JsonObject obj = array.get(i).getAsJsonObject();
-                handleDataFromJson(obj);
+        if (buffer.indexOf(']') != -1) {
+            JsonElement jsonIssueElement = gson.fromJson(buffer, JsonElement.class);
+            JsonArray allReportedIssues = jsonIssueElement.getAsJsonArray();
+            for (int i = 0; i < allReportedIssues.size(); i++) {
+                JsonObject issue = allReportedIssues.get(i).getAsJsonObject();
+                addIssueIfNecessary(issue);
             }
-
-            bufferReadToString = "";
+            buffer = "";
         }
     }
 
-    private void handleDataFromJson(JsonObject json) {
+    private void addIssueIfNecessary(JsonObject issue) {
         Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        JsonObject address = json.getAsJsonObject().get("address").getAsJsonObject();
+        JsonObject issueJson = gson.fromJson(issue, JsonObject.class);
+        JsonObject address = issue.getAsJsonObject().get("address").getAsJsonObject();
         Double addressLat = address.get("lat").getAsDouble();
         Double addressLng = address.get("lng").getAsDouble();
-        String type = jsonObject.get("type").getAsString();
-        String state = jsonObject.get("state").getAsString();
+        String type = issueJson.get("type").getAsString();
+        String state = issueJson.get("state").getAsString();
         Address issueAddress = new Address(addressLat, addressLng);
-        int likesNumber = jsonObject.get("likesNumber").getAsInt();
-        int dislikesNumber = jsonObject.get("dislikesNumber").getAsInt();
-        boolean hasLocation = jsonObject.get("hasLocation").getAsBoolean();
-        int value = jsonObject.get("value").getAsInt();
+        int likesNumber = issueJson.get("likesNumber").getAsInt();
+        int dislikesNumber = issueJson.get("dislikesNumber").getAsInt();
+        boolean hasLocation = issueJson.get("hasLocation").getAsBoolean();
+        int value = issueJson.get("value").getAsInt();
         if (isAvailableIssue(type, value)) {
-            Issue issue = new Issue();
-            issue.setType(IssueType.valueOf(type));
-            issue.setState(IssueState.valueOf(state));
-            issue.setLikesNumber(likesNumber);
-            issue.setDislikesNumber(dislikesNumber);
-            issue.setHasLocation(hasLocation);
-            issue.setAddress(issueAddress);
-            issue.setReportedDate(LocalDate.now());
-            issue.setDescription("");
+            Issue newIssue = new Issue();
+            newIssue.setType(IssueType.valueOf(type));
+            newIssue.setState(IssueState.valueOf(state));
+            newIssue.setLikesNumber(likesNumber);
+            newIssue.setDislikesNumber(dislikesNumber);
+            newIssue.setHasLocation(hasLocation);
+            newIssue.setAddress(issueAddress);
+            newIssue.setReportedDate(LocalDate.now());
+            newIssue.setDescription("");
             String actualLocation = computeActualLocation(addressLat, addressLng);
-            issue.setActualLocation(actualLocation);
-            issueRepository.save(issue);
+            newIssue.setActualLocation(actualLocation);
+            issueRepository.save(newIssue);
             sendMessagesViaWebSocketOnUpdate(citizenService.findAllValidEmails());
         }
     }
@@ -150,6 +149,13 @@ public class ArduinoSerialListener implements SerialPortDataListener {
                 }
                 actualAddress += suburb.getAsString();
             }
+            final JsonElement village = obj.get("village");
+            if (village != null) {
+                if (moreThanOneWord) {
+                    actualAddress += ", ";
+                }
+                actualAddress += village.getAsString();
+            }
 
             return actualAddress;
         } catch (Exception e) {
@@ -163,6 +169,6 @@ public class ArduinoSerialListener implements SerialPortDataListener {
         final List<WebSocketMessageUpdateDTO> webSocketMessageUpdates = emails.stream()
                 .map(WebSocketMessageUpdateDTO::new)
                 .collect(Collectors.toList());
-        webSocketResource.sendUpdate(webSocketMessageUpdates);
+        webSocketController.sendUpdate(webSocketMessageUpdates);
     }
 }

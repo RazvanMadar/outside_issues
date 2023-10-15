@@ -1,5 +1,8 @@
 package com.license.outside_issues.service.citizen;
 
+import com.license.outside_issues.dto.ChatCitizenDTO;
+import com.license.outside_issues.dto.DisplayCitizenDTO;
+import com.license.outside_issues.dto.RegisterCitizenDTO;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.model.Citizen;
@@ -7,9 +10,6 @@ import com.license.outside_issues.model.Role;
 import com.license.outside_issues.repository.CitizenJdbcRepository;
 import com.license.outside_issues.repository.CitizenRepository;
 import com.license.outside_issues.repository.RoleRepository;
-import com.license.outside_issues.dto.ChatCitizenDTO;
-import com.license.outside_issues.dto.DisplayCitizenDTO;
-import com.license.outside_issues.dto.RegisterCitizenDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -70,7 +70,6 @@ public class CitizenServiceImpl implements CitizenService {
         }
         else {
             String rawPassword = citizenDTO.getPassword();
-
             String encodedPassword = rawPassword != null ? passwordEncoder.encode(rawPassword) : null;
             Citizen citizen = new Citizen(citizenDTO);
             citizen.setPassword(encodedPassword);

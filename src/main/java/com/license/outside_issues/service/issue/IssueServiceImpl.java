@@ -1,5 +1,7 @@
 package com.license.outside_issues.service.issue;
 
+import com.license.outside_issues.dto.IssueDTO;
+import com.license.outside_issues.dto.StatisticsDTO;
 import com.license.outside_issues.enums.IssueState;
 import com.license.outside_issues.enums.IssueType;
 import com.license.outside_issues.exception.BusinessException;
@@ -11,8 +13,6 @@ import com.license.outside_issues.repository.CitizenReactionsRepository;
 import com.license.outside_issues.repository.IssueImageRepository;
 import com.license.outside_issues.repository.IssueJdbcRepository;
 import com.license.outside_issues.repository.IssueRepository;
-import com.license.outside_issues.dto.IssueDTO;
-import com.license.outside_issues.dto.StatisticsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

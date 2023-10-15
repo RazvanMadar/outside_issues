@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity()
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final CitizenRepository citizenRepository;
 
     private final JwtFilter jwtFilter;

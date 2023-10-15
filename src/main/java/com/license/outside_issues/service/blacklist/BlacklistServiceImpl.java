@@ -1,12 +1,12 @@
 package com.license.outside_issues.service.blacklist;
 
+import com.license.outside_issues.dto.StatisticsDTO;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.model.Blacklist;
 import com.license.outside_issues.model.Citizen;
 import com.license.outside_issues.repository.BlacklistRepository;
 import com.license.outside_issues.repository.CitizenRepository;
-import com.license.outside_issues.dto.StatisticsDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -2,11 +2,11 @@ package com.license.outside_issues.service.authentication;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.license.outside_issues.dto.AuthenticationRequestDTO;
+import com.license.outside_issues.dto.AuthenticationResponseDTO;
 import com.license.outside_issues.exception.BusinessException;
 import com.license.outside_issues.exception.ExceptionReason;
 import com.license.outside_issues.model.Citizen;
-import com.license.outside_issues.dto.AuthenticationRequestDTO;
-import com.license.outside_issues.dto.AuthenticationResponseDTO;
 import com.license.outside_issues.service.authentication.jwt.JwtUtil;
 import com.license.outside_issues.service.blacklist.BlacklistService;
 import org.springframework.http.HttpStatus;
@@ -48,10 +48,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             final boolean isBlocked = blacklistService.isCitizenBlocked(citizen.getId());
             return ResponseEntity.ok(new AuthenticationResponseDTO(citizen.getId(), citizen.getEmail(), citizen.getRoles().iterator().next().getName(), token, citizen.getFirstName(), citizen.getLastName(), isBlocked));
         } catch (BadCredentialsException ex) {
-            String errorMessage = "Failed to authenticate since password does not match stored value";
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(errorMessage);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(json);
+            String authMessage = "Failed to authenticate since password does not match stored value";
+            ObjectMapper conversionMapper = new ObjectMapper();
+            String failedAuthMessage = conversionMapper.writeValueAsString(authMessage);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(failedAuthMessage);
         }
     }
 }

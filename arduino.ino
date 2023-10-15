@@ -70,7 +70,7 @@ void loop() {
   if (Serial) {
     delay(180000);
     StaticJsonDocument<2000> doc;
-    JsonArray array = doc.to<JsonArray>();
+    JsonArray issuesArray = doc.to<JsonArray>();
     for (int i = 0; i < 12; i++) {
       int randomValue;
       if (i < 4) {
@@ -81,13 +81,13 @@ void loop() {
         randomValue = random(20);
       }
       issues[i].value = randomValue;
-      JsonObject objJson = array.createNestedObject();
-      issues[i].toJson(objJson);
+      JsonObject issueJson = issuesArray.createNestedObject();
+      issues[i].toJson(issueJson);
     }
-    String jsonStr;
-    serializeJson(array, jsonStr);
+    String content;
+    serializeJson(issuesArray, content);
 
-    Serial.print(jsonStr);
+    Serial.print(content);
   } else {
     Serial.println("Serial port is busy!");
   }
