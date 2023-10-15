@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="20230502133000" author="razvan.madar">
+        <sql>
+            INSERT INTO issues (actual_location, lat, lng, citizen_email, description, dislikes_number, likes_number, has_location, reported_date, state, type)
+            VALUES ('Strada Veteranilor, 22, Ioșia Sud', 47.05233254831364, 21.890590253959438, 'razvanmadar@gmail.com', 'Drumul este foarte spart aici', 0, 0, true, '2023-07-10', 'REGISTERED', 'ROAD');
+            INSERT INTO issues (actual_location, lat, lng, citizen_email, description, dislikes_number, likes_number, has_location, reported_date, state, type)
+            VALUES ('Calea Matei Basarab, 30, Orașul Nou', 47.0481341514457, 21.915844186052748, 'razvanmadar@gmail.com', 'Stâlpul este distrus și pare o zonă foarte periculoasă', 0, 0, true, '2023-07-11', 'REGISTERED', 'LIGHTNING');
+            INSERT INTO issues (actual_location, lat, lng, citizen_email, description, dislikes_number, likes_number, has_location, reported_date, state, type)
+            VALUES ('Calea Clujului, Velența', 47.05293464131867, 21.945371278232923, 'razvanmadar@gmail.com', 'Clădire foarte distrusă', 0, 0, true, '2023-07-08', 'REGISTERED', 'BUILDINGS');
+            INSERT INTO issues (actual_location, lat, lng, citizen_email, description, dislikes_number, likes_number, has_location, reported_date, state, type)
+            VALUES ('Strada Louis Pasteur, Gheorghe Doja', 47.06428190845734, 21.949483246041815, 'razvanmadar@gmail.com', 'Mulți câini maidanezi se plimbă prin fața blocului', 0, 0, true, '2023-07-07', 'REGISTERED', 'ANIMALS');
+            INSERT INTO issues (actual_location, lat, lng, citizen_email, description, dislikes_number, likes_number, has_location, reported_date, state, type)
+            VALUES ('Strada Jiului, Nicolae Iorga', 7.073395784067195, 21.94330188747217, 'razvanmadar@gmail.com', 'Iarba în parc este uriașă', 0, 0, true, '2023-07-01', 'REGISTERED', 'GREEN_SPACES');
+            INSERT INTO issues (actual_location, lat, lng, citizen_email, description, dislikes_number, likes_number, has_location, reported_date, state, type)
+            VALUES ('Rogerius', 47.07924072878733, 21.919612510625093, 'razvanmadar@gmail.com', 'Secretarele de aici nu lucrează în timpul programului', 0, 0, true, '2023-06-01', 'REGISTERED', 'PUBLIC_DOMAIN');
+            INSERT INTO issues (actual_location, lat, lng, citizen_email, description, dislikes_number, likes_number, has_location, reported_date, state, type)
+            VALUES ('Strada Petre Carp, Zona Industrială Vest', 47.08111212881078, 21.87805790516643, 'razvanmadar@gmail.com', 'De 2 zile la ora 2 noaptea sunt persoane în fața blocului ce strigă foarte puternic', 0, 0, true, '2023-06-01', 'REGISTERED', 'PUBLIC_DISORDER');
+            INSERT INTO issues (actual_location, lat, lng, citizen_email, description, dislikes_number, likes_number, has_location, reported_date, state, type)
+            VALUES ('Ioșia Nord', 47.068945805169044, 21.89558573995262, 'razvanmadar@gmail.com', 'Autobusul 26 este foarte vechi și periculos', 0, 0, true, '2023-04-01', 'REGISTERED', 'PUBLIC_TRANSPORT');
+            INSERT INTO issues (actual_location, lat, lng, citizen_email, description, dislikes_number, likes_number, has_location, reported_date, state, type)
+            VALUES ('Strada Ciprian Porumbescu, Rogerius', 47.078188954691406, 21.926822662353516, 'razvanmadar@gmail.com', 'Semnul de cedează din intersecția din Rogerius este rupt...', 0, 0, true, '2023-05-05', 'REGISTERED', 'TRAFFIC_ROAD_SIGNS');
+            INSERT INTO issues (actual_location, lat, lng, citizen_email, description, dislikes_number, likes_number, has_location, reported_date, state, type)
+            VALUES ('Strada Coriolan Hora, 155, Ioșia', 47.05515506875311, 21.886310310323733, 'razvanmadar@gmail.com', 'Canalizare sparta in mijlocului drumului', 0, 0, true, '2023-05-06', 'REGISTERED', 'TRAFFIC_ROAD_SIGNS');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

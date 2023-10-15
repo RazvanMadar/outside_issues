@@ -1,42 +1,21 @@
 #include <ArduinoJson.h>
 
-enum IssueType { ROAD, LIGHTNING, GREEN_SPACES, PUBLIC_DOMAIN, PUBLIC_DISORDER,
-          PUBLIC_TRANSPORT, BUILDINGS, TRAFFIC_ROAD_SIGNS, ANIMALS };
-
-const String typeStrings[] = {
-  "ROAD",
-  "LIGHTNING",
-  "GREEN_SPACES",
-  "PUBLIC_DOMAIN",
-  "PUBLIC_DISORDER",
-  "PUBLIC_TRANSPORT",
-  "BUILDINGS",
-  "TRAFFIC_ROAD_SIGNS",
-  "ANIMALS"
-};
-
-const double UPPER_LEFT_LAT = 47.09099;
-const double UPPER_LEFT_LNG = 21.86040;
-const double LOWER_RIGHT_LAT = 47.02749;
-const double LOWER_RIGHT_LNG = 21.95793;
-
-
 typedef struct {
   double lat;
   double lng;
 } Address;
 
-
 typedef struct {
-  IssueType type;
+  String type;
   Address address;
   String state;
   int likesNumber;
   int dislikesNumber;
   bool hasLocation;
+  int value;
 
   void toJson(JsonObject& root) const {
-    root["type"] = typeStrings[type];
+    root["type"] = type;
     JsonObject addressJson = root.createNestedObject("address");
     addressJson["lat"] = address.lat;
     addressJson["lng"] = address.lng;
@@ -44,64 +23,72 @@ typedef struct {
     root["likesNumber"] = likesNumber;
     root["dislikesNumber"] = dislikesNumber;
     root["hasLocation"] = hasLocation;
-  }
-
-  void fromJson(JsonObject& root) {
-    String typeString = root["type"].as<String>();
-    for (int i = 0; i < sizeof(typeStrings) / sizeof(typeStrings[0]); i++) {
-      if (typeStrings[i] == typeString) {
-        type = static_cast<IssueType>(i);
-        break;
-      }
-    }
-    JsonObject addressJson = root["address"];
-    double lat = addressJson["lat"].as<double>();
-    double lng = addressJson["lng"].as<double>();
-    address = {lat, lng};
-    state = root["state"].as<String>();
-    likesNumber = root["likesNumber"].as<int>();
-    dislikesNumber = root["dislikesNumber"].as<int>();
-    hasLocation = root["hasLocation"].as<bool>();
+    root["value"] = value;
   }
 } Issue;
+
+Issue issues[12];
 
 void setup() {
   Serial.begin(9600);
   randomSeed(millis());
+  Address addresses[12];
+  addresses[0] = {47.08088004191627, 21.91583633422852}; 
+  addresses[1] = {47.04417173680878, 21.942100524902347}; 
+  addresses[2] = {47.08263167570331, 21.875667572021488}; 
+  addresses[3] = {47.022398621893444, 21.898155212402347}; 
+  addresses[4] = {47.098761780151115, 21.917552947998047}; 
+  addresses[5] = {47.07117401928081, 21.863651275634766};
+  addresses[6] = {47.04952921777288, 21.98587417602539}; 
+  addresses[7] = {47.06895360359799, 21.976432800292972}; 
+  addresses[8] = {47.096888511208654, 21.886653900146488}; 
+  addresses[9] = {47.04753842906147, 21.854724884033207};
+  addresses[10] = {47.02801474206072, 21.979351043701175};
+  addresses[11] = {47.02226520048006, 21.93557739257813};
+  
+  for (int i = 0; i < 12; i++) {
+    if (i < 4) {
+      issues[i].type = "PUBLIC_DISORDER";
+    } else if (i < 8) {
+      issues[i].type = "LIGHTNING";
+    } else {
+      issues[i].type = "ROAD";
+    }
+    issues[i].state = "REGISTERED";
+    issues[i].likesNumber = 0;
+    issues[i].dislikesNumber = 0;
+    issues[i].hasLocation = true;
+    issues[i].address = addresses[i];
+  }
+  
   while (!Serial) {
-    // Wait for serial port to connect. Needed for native USB port only
+    // Wait for serial port to connect (for native USB port only)
   }
 }
 
 void loop() {
   if (Serial) {
-    Issue objects[2];
-
-    for (int i = 0; i < 2; i++) {
-      IssueType randomType = static_cast<IssueType>(random(0, 9));
-      objects[i].type = randomType;
-      double randomLat = random(LOWER_RIGHT_LAT * 100000, UPPER_LEFT_LAT * 100000) / 100000.0;
-      double randomLng = random(UPPER_LEFT_LNG * 100000, LOWER_RIGHT_LNG * 100000) / 100000.0;
-      objects[i].address = {randomLat, randomLng};
-      objects[i].state = "REGISTERED";
-      objects[i].likesNumber = 0;
-      objects[i].dislikesNumber = 0;
-      objects[i].hasLocation = true;
+    delay(180000);
+    StaticJsonDocument<2000> doc;
+    JsonArray issuesArray = doc.to<JsonArray>();
+    for (int i = 0; i < 12; i++) {
+      int randomValue;
+      if (i < 4) {
+        randomValue = random(50, 150);
+      } else if (i < 8) {
+        randomValue = random(10000);
+      } else {
+        randomValue = random(20);
+      }
+      issues[i].value = randomValue;
+      JsonObject issueJson = issuesArray.createNestedObject();
+      issues[i].toJson(issueJson);
     }
+    String content;
+    serializeJson(issuesArray, content);
 
-    StaticJsonDocument<500> doc;
-    JsonArray array = doc.to<JsonArray>();
-    for (int i = 0; i < 2; i++) {
-      JsonObject objJson = array.createNestedObject();
-      objects[i].toJson(objJson);
-    }
-    String jsonStr;
-    serializeJson(array, jsonStr);
-
-    Serial.println(jsonStr);
+    Serial.print(content);
   } else {
-    Serial.println("Serial port is busy.");
+    Serial.println("Serial port is busy!");
   }
-
-  delay(20000);
 }
